@@ -1,6 +1,5 @@
 package Util;
 
-import Dicionario.Lib;
 import java.util.Objects;
 
 public class Token {
@@ -23,7 +22,7 @@ public class Token {
 
     @Override
     public String toString() {
-        return "Lexema: " + lexema + " Tipo: " + Lib.conversor(id);
+        return "Lexema: " + lexema + " Tipo: " + Jarvis.conversor(id);
     }
 
     @Override
