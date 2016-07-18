@@ -95,7 +95,7 @@ public class Jarvis {
                     //Tratamento de String
                     //Nao deve remover espacos aqui
                     if (linha.contains("\"")) {
-                        if(verificaRegex(linha)){
+                        if (verificaRegex(linha, listaDeArquivos[i].getName())) {
                             continue;
                         }
                         else{
@@ -108,7 +108,7 @@ public class Jarvis {
                     //Apos remover os espacos, mandar os possiveis tokens passar no Regex
                     for (int x = 0; x < entrada.length; x++) {
                         //Passa pelo Regex
-                        verificaRegex(entrada[x]);
+                        verificaRegex(entrada[x], listaDeArquivos[i].getName());
                     }
                 } // Fim do Arquivo Atual
             }
@@ -126,17 +126,18 @@ public class Jarvis {
 
     /*Ainda falta melhorar. Sempre que uma String nao for valida, tenta quebrar em pedacos menores
     verificando caractere por caractere.Fazendo primeiro o basicao*/
-    private boolean verificaRegex(String entrada) {
+    private boolean verificaRegex(String entrada, String nomeArquivo) {
         //Primeira verificacao, se a palavra inteira pode virar um token
         for (PadraoRegex regex : PadraoRegex.values()) {
             if (Pattern.matches(regex.valor, entrada)) {
-                tokens.add(new Token(regex.ordinal(), entrada));
+                tokens.add(new Token(regex.ordinal(), entrada, nLinha, nomeArquivo));
                 return true;
             }
         }
         
         /*A entrada completa nao passou no teste
         Verificar por partes a partir de agora
+        Os erros devem ser lancados a partir desta funcao agora
         */
         
 

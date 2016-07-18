@@ -6,10 +6,14 @@ public class Token {
 
     private int id;
     private String lexema;
+    private int nLinha;
+    private String nomeArquivo;
 
-    public Token(int id, String lexema) {
+    public Token(int id, String lexema, int nLinha,String nomeArquivo) {
         this.id = id;
         this.lexema = lexema;
+        this.nLinha = nLinha;
+        this.nomeArquivo = nomeArquivo;
     }
 
     public int getId() {
@@ -22,7 +26,8 @@ public class Token {
 
     @Override
     public String toString() {
-        return "Lexema: " + lexema + " Tipo: "+Jarvis.PadraoRegex.values()[id].name();
+        return "Lexema: " + lexema + " Tipo: " + Jarvis.PadraoRegex.values()[id].name() + " Criado na linha: " + nLinha + 
+                " Do arquivo: " + nomeArquivo;
     }
 
     @Override
@@ -45,5 +50,5 @@ public class Token {
         }
         return true;
     }
-
+    
 }
