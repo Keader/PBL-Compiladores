@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 public class Jarvis {
 
     private final List<Token> tokens;
-    private final List<Token> tokensError;
+    private final List<TokenError> tokensError;
     private int nLinha;
 
     public Jarvis() {
@@ -44,8 +44,9 @@ public class Jarvis {
     }
     
      public enum ErrorRegex {
-     NUMERO_MAL_FORMADO("(^\\d+.)|(^.\\d+)");
-     
+     NUMERO_MAL_FORMADO("(\\.\\d+(.+)?)|(\\d+\\.(.+)?)"),
+     CARACTERE_MAL_FORMADO("'\\w*'?|'\\W+'?");
+     //Error na String e Comentario eh lancado sem o uso desse Enum.
      public String valor;
      private ErrorRegex(String valor) {
             this.valor = valor;
@@ -69,8 +70,11 @@ public class Jarvis {
                 //Se for diretorio, passa pro proximo
                 if (listaDeArquivos[i].isDirectory())
                     continue;
+               
+                //Lembrar de remover isso depois
+                if(!listaDeArquivos[i].getName().endsWith(".txt"))
+                    continue;
                 
-                System.out.println();
                 File arq = new File(listaDeArquivos[i].getName());
                 
                 /*Se arquivo nao existir eh porque foi deletado / movido da pasta antes de ter sido lido
@@ -80,31 +84,33 @@ public class Jarvis {
                     continue;
                 
                 BufferedReader leitor = new BufferedReader(new FileReader(arq));
+                nLinha = 0;
                 
-                String linha = leitor.readLine();
-                String entrada[] = linha.split(" ");
-
-                for (int x = 0;x < entrada.length; x++){
+                //Lendo do Arquivo
+                for (String linha = leitor.readLine() ; linha != null; linha = leitor.readLine()) {
+                    nLinha++;
                     
-                    //Comentario em progresso...
-                    if (entrada[x].contains("{")){
-                        String comentario[] = entrada[x].split("\\{"); //Quebra o { em 2 pedacos
-                        if(comentario.length > 1){
-                            
-                            while(!linha.contains("}")){
-                                linha = leitor.readLine();
-                            }
-                            
+                    //Precisa tratar comentario AQUI
+                    
+                    //Tratamento de String
+                    //Nao deve remover espacos aqui
+                    if (linha.contains("\"")) {
+                        if(verificaRegex(linha)){
+                            continue;
                         }
-                            
+                        else{
+                            tokensError.add(new TokenError(linha,"CADEIRA_DE_CARACTERES_MAL_FORMADA",nLinha));
+                            continue;
+                        }
                     }
                     
-                    //Passa pelo automato normal
-                    if (verificaRegex(entrada[x])) {
-                        continue;
+                    String entrada[] = linha.split("\\s+");
+                    //Apos remover os espacos, mandar os possiveis tokens passar no Regex
+                    for (int x = 0; x < entrada.length; x++) {
+                        //Passa pelo Regex
+                        verificaRegex(entrada[x]);
                     }
-                        
-                }
+                } // Fim do Arquivo Atual
             }
             
         } catch (NullPointerException ex) {
@@ -128,36 +134,21 @@ public class Jarvis {
                 return true;
             }
         }
-
-        /* Ainda em implementacao
-        //Verifica entao se pode por partes
-        char verificador[] = entrada.toCharArray();
-        String acumulador = "";
-        int tipo = -1;
-        boolean stop = false;
-
-        for (int i = 0; i < verificador.length; i++) {
-            String verificar = "" + verificador[i];
-            acumulador += verificar;
-            for (PadraoRegex regex : PadraoRegex.values()) {
-                if (Pattern.matches(regex.valor, acumulador)) {
-                    tipo = regex.ordinal();
-                }
-                else if (i == 0){ //Error na primeira linha
-                    tokensError.add(new Token(PadraoRegex.ERROR.ordinal(),acumulador,nLinha));
-                    acumulador = "";
-                    break;
-                }
-                else if (!acumulador.equals("") && tipo >= 0) { //Achou um erro no meio, entao cria um token com o que ja tem
-                    acumulador = acumulador.substring(i-1);
-                    tokens.add(new Token(tipo, acumulador));
-                    acumulador = "";
-                    break;
-                }
-            }
-        }*/
+        
+        /*A entrada completa nao passou no teste
+        Verificar por partes a partir de agora
+        */
+        
 
         return false;
+    }
+
+    public List<Token> getTokens() {
+        return tokens;
+    }
+
+    public List<TokenError> getTokensError() {
+        return tokensError;
     }
    
 
