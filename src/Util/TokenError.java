@@ -17,7 +17,7 @@ public class TokenError {
         autoDetectarError(lexema);
     }
     
-        public TokenError(String lexema,String tipo, int linha){
+    public TokenError(String lexema,String tipo, int linha){
         this.lexema = lexema;
         this.linha = linha;
         this.tipo = tipo;
@@ -37,11 +37,10 @@ public class TokenError {
     
     @Override
     public String toString(){
-        return linha+" - "+tipo+" : "+lexema;
+        return linha + " - " + tipo + " : " + lexema;
     }
     
     private void autoDetectarError(String error){
-        
         for(ErrorRegex regex:ErrorRegex.values()){
             if(Pattern.matches(regex.valor, error)){
                 tipo += regex.name();
