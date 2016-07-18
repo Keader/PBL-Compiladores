@@ -126,9 +126,9 @@ public class Jarvis implements Lib {
 
                 for (int x = 0;x < entrada.length; x++){
                     
-                    //Comentario
+                    //Comentario em progresso...
                     if (entrada[x].contains("{")){
-                        String comentario[] = entrada[x].split("\\{"); //Quebra o { em 2 pedassos
+                        String comentario[] = entrada[x].split("\\{"); //Quebra o { em 2 pedacos
                         if(comentario.length > 1){
                             
                             while(!linha.contains("}")){
