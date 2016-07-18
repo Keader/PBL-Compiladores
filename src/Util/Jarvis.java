@@ -71,13 +71,13 @@ public class Jarvis {
 				if (listaDeArquivos[i].isDirectory())
 					continue;
 
-				//Lembrar de remover isso depois //KEADER - isso aqui é mesmo necessário? acho melhor retirar, porque ela pode testar com qualquer arquivo
+				//Lembrar de remover isso depois
 				if(!listaDeArquivos[i].getName().endsWith(".txt"))
 					continue;
 
 				File arq = new File(listaDeArquivos[i].getName());
 
-				//verificando se o arquivo existe para começar a analisar
+				//verificando se o arquivo existe para comeï¿½ar a analisar
 				if (arq.exists()){                
 					BufferedReader leitor = new BufferedReader(new FileReader(arq));
 					nLinha = 0;
@@ -91,7 +91,7 @@ public class Jarvis {
 						
 						//Tratamento de String
 						//Nao deve remover espacos aqui
-						if (linha.contains("\"")) {
+						if (linha.startsWith("\"")) {
 							if (verificaRegex(linha, listaDeArquivos[i].getName())) {
 								continue;
 							}
