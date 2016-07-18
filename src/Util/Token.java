@@ -1,54 +1,48 @@
 package Util;
 
-import java.util.Objects;
+import Util.Jarvis.PadraoRegex;
 
 public class Token {
 
-    private int id;
-    private String lexema;
-    private int nLinha;
-    private String nomeArquivo;
+	private int id;
+	private int nLinha;
 
-    public Token(int id, String lexema, int nLinha,String nomeArquivo) {
-        this.id = id;
-        this.lexema = lexema;
-        this.nLinha = nLinha;
-        this.nomeArquivo = nomeArquivo;
-    }
+	private String lexema;
+	private String classe;
 
-    public int getId() {
-        return id;
-    }
+	public Token(int id, String lexema, int nLinha) {
+		this.id = id;
+		this.lexema = lexema;
+		this.nLinha = nLinha;
+	}
 
-    public String getLexema() {
-        return lexema;
-    }
+	public int getId() {
+		return id;
+	}
 
-    @Override
-    public String toString() {
-        return "Lexema: " + lexema + " Tipo: " + Jarvis.PadraoRegex.values()[id].name() + " Criado na linha: " + nLinha + 
-                " Do arquivo: " + nomeArquivo;
-    }
+	public String getLexema() {
+		return lexema;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Token other = (Token) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (!Objects.equals(this.lexema, other.lexema)) {
-            return false;
-        }
-        return true;
-    }
-    
+	public String getClasse() {
+		if(classe == null)
+			classe = PadraoRegex.values()[id].name();
+		return classe;
+	}
+
+	@Override
+	public String toString() {
+		return "Lexema: " + lexema + " Tipo: " + Jarvis.PadraoRegex.values()[id].name() + " Criado na linha: " + nLinha;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Token) {
+			Token aux = (Token) obj;
+			if(aux.getId() == this.id && aux.getLexema().equals(this.lexema))
+				return true;
+		}
+
+		return false;
+	}
 }

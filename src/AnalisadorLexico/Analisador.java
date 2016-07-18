@@ -1,6 +1,5 @@
 package AnalisadorLexico;
 
-import Dicionario.Lib;
 import Util.Jarvis;
 
 

@@ -44,13 +44,14 @@ public class Jarvis {
     }
     
      public enum ErrorRegex {
-     NUMERO_MAL_FORMADO("(\\.\\d+(.+)?)|(\\d+\\.(.+)?)"),
-     CARACTERE_MAL_FORMADO("'\\w*'?|'\\W+'?");
-     //Error na String e Comentario eh lancado sem o uso desse Enum.
-     public String valor;
-     private ErrorRegex(String valor) {
+    	 NUMERO_MAL_FORMADO("(\\.\\d+(.+)?)|(\\d+\\.(.+)?)"),
+    	 CARACTERE_MAL_FORMADO("'\\w*'?|'\\W+'?");
+    	 
+    	 //Error na String e Comentario eh lancado sem o uso desse Enum.
+    	 public String valor;
+    	 private ErrorRegex(String valor) {
             this.valor = valor;
-        }
+    	 }
      }
     
     public void Executar(){
@@ -99,7 +100,7 @@ public class Jarvis {
                             continue;
                         }
                         else{
-                            tokensError.add(new TokenError(linha,"CADEIRA_DE_CARACTERES_MAL_FORMADA",nLinha));
+                            tokensError.add(new TokenError(linha,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha));
                             continue;
                         }
                     }
@@ -130,7 +131,7 @@ public class Jarvis {
         //Primeira verificacao, se a palavra inteira pode virar um token
         for (PadraoRegex regex : PadraoRegex.values()) {
             if (Pattern.matches(regex.valor, entrada)) {
-                tokens.add(new Token(regex.ordinal(), entrada, nLinha, nomeArquivo));
+                tokens.add(new Token(regex.ordinal(), entrada, nLinha));
                 return true;
             }
         }
@@ -151,7 +152,5 @@ public class Jarvis {
     public List<TokenError> getTokensError() {
         return tokensError;
     }
-   
-
 }
 
