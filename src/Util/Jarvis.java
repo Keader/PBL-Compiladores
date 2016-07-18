@@ -7,8 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
@@ -19,41 +17,17 @@ import javax.swing.JOptionPane;
  */
 public class Jarvis implements Lib {
 
-    private final List<String> palavrasReservadas;
     private final List<Token> tokens;
     private final List<Token> tokensError;
 
     public Jarvis() {
-        palavrasReservadas = new LinkedList<>();
         tokens = new LinkedList<>();
         tokensError = new LinkedList<>();
-        inicialize();
     }
-
-    private void inicialize() {
-        palavrasReservadas.add("programa");
-        palavrasReservadas.add("const");
-        palavrasReservadas.add("var");
-        palavrasReservadas.add("funcao");
-        palavrasReservadas.add("inicio");
-        palavrasReservadas.add("fim");
-        palavrasReservadas.add("se");
-        palavrasReservadas.add("entao");
-        palavrasReservadas.add("senao");
-        palavrasReservadas.add("enquanto");
-        palavrasReservadas.add("faca");
-        palavrasReservadas.add("leia");
-        palavrasReservadas.add("escreva");
-        palavrasReservadas.add("inteiro");
-        palavrasReservadas.add("real");
-        palavrasReservadas.add("booleano");
-        palavrasReservadas.add("verdadeiro");
-        palavrasReservadas.add("falso");
-        palavrasReservadas.add("cadeia");
-        palavrasReservadas.add("caractere");
-    }
-    
-    //Isso deve mudar em breve
+ 
+    /*
+    Isso ainda devera ser usado em breve, para converter para string
+    Deixar comentado por enquanto
     public static String conversor(int tipo) {
 
         switch (tipo) {
@@ -86,12 +60,7 @@ public class Jarvis implements Lib {
             default:
                 return "Desconhecido";
         }
-    }
-
-    
-    public boolean ehPalavraReservada(String palavra) {
-        return palavrasReservadas.contains(palavra);
-    }
+    }*/
     
     public void Executar(){
         try {
@@ -139,12 +108,6 @@ public class Jarvis implements Lib {
                             
                     }
                     
-                    //Verifica se eh palavra reservada
-                    if (palavrasReservadas.contains(entrada[x])){
-                        tokens.add(new Token(PALAVRA_RESERVADA,entrada[x]));
-                        continue;
-                    }
-                    
                     //Passa pelo automato normal
                     if (verificaRegex(entrada[x])) {
                         continue;
@@ -167,6 +130,7 @@ public class Jarvis implements Lib {
     /*Ainda falta melhorar. Sempre que uma String nao for valida, tenta quebrar em pedacos menores
     verificando caractere por caractere.Fazendo primeiro o basicao*/
     private boolean verificaRegex(String entrada) {
+        //Primeira verificacao, se a palavra inteira pode virar um token
         for (PadraoRegex regex : PadraoRegex.values()) {
             if (Pattern.matches(regex.valor, entrada)) {
                 tokens.add(new Token(regex.ordinal(), entrada));

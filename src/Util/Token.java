@@ -20,10 +20,12 @@ public class Token {
         return lexema;
     }
 
+    /*
+    Descomentar aqui quando ter certeza de que forma vai converter para nome
     @Override
     public String toString() {
         return "Lexema: " + lexema + " Tipo: " + Jarvis.conversor(id);
-    }
+    }*/
 
     @Override
     public boolean equals(Object obj) {
