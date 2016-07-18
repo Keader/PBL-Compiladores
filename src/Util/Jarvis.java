@@ -1,6 +1,5 @@
 package Util;
 
-import Dicionario.Lib;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,52 +14,43 @@ import javax.swing.JOptionPane;
  * conroller.
  *
  */
-public class Jarvis implements Lib {
+public class Jarvis {
 
     private final List<Token> tokens;
     private final List<Token> tokensError;
+    private int nLinha;
 
     public Jarvis() {
         tokens = new LinkedList<>();
         tokensError = new LinkedList<>();
+        nLinha = 0;
     }
- 
-    /*
-    Isso ainda devera ser usado em breve, para converter para string
-    Deixar comentado por enquanto
-    public static String conversor(int tipo) {
+    
+    public enum PadraoRegex {
+        PALAVRA_RESERVADA("programa|const|var|funcao|inicio|fim|se|entao|senao|enquanto|faca|leia|escreva|inteiro|real|booleano|verdadeiro|falso|cadeia|caractere"), //Esta usando atualmente a lista de reservados, possivelmente mudara para o Regex
+        IDENTIFICADOR("[a-zA-Z]([a-zA-Z]|\\d|_)*?"),
+        NUMERO("\\d+(\\.\\d+)?"),
+        OP_ARITMETICO("\\+|\\-|\\*|\\/"),
+        OP_RELACIONAL("(<>)|=|<|(<=)|>|(>=)"),
+        OP_LOGICO("nao|e|ou"),
+        DELIMITADOR(";|,|\\(|\\)"),
+        CADEIA_CARACTERIES("\"[a-zA-Z]([a-zA-Z]|\\d|\\p{Blank})*?\""),
+        CARACTERE("'([a-zA-Z]|\\d)'");
+        public String valor;
 
-        switch (tipo) {
-            case PALAVRA_RESERVADA:
-                return "Palavra Reservada";
-            case IDENTIFICADOR:
-                return "Identificador";
-            case NUMERO:
-                return "Numero";
-            case DIGITO:
-                return "Digito";
-            case LETRA:
-                return "Letra";
-            case OP_ARITMETICOS:
-                return "Operador Aritmetico";
-            case OP_RELACIONAIS:
-                return "Operador Relacional";
-            case OP_LOGICOS:
-                return "Operador Logico";
-            case DEL_COMENTARIOS:
-                return "Delimitador de Comentarios";
-            case DELIMITADORES:
-                return "Delimitador";
-            case CADEIA_DE_CHAR:
-                return "Cadeia de Caracteries";
-            case CARACTERE:
-                return "Caractere";
-            case ERROR:
-                return "Erro";
-            default:
-                return "Desconhecido";
+        private PadraoRegex(String valor) {
+            this.valor = valor;
         }
-    }*/
+    }
+    
+     public enum ErrorRegex {
+     NUMERO_MAL_FORMADO("(^\\d+.)|(^.\\d+)");
+     
+     public String valor;
+     private ErrorRegex(String valor) {
+            this.valor = valor;
+        }
+     }
     
     public void Executar(){
         try {
@@ -74,8 +64,9 @@ public class Jarvis implements Lib {
             
             File listaDeArquivos[] = dir.listFiles();
             
+            //Percorre os arquivos na pasta
             for (int i = 0; i < listaDeArquivos.length; i++){
-                
+                //Se for diretorio, passa pro proximo
                 if (listaDeArquivos[i].isDirectory())
                     continue;
                 
@@ -137,8 +128,38 @@ public class Jarvis implements Lib {
                 return true;
             }
         }
+
+        /* Ainda em implementacao
+        //Verifica entao se pode por partes
+        char verificador[] = entrada.toCharArray();
+        String acumulador = "";
+        int tipo = -1;
+        boolean stop = false;
+
+        for (int i = 0; i < verificador.length; i++) {
+            String verificar = "" + verificador[i];
+            acumulador += verificar;
+            for (PadraoRegex regex : PadraoRegex.values()) {
+                if (Pattern.matches(regex.valor, acumulador)) {
+                    tipo = regex.ordinal();
+                }
+                else if (i == 0){ //Error na primeira linha
+                    tokensError.add(new Token(PadraoRegex.ERROR.ordinal(),acumulador,nLinha));
+                    acumulador = "";
+                    break;
+                }
+                else if (!acumulador.equals("") && tipo >= 0) { //Achou um erro no meio, entao cria um token com o que ja tem
+                    acumulador = acumulador.substring(i-1);
+                    tokens.add(new Token(tipo, acumulador));
+                    acumulador = "";
+                    break;
+                }
+            }
+        }*/
+
         return false;
     }
    
-    
+
 }
+
