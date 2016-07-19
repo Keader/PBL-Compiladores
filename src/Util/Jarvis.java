@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -19,327 +18,301 @@ import javax.swing.JOptionPane;
  */
 public class Jarvis {
 
-    private final List<Token> tokens;
-    private final List<TokenError> tokensError;
-    private int nLinha;
+	private final List<Token> tokens;
+	private final List<TokenError> tokensError;
+	private int nLinha;
 
-    public Jarvis() {
-        tokens = new LinkedList<>();
-        tokensError = new LinkedList<>();
-        nLinha = 0;
-    }
+	public Jarvis() {
+		tokens = new LinkedList<>();
+		tokensError = new LinkedList<>();
+		nLinha = 0;
+	}
 
-    public enum PadraoRegex {
-        PALAVRA_RESERVADA("programa|const|var|funcao|inicio|fim|se|entao|senao|enquanto|faca|leia|escreva|inteiro|real|booleano|verdadeiro|falso|cadeia|caractere"), //Esta usando atualmente a lista de reservados, possivelmente mudara para o Regex
-        IDENTIFICADOR("[a-zA-Z]([a-zA-Z]|\\d|_)*?"),
-        NUMERO("\\d+(\\.\\d+)?"),
-        OP_ARITMETICO("\\+|\\-|\\*|\\/"),
-        OP_RELACIONAL("(<>)|=|<|(<=)|>|(>=)"),
-        OP_LOGICO("nao|e|ou"),
-        DELIMITADOR(";|,|\\(|\\)"),
-        CADEIA_CARACTERIES("\"[a-zA-Z]([a-zA-Z]|\\d|\\p{Blank})*?\""),
-        CARACTERE("'([a-zA-Z]|\\d)'");
-        public String valor;
+	public enum PadraoRegex {
+		PALAVRA_RESERVADA("programa|const|var|funcao|inicio|fim|se|entao|senao|enquanto|faca|leia|escreva|inteiro|real|booleano|verdadeiro|falso|cadeia|caractere"), //Esta usando atualmente a lista de reservados, possivelmente mudara para o Regex
+		IDENTIFICADOR("[a-zA-Z]([a-zA-Z]|\\d|_)*?"),
+		NUMERO("\\d+(\\.\\d+)?"),
+		OP_ARITMETICO("\\+|\\-|\\*|\\/"),
+		OP_RELACIONAL("(<>)|=|<|(<=)|>|(>=)"),
+		OP_LOGICO("nao|e|ou"),
+		DELIMITADOR(";|,|\\(|\\)"),
+		CADEIA_CARACTERIES("\"[a-zA-Z]([a-zA-Z]|\\d|\\p{Blank})*?\""),
+		CARACTERE("'([a-zA-Z]|\\d)'");
+		public String valor;
 
-        private PadraoRegex(String valor) {
-            this.valor = valor;
-        }
-    }
+		private PadraoRegex(String valor) {
+			this.valor = valor;
+		}
+	}
 
-    public enum ErrorRegex {
-        NUMERO_MAL_FORMADO("(\\.\\d+(.+)?)|(\\d+\\.(.+)?)"),
-        CARACTERE_MAL_FORMADO("'\\w*'?|'\\W+'?");
+	public enum ErrorRegex {
+		NUMERO_MAL_FORMADO("(\\.\\d+(.+)?)|(\\d+\\.(.+)?)"),
+		CARACTERE_MAL_FORMADO("'\\w*'?|'\\W+'?");
 
-        //Error na String e Comentario eh lancado sem o uso desse Enum.
-        public String valor;
+		//Error na String e Comentario eh lancado sem o uso desse Enum.
+		public String valor;
 
-        private ErrorRegex(String valor) {
-            this.valor = valor;
-        }
-    }
+		private ErrorRegex(String valor) {
+			this.valor = valor;
+		}
+	}
 
-    public void Executar() {
-        try {
+	public void Executar() {
+		try {
 
-            File dir = new File(System.getProperty("user.dir"));
+			File dir = new File(System.getProperty("user.dir"));
 
-            if (!dir.exists()) {
-                JOptionPane.showMessageDialog(null, "Programa nao possui autorizacao para ler pastas do usuario", "Error", JOptionPane.ERROR_MESSAGE);
-                System.exit(-1);
-            }
+			if (!dir.exists()) {
+				JOptionPane.showMessageDialog(null, "Programa nao possui autorizacao para ler pastas do usuario", "Error", JOptionPane.ERROR_MESSAGE);
+				System.exit(-1);
+			}
 
-            File listaDeArquivos[] = dir.listFiles();
+			File listaDeArquivos[] = dir.listFiles();
 
-            //Percorre os arquivos na pasta
-            for (int i = 0; i < listaDeArquivos.length; i++) {
-                //Se for diretorio, passa pro proximo
-                if (listaDeArquivos[i].isDirectory()) {
-                    continue;
-                }
+			//Percorre os arquivos na pasta
+			for (int i = 0; i < listaDeArquivos.length; i++) {
+				//Se for diretorio, passa pro proximo
+				if (listaDeArquivos[i].isDirectory()) {
+					continue;
+				}
 
-                //Lembrar de remover isso depois //KEADER - isso aqui eh mesmo necessario? acho melhor retirar, porque ela pode testar com qualquer arquivo
-                if (!listaDeArquivos[i].getName().endsWith(".txt")) {
-                    continue;
-                }
+				//Lembrar de remover isso depois 
+				if (!listaDeArquivos[i].getName().endsWith(".txt")) {
+					continue;
+				}
 
-                File arq = new File(listaDeArquivos[i].getName());
+				File arq = new File(listaDeArquivos[i].getName());
 
-                //verificando se o arquivo existe para comecar a analisar
-                if (arq.exists()) {
-                    BufferedReader leitor = new BufferedReader(new FileReader(arq));
-                    nLinha = 0;
-                    int abriuComentario = 0;
+				//verificando se o arquivo existe para comecar a analisar
+				if (arq.exists()) {
+					BufferedReader leitor = new BufferedReader(new FileReader(arq));
+					nLinha = 0;
+					int tipoBusca = 0;
+					//Lendo do Arquivo
+					for (String linha = leitor.readLine(); linha != null; linha = leitor.readLine()) {
+						//verifica se abriu algum comentario
+						String linhaAtualizada = analisadorComentario(linha, tipoBusca);
+						//se 0, pode seguir normalmente
+						//se 1, pula pra proxima linha
+						if (linhaAtualizada != null) {
+							//Tratamento de String
+							//Nao deve remover espacos aqui
+							if (linhaAtualizada.contains("\"")) {
+								if (verificaRegex(linha)) {
+									continue;
+								} else {
+									tokensError.add(new TokenError(linhaAtualizada, "CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha));
+									continue;
+								}
+							}
 
-                    //Lendo do Arquivo
-                    for (String linha = leitor.readLine(); linha != null; linha = leitor.readLine()) {
-                        nLinha++;
-                        //verifica se abriu algum comentario
-                        abriuComentario = analisadorComentario(linha, abriuComentario);
-                        //se 0, pode seguir normalmente
-                        //se 1, pula pra proxima linha
-                        if (abriuComentario == 0) {
-                            //Tratamento de String
-                            //Nao deve remover espacos aqui
-                            if (linha.contains("\"")) {
-                                if (verificaRegex(linha)) {
-                                    continue;
-                                } else {
-                                    tokensError.add(new TokenError(linha, "CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha));
-                                    continue;
-                                }
-                            }
+							String entrada[] = linhaAtualizada.split("\\s+");
+							//Apos remover os espacos, mandar os possiveis tokens passar no Regex
+							for (int x = 0; x < entrada.length; x++) {
+								//Passa pelo Regex
+								verificaRegex(entrada[x]);
+							}
+						}
+						
+						//atuliza contador de linha
+						nLinha++;
+					}
+				} // Fim do Arquivo Atual
+			}
 
-                            String entrada[] = linha.split("\\s+");
-                            //Apos remover os espacos, mandar os possiveis tokens passar no Regex
-                            for (int x = 0; x < entrada.length; x++) {
-                                //Passa pelo Regex
-                                verificaRegex(entrada[x]);
-                            }
-                        }
-                    }
-                } // Fim do Arquivo Atual
-            }
+		} catch (NullPointerException ex) {
+			ex.printStackTrace();
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+	}
 
-    }
+	/**
+	 * o que que isso faz? ele recebe a linha e a posicao inicial de "abre
+	 * chave", verifica se nessa mesma linha tem "fecha chave" e retorna os
+	 * valores
+	 *
+	 * @param linha a string que sera verificada
+	 * @param posAchou a posicao inicial de "abre chave" (caso nao esteja nessa
+	 * mesma linha, colocar valores inferiores a 0)
+	 * @return -1 se nao tiver, ele retorna -1 significando pra pular pra
+	 * proxima linha
+	 * @return fim se tiver, ele retorna a posicao do primeiro "fecha chave"
+	 * @deprecated só serve para analisadores char a char
+	 */
+	public int analisadorComentarioChar(String linha, int posAchou) {
+		int fim = linha.length();
 
-    /**
-     * o que que isso faz? ele recebe a linha e a posicao inicial de "abre
-     * chave", verifica se nessa mesma linha tem "fecha chave" e retorna os
-     * valores
-     *
-     * @param linha a string que sera verificada
-     * @param posAchou a posicao inicial de "abre chave" (caso nao esteja nessa
-     * mesma linha, colocar valores inferiores a 0)
-     * @return -1 se nao tiver, ele retorna -1 significando pra pular pra
-     * proxima linha
-     * @return fim se tiver, ele retorna a posicao do primeiro "fecha chave"
-     */
-    public int analisadorComentarioChar(String linha, int posAchou) {
-        int fim = linha.length();
+		if (posAchou >= 0) {
+			//pega posicacao da primeira }
+			fim = linha.indexOf("}");
+			//se ela estiver depois de { retorna a posicao dela
+			if (fim > posAchou) {
+				return fim;
+			} else {
+				return -1;
+			}
+		} else {
+			return linha.indexOf("}");
+		}
+	}
 
-        if (posAchou >= 0) {
-            //pega posicacao da primeira }
-            fim = linha.indexOf("}");
-            //se ela estiver depois de { retorna a posicao dela
-            if (fim > posAchou) {
-                return fim;
-            } else {
-                return -1;
-            }
-        } else {
-            return linha.indexOf("}");
-        }
-    }
+	/***
+	 * o que que isso faz? ele recebe a linha e o tipo de coisa que ele ta buscando
+	 * ele apaga tudo que estiver como comentario
+	 * @param linha
+	 * @param busca 0 para buscar inicio de comentario
+	 * @param busca 1 para buscar final de comentario
+	 * @return linha retorna a linha atualizada depois da operacao
+	 */
+	public String analisadorComentario(String linha, int busca) {
+		int in = 0, fm = linha.length();
+		String aux = null;
 
-    //TODO implementar
-    public int analisadorComentario(String linha, int busca) {
-        int in = 0, fm = linha.length();
-        String aux = null;
+		//buscando inicio de comentario
+		if (busca == 0) {
+			//verifica se existe algum comentario
+			if (linha.contains("{")) {
+				in = linha.indexOf("{");
+				fm = linha.indexOf("}");
+				//	String aux = fm > in ? apagaComentario(linha, in, fm) : apagaComentario(linha, in, linha.length);
+				if (fm > in) {
+					aux = apagaComentario(linha, in, fm);
+					return analisadorComentario(aux, 0);
+				} else {
+					aux = apagaComentario(linha, in, linha.length());
+					return null;
+				}
+			}
+			//se não existe nenhum comentario nessa linha, so retorna
+			return linha;
+		} 
+		else if (busca == 1) {
+			if (linha.contains("}")) {
+				fm = linha.indexOf("}");
+				aux = apagaComentario(linha, 0, fm);
+				//continua procurando por mais comentarios na linha
+				return analisadorComentario(aux, 0);
+			}
+			//se nao tem nenhum fechar comentario nessa linha, pede a proxima
+			return null;
+		}
+		return linha;
+	}
 
-        //buscando inicio de comentï¿½rio
-        if (busca == 0) {
-            //verifica se existe algum comentï¿½rio
-            if (linha.contains("{")) {
-                in = linha.indexOf("{");
-                fm = linha.indexOf("}");
-                //	String aux = fm > in ? apagaComentario(linha, in, fm) : apagaComentario(linha, in, linha.length);
-                if (fm > in) {
-                    aux = apagaComentario(linha, in, fm);
-                    return analisadorComentario(aux, 0);
-                } else {
-                    aux = apagaComentario(linha, in, linha.length());
-                    return -1;
-                }
-            }
-            return 0;
-        } else if (busca == 1) {
-            if (linha.contains("}")) {
-                fm = linha.indexOf("}");
-                aux = apagaComentario(linha, 0, fm);
-                //continua procurando por mais comentï¿½rios na linha
-                return analisadorComentario(aux, 0);
-            }
-            return -1;
-        }
-        return 0;
-    }
+	private String apagaComentario(String linha, int posI, int posF) {
+		String sumir = linha.substring(posI, posF + 1);
+		System.out.println(linha.replace(sumir, ""));
+		return linha.replace(sumir, "");
+	}
 
-    private String apagaComentario(String linha, int posI, int posF) {
-        String sumir = linha.substring(posI, posF + 1);
-        System.out.println(linha.replace(sumir, ""));
-        return linha.replace(sumir, "");
-    }
-
-    //TODO da uma olhada nisso
-    private int verificadorPorChar(String linha) {
-        char[] auxLinha = linha.toCharArray();
-        List<String> auxPalavras = new ArrayList<String>();
-
-        for (int i = 0; i < linha.length(); i++) {
-            if (auxLinha[i] == '{') {
-                int t = analisadorComentarioChar(linha, i);
-                //retorna um aviso pra pular a linha caso nï¿½o tenha achado o final do comentï¿½rio
-                if (t < 0) {
-                    return -1;
-                } //se achou o final do comentï¿½rio pula o que estiver dentro
-                else if (t > i) {
-                    i = t;
-                }
-            } else {
-                //concatena o ultimo objeto formado com o novo char
-                String t = auxPalavras.get(auxPalavras.size()) + auxLinha[i];
-
-                //TODO Keader, olha isso aqui, pode descomentar, mas tem que fazer o "VerificadorRegex(t)" funfar
-                //verifica se passa em algum dos regex (so precisa passar em 1 deles pra continuar, pois o objetivo ï¿½ achar o ultimo que funciona)
-                //if(VerificadorRegex(t))
-                //	auxPalavras.add(t);
-                //se nï¿½o passar acaba o for e olha o ultimo que passou
-                //else
-                //	break;
-            }
-        }
-
-        String lexema = auxPalavras.get(auxPalavras.size());
-        //agora eh so olhar a que classe ele pertence
-        //if(VerificadorRegex(t))
-
-        auxPalavras.clear();
-        return 0;
-    }
-
-    /*Ainda falta melhorar. Sempre que uma String nao for valida, tenta quebrar em pedacos menores
+	/*Ainda falta melhorar. Sempre que uma String nao for valida, tenta quebrar em pedacos menores
     verificando caractere por caractere.Fazendo primeiro o basicao*/
-    private boolean verificaRegex(String entrada) {
-        
-        //Primeira verificacao, se a palavra inteira pode virar um token
-        if (verificaRegexCriandoToken(entrada)) {
-            return true;
-        }
-        
-        /*A entrada completa nao passou no teste
+	private boolean verificaRegex(String entrada) {
+
+		//Primeira verificacao, se a palavra inteira pode virar um token
+		if (verificaRegexCriandoToken(entrada)) {
+			return true;
+		}
+
+		/*A entrada completa nao passou no teste
         Verificar por partes a partir de agora
         Os erros devem ser lancados a partir desta funcao agora
-         */
-        char analisar[] = entrada.toCharArray();
-        String acumulador = "";
-        int MAX = analisar.length - 1;
-        boolean quebraLoop = false;
+		 */
+		char analisar[] = entrada.toCharArray();
+		String acumulador = "";
+		int MAX = analisar.length - 1;
+		boolean quebraLoop = false;
 
-        for (int i = 0; i < analisar.length; i++) {
+		for (int i = 0; i < analisar.length; i++) {
 
-            acumulador += analisar[i];
+			acumulador += analisar[i];
 
-            //Analisador de Strings
-            //**************************************************************************************************************
-            if (analisar[i] == '"') {
-                //Pega o acumulador ateh entao, e verifica se o Regex eh valido. Se for valido cria token, se nao, gera error
-                //Apos isso, comeca a analisar a String propriamente dita
-                if (!acumulador.equals("")) {
-                    if (!verificaRegexCriandoToken(acumulador)) {
-                        tokensError.add(new TokenError(acumulador, nLinha));
-                    }
-                    acumulador = "";
-                }
+			//Analisador de Strings
+			//**************************************************************************************************************
+			if (analisar[i] == '"') {
+				//Pega o acumulador ateh entao, e verifica se o Regex eh valido. Se for valido cria token, se nao, gera error
+				//Apos isso, comeca a analisar a String propriamente dita
+				if (!acumulador.equals("")) {
+					if (!verificaRegexCriandoToken(acumulador)) {
+						tokensError.add(new TokenError(acumulador, nLinha));
+					}
+					acumulador = "";
+				}
 
-                //Comecando a analise da String
-                int comeco = i;
-                int fim = -1;
-                for (int z = comeco; z < analisar.length; z++) { //Busca ate o fim do arquivo se encontra um fechamento de String
-                    if (analisar[z] == '"') { // Caso encontre o fim da string, salva a posicao dele
-                        fim = z + 1;
-                        break;
-                    }
-                }
-                if (fim >= 0) { // Caso o final tenha sido encontrado na mesma linha
-                    String string = "";
-                    for (int z = comeco; z < fim; z++) {
-                        string += analisar[z];
-                    }
-                    if (!verificaRegexCriandoToken(string)) { // String foi bem formada, mas nao foi aceita pelo Regex. Caso seja aceito o Token eh criado automaticamente
-                        tokensError.add(new TokenError(string, "CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha));
-                    }
-                    i = fim;
-                    continue;
-                } else { //Chegou no fim da linha e nao achou o " de finalizar
-                    String error = "";
-                    for (int g = i; g < analisar.length; g++) {
-                        error += analisar[g];
-                    }
-                    tokensError.add(new TokenError(error, "CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha));
-                    i = fim;
-                    continue;
-                }
-            }
+				//Comecando a analise da String
+				int comeco = i;
+				int fim = -1;
+				for (int z = comeco; z < analisar.length; z++) { //Busca ate o fim do arquivo se encontra um fechamento de String
+					if (analisar[z] == '"') { // Caso encontre o fim da string, salva a posicao dele
+						fim = z + 1;
+						break;
+					}
+				}
+				if (fim >= 0) { // Caso o final tenha sido encontrado na mesma linha
+					String string = "";
+					for (int z = comeco; z < fim; z++) {
+						string += analisar[z];
+					}
+					if (!verificaRegexCriandoToken(string)) { // String foi bem formada, mas nao foi aceita pelo Regex. Caso seja aceito o Token eh criado automaticamente
+						tokensError.add(new TokenError(string, "CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha));
+					}
+					i = fim;
+					continue;
+				} else { //Chegou no fim da linha e nao achou o " de finalizar
+					String error = "";
+					for (int g = i; g < analisar.length; g++) {
+						error += analisar[g];
+					}
+					tokensError.add(new TokenError(error, "CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha));
+					i = fim;
+					continue;
+				}
+			}
 
-            //****************************************************************************************************************************
-            if (!isEntradaValida(acumulador) && i == 0) { //Deu error no rimeiro elemento
-                tokensError.add(new TokenError(acumulador, nLinha));
-                acumulador = "";
-            } else if (!isEntradaValida(acumulador)) { //Nao eh o primeiro
-                acumulador = acumulador.substring(i - 1); //Remove o ultimo elemento (significa que os que estao atras dele tecnicamente estao corretos
-                verificaRegexCriandoToken(acumulador);
-                acumulador = "";
-            }
+			//****************************************************************************************************************************
+			if (!isEntradaValida(acumulador) && i == 0) { //Deu error no rimeiro elemento
+				tokensError.add(new TokenError(acumulador, nLinha));
+				acumulador = "";
+			} else if (!isEntradaValida(acumulador)) { //Nao eh o primeiro
+				acumulador = acumulador.substring(i - 1); //Remove o ultimo elemento (significa que os que estao atras dele tecnicamente estao corretos
+				verificaRegexCriandoToken(acumulador);
+				acumulador = "";
+			}
 
-            //PRECISA FAZER CASO ESPECIAL DOS NUMEROS (5.5) por exemplo (Da para usar um Regex nessa situacao)
-        }
+			//PRECISA FAZER CASO ESPECIAL DOS NUMEROS (5.5) por exemplo (Da para usar um Regex nessa situacao)
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    private boolean isEntradaValida(String entrada) {
-        for (PadraoRegex regex : PadraoRegex.values()) {
-            if (Pattern.matches(regex.valor, entrada)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	private boolean isEntradaValida(String entrada) {
+		for (PadraoRegex regex : PadraoRegex.values()) {
+			if (Pattern.matches(regex.valor, entrada)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    private boolean verificaRegexCriandoToken(String entrada) {
-        for (PadraoRegex regex : PadraoRegex.values()) {
-            if (Pattern.matches(regex.valor, entrada)) {
-                tokens.add(new Token(regex.ordinal(), entrada, nLinha));
-                return true;
-            }
-        }
-        return false;
-    }
+	private boolean verificaRegexCriandoToken(String entrada) {
+		for (PadraoRegex regex : PadraoRegex.values()) {
+			if (Pattern.matches(regex.valor, entrada)) {
+				tokens.add(new Token(regex.ordinal(), entrada, nLinha));
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public List<Token> getTokens() {
-        return tokens;
-    }
+	public List<Token> getTokens() {
+		return tokens;
+	}
 
-    public List<TokenError> getTokensError() {
-        return tokensError;
-    }
+	public List<TokenError> getTokensError() {
+		return tokensError;
+	}
 }
-
