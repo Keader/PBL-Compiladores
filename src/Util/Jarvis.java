@@ -15,144 +15,145 @@ import javax.swing.JOptionPane;
  *
  */
 public class Jarvis {
-	private final List<Token> tokens;
-	private final List<TokenError> tokensError;
-	private int nLinha;
 
-	public Jarvis() {
-		tokens = new LinkedList<>();
-		tokensError = new LinkedList<>();
-		nLinha = 0;
-	}
+    private final List<Token> tokens;
+    private final List<TokenError> tokensError;
+    private int nLinha;
 
-	public enum PadraoRegex {
-		PALAVRA_RESERVADA("programa|const|var|funcao|inicio|fim|se|entao|senao|enquanto|faca|leia|escreva|inteiro|real|booleano|verdadeiro|falso|cadeia|caractere"), //Esta usando atualmente a lista de reservados, possivelmente mudara para o Regex
-		IDENTIFICADOR("[a-zA-Z]([a-zA-Z]|\\d|_)*?"),
-		NUMERO("\\d+(\\.\\d+)?"),
-		OP_ARITMETICO("\\+|\\-|\\*|\\/"),
-		OP_RELACIONAL("(<>)|=|<|(<=)|>|(>=)"),
-		OP_LOGICO("nao|e|ou"),
-		DELIMITADOR(";|,|\\(|\\)"),
-		CADEIA_CARACTERIES("\"[a-zA-Z]([a-zA-Z]|\\d|\\p{Blank})*?\""),
-		CARACTERE("'([a-zA-Z]|\\d)'");
-		public String valor;
+    public Jarvis() {
+        tokens = new LinkedList<>();
+        tokensError = new LinkedList<>();
+        nLinha = 0;
+    }
 
-		private PadraoRegex(String valor) {
-			this.valor = valor;
-		}
-	}
+    public enum PadraoRegex {
+        PALAVRA_RESERVADA("programa|const|var|funcao|inicio|fim|se|entao|senao|enquanto|faca|leia|escreva|inteiro|real|booleano|verdadeiro|falso|cadeia|caractere"), //Esta usando atualmente a lista de reservados, possivelmente mudara para o Regex
+        IDENTIFICADOR("[a-zA-Z]([a-zA-Z]|\\d|_)*?"),
+        NUMERO("\\d+(\\.\\d+)?"),
+        OP_ARITMETICO("\\+|\\-|\\*|\\/"),
+        OP_RELACIONAL("(<>)|=|<|(<=)|>|(>=)"),
+        OP_LOGICO("nao|e|ou"),
+        DELIMITADOR(";|,|\\(|\\)"),
+        CADEIA_CARACTERIES("\"[a-zA-Z]([a-zA-Z]|\\d|\\p{Blank})*?\""),
+        CARACTERE("'([a-zA-Z]|\\d)'");
+        public String valor;
 
-	public enum ErrorRegex {
-		NUMERO_MAL_FORMADO("(\\.\\d+(.+)?)|(\\d+\\.(.+)?)"),
-		CARACTERE_MAL_FORMADO("'\\w*'?|'\\W+'?");
+        private PadraoRegex(String valor) {
+            this.valor = valor;
+        }
+    }
 
-		//Error na String e Comentario eh lancado sem o uso desse Enum.
-		public String valor;
-		private ErrorRegex(String valor) {
-			this.valor = valor;
-		}
-	}
+    public enum ErrorRegex {
+        NUMERO_MAL_FORMADO("(\\.\\d+(.+)?)|(\\d+\\.(.+)?)"),
+        CARACTERE_MAL_FORMADO("'\\w*'?|'\\W+'?");
 
-	public void Executar(){
-		try {
+        //Error na String e Comentario eh lancado sem o uso desse Enum.
+        public String valor;
 
-			File dir = new File(System.getProperty("user.dir"));
+        private ErrorRegex(String valor) {
+            this.valor = valor;
+        }
+    }
 
-			if (!dir.exists()){
-				JOptionPane.showMessageDialog(null, "Programa nao possui autorizacao para ler pastas do usuario", "Error", JOptionPane.ERROR_MESSAGE);
-				System.exit(-1);
-			}
+    public void Executar() {
+        try {
 
-			File listaDeArquivos[] = dir.listFiles();
+            File dir = new File(System.getProperty("user.dir"));
 
-			//Percorre os arquivos na pasta
-			for (int i = 0; i < listaDeArquivos.length; i++){
-				//Se for diretorio, passa pro proximo
-				if (listaDeArquivos[i].isDirectory())
-					continue;
+            if (!dir.exists()) {
+                JOptionPane.showMessageDialog(null, "Programa nao possui autorizacao para ler pastas do usuario", "Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(-1);
+            }
 
-				//Lembrar de remover isso depois
-				if(!listaDeArquivos[i].getName().endsWith(".txt"))
-					continue;
+            File listaDeArquivos[] = dir.listFiles();
 
-				File arq = new File(listaDeArquivos[i].getName());
+            //Percorre os arquivos na pasta
+            for (int i = 0; i < listaDeArquivos.length; i++) {
+                //Se for diretorio, passa pro proximo
+                if (listaDeArquivos[i].isDirectory()) {
+                    continue;
+                }
 
-				//verificando se o arquivo existe para come�ar a analisar
-				if (arq.exists()){                
-					BufferedReader leitor = new BufferedReader(new FileReader(arq));
-					nLinha = 0;
+                //Lembrar de remover isso depois
+                if (!listaDeArquivos[i].getName().endsWith(".txt")) {
+                    continue;
+                }
 
-					//Lendo do Arquivo
-					for (String linha = leitor.readLine(); linha != null; linha = leitor.readLine()) {
-						nLinha++;
+                File arq = new File(listaDeArquivos[i].getName());
 
-						//Precisa tratar comentario AQUI
-						analisadorComentario();
-						
-						//Tratamento de String
-						//Nao deve remover espacos aqui
-						if (linha.startsWith("\"")) {
-							if (verificaRegex(linha, listaDeArquivos[i].getName())) {
-								continue;
-							}
-							else{
-								tokensError.add(new TokenError(linha,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha));
-								continue;
-							}
-						}
+                //verificando se o arquivo existe para comecar a analisar
+                if (arq.exists()) {
+                    BufferedReader leitor = new BufferedReader(new FileReader(arq));
+                    nLinha = 0;
 
-						String entrada[] = linha.split("\\s+");
-						//Apos remover os espacos, mandar os possiveis tokens passar no Regex
-						for (int x = 0; x < entrada.length; x++) {
-							//Passa pelo Regex
-							verificaRegex(entrada[x], listaDeArquivos[i].getName());
-						}
-					}
-				} // Fim do Arquivo Atual
-			}
+                    //Lendo do Arquivo
+                    for (String linha = leitor.readLine(); linha != null; linha = leitor.readLine()) {
+                        nLinha++;
 
-		} catch (NullPointerException ex) {
-			ex.printStackTrace();
-		} catch (FileNotFoundException ex) {
-			ex.printStackTrace();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+                        //Precisa tratar comentario AQUI
+                        analisadorComentario();
 
+                        //Tratamento de String
+                        //Nao deve remover espacos aqui
+                        if (linha.startsWith("\"")) {
+                            if (verificaRegex(linha)) {
+                                continue;
+                            } else {
+                                tokensError.add(new TokenError(linha, "CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha));
+                                continue;
+                            }
+                        }
 
-	}
-	
-	//TODO implementar
-	private void analisadorComentario(){
-		
-	}
+                        String entrada[] = linha.split("\\s+");
+                        //Apos remover os espacos, mandar os possiveis tokens passar no Regex
+                        for (int x = 0; x < entrada.length; x++) {
+                            //Passa pelo Regex
+                            verificaRegex(entrada[x]);
+                        }
+                    }
+                } // Fim do Arquivo Atual
+            }
 
-	/*Ainda falta melhorar. Sempre que uma String nao for valida, tenta quebrar em pedacos menores
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    //TODO implementar
+    private void analisadorComentario() {
+
+    }
+
+    /*Ainda falta melhorar. Sempre que uma String nao for valida, tenta quebrar em pedacos menores
     verificando caractere por caractere.Fazendo primeiro o basicao*/
-	private boolean verificaRegex(String entrada, String nomeArquivo) {
-		//Primeira verificacao, se a palavra inteira pode virar um token
-		for (PadraoRegex regex : PadraoRegex.values()) {
-			if (Pattern.matches(regex.valor, entrada)) {
-				tokens.add(new Token(regex.ordinal(), entrada, nLinha));
-				return true;
-			}
-		}
+    private boolean verificaRegex(String entrada) {
+        //Primeira verificacao, se a palavra inteira pode virar um token
+        for (PadraoRegex regex : PadraoRegex.values()) {
+            if (Pattern.matches(regex.valor, entrada)) {
+                tokens.add(new Token(regex.ordinal(), entrada, nLinha));
+                return true;
+            }
+        }
 
-		/*A entrada completa nao passou no teste
+        /*A entrada completa nao passou no teste
         Verificar por partes a partir de agora
         Os erros devem ser lancados a partir desta funcao agora
-		 */
+         */
+        
+        
+        return false;
+    }
 
+    public List<Token> getTokens() {
+        return tokens;
+    }
 
-		return false;
-	}
-
-	public List<Token> getTokens() {
-		return tokens;
-	}
-
-	public List<TokenError> getTokensError() {
-		return tokensError;
-	}
+    public List<TokenError> getTokensError() {
+        return tokensError;
+    }
 }
 
