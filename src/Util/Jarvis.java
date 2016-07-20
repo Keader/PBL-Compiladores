@@ -87,20 +87,20 @@ public class Jarvis {
 				if (arq.exists()) {
 					BufferedReader leitor = new BufferedReader(new FileReader(arq));
 					nLinha = 0;
-					int tipoBusca = 0;
+					int tipoBusca = 0, comentarioLinha = 0;
 					//Lendo do Arquivo
 					for (String linha = leitor.readLine(); linha != null; linha = leitor.readLine()) {
 						//verifica se abriu algum comentario
 						String linhaAtualizada = analisadorComentario(linha, tipoBusca);
-						//se 0, pode seguir normalmente
-						//se 1, pula pra proxima linha
 						if (linhaAtualizada != null) {
+							comentarioLinha = nLinha;
+							tipoBusca = 0;
 							//Tratamento de String
 							//Nao deve remover espacos aqui
 							if (linhaAtualizada.contains("\"")) {
-								if (verificaRegex(linha)) {
+								if (verificaRegex(linha))
 									continue;
-								} else {
+								else {
 									tokensError.add(new TokenError(linhaAtualizada, "CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha));
 									continue;
 								}
@@ -113,11 +113,17 @@ public class Jarvis {
 								verificaRegex(entrada[x]);
 							}
 						}
+						else
+							tipoBusca = -1;
 						
 						//atuliza contador de linha
 						nLinha++;
 					}
-				} // Fim do Arquivo Atual
+					if(tipoBusca < 0) {
+						tokensError.add(new TokenError("nao sei o que voce escreveu", "COMENTARIO_MAL_FORMADO", comentarioLinha));
+					}
+				} 
+				// Fim do Arquivo Atual
 			}
 
 		} catch (NullPointerException ex) {
@@ -152,10 +158,12 @@ public class Jarvis {
 			//se ela estiver depois de { retorna a posicao dela
 			if (fim > posAchou) {
 				return fim;
-			} else {
+			} 
+			else {
 				return -1;
 			}
-		} else {
+		} 
+		else {
 			return linha.indexOf("}");
 		}
 	}
@@ -165,37 +173,53 @@ public class Jarvis {
 	 * ele apaga tudo que estiver como comentario
 	 * @param linha
 	 * @param busca 0 para buscar inicio de comentario
-	 * @param busca 1 para buscar final de comentario
+	 * @param busca n > 0 para buscar inicio de comentario, comecando de n
+	 * @param busca -1 para buscar final de comentario
 	 * @return linha retorna a linha atualizada depois da operacao
 	 */
 	public String analisadorComentario(String linha, int busca) {
 		int in = 0, fm = linha.length();
-		String aux = null;
-
-		//buscando inicio de comentario
-		if (busca == 0) {
+		//buscando inicio de comentario a partir do inicio da string ou de outra parte
+		if (busca >= 0) {
 			//verifica se existe algum comentario
 			if (linha.contains("{")) {
-				in = linha.indexOf("{");
-				fm = linha.indexOf("}");
+				in = linha.indexOf("{", busca);
+				fm = linha.indexOf("}", in);
+				
 				//	String aux = fm > in ? apagaComentario(linha, in, fm) : apagaComentario(linha, in, linha.length);
-				if (fm > in) {
-					aux = apagaComentario(linha, in, fm);
-					return analisadorComentario(aux, 0);
-				} else {
-					aux = apagaComentario(linha, in, linha.length());
-					return null;
-				}
+				if(linha.contains("\"")){
+					int inicioString = linha.indexOf('\"'), fimString = linha.length();
+					//o comentário começa depois da string?
+					if(in > inicioString){
+						//buscando pelo final da string
+						for(int i = inicioString + 1; i < linha.length(); i++){
+							if(linha.toCharArray()[i] == '\"'){
+								fimString = i;
+								break;
+							}
+						}
+						//se o inicio do comentário for menor que o fim da string, retorna a posicao do fim da string
+						if(in < fimString) 
+							return analisadorComentario(linha, fimString);
+					}
+				}		
+				
+				if(in < 0)
+					return linha;
+				if(fm > in) 
+					return analisadorComentario(apagaComentario(linha, in, fm), 0);
+				else if(fm < 0) 
+					return analisadorComentario(apagaComentario(linha, in, linha.length()), 0);
 			}
 			//se não existe nenhum comentario nessa linha, so retorna
 			return linha;
 		} 
-		else if (busca == 1) {
+		//se estiver buscando por fechar comentário
+		else if (busca < 0) {
 			if (linha.contains("}")) {
 				fm = linha.indexOf("}");
-				aux = apagaComentario(linha, 0, fm);
 				//continua procurando por mais comentarios na linha
-				return analisadorComentario(aux, 0);
+				return analisadorComentario(apagaComentario(linha, 0, fm), 0);
 			}
 			//se nao tem nenhum fechar comentario nessa linha, pede a proxima
 			return null;
@@ -204,7 +228,12 @@ public class Jarvis {
 	}
 
 	private String apagaComentario(String linha, int posI, int posF) {
-		String sumir = linha.substring(posI, posF + 1);
+		String sumir;
+		if(posF + 1 > linha.length())
+			sumir = linha.substring(posI, posF);
+		else
+			sumir = linha.substring(posI, posF + 1);
+		
 		System.out.println(linha.replace(sumir, ""));
 		return linha.replace(sumir, "");
 	}
@@ -262,7 +291,8 @@ public class Jarvis {
 					}
 					i = fim;
 					continue;
-				} else { //Chegou no fim da linha e nao achou o " de finalizar
+				} 
+				else { //Chegou no fim da linha e nao achou o " de finalizar
 					String error = "";
 					for (int g = i; g < analisar.length; g++) {
 						error += analisar[g];
