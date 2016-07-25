@@ -304,7 +304,11 @@ public class Jarvis {
                         int temp = Integer.parseInt(prox);
                         acumulador += temp;
                         i = proximo;
-                    } catch (NumberFormatException e) {}
+                    } catch (NumberFormatException e) {
+                        tokensError.add(new TokenError(acumulador, nLinha, i));
+                        acumulador = "";
+                        continue;
+                    }
                 }
             }
             
