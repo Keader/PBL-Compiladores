@@ -9,18 +9,28 @@ public class TokenError {
     private String lexema;
     private String tipo;
     private int linha;
+    private int coluna;
     
-    public TokenError(String lexema, int linha){
+    public TokenError(String lexema, int linha, int coluna){
         this.lexema = lexema;
         this.linha = linha;
         tipo = "";
         autoDetectarError(lexema);
+        this.coluna = coluna;
+    }
+    
+    public TokenError(String lexema,String tipo, int linha, int coluna){
+        this.lexema = lexema;
+        this.linha = linha;
+        this.tipo = tipo;
+        this.coluna = coluna;
     }
     
     public TokenError(String lexema,String tipo, int linha){
         this.lexema = lexema;
         this.linha = linha;
         this.tipo = tipo;
+        coluna = -1;
     }
 
     public String getLexema() {
@@ -37,7 +47,9 @@ public class TokenError {
     
     @Override
     public String toString(){
-        return linha + " - " + tipo + " : " + lexema;
+        if (coluna == -1)
+            return "* " + lexema + " * " + tipo + " :" + linha;
+        return "* " + lexema + " * " + tipo + " :" + linha + ":" + coluna;
     }
     
     private void autoDetectarError(String error){
@@ -47,7 +59,6 @@ public class TokenError {
                 return;
             }
         }
-        
         tipo+= "SIMBOLO_DESCONHECIDO";
     }
 }
