@@ -60,7 +60,7 @@ public class Jarvis {
     }
     
     public enum AuxRegex {
-        SEPARADORES("\"|\\s|'|\\(|\\)"),
+        SEPARADORES("\"|\\s|'"),
         CASO_ESPECIAL("\\d+\\.");
         public String valor;
         
@@ -109,11 +109,9 @@ public class Jarvis {
                             comentarioLinha = nLinha;
                             tipoBusca = 0;
                             verificaRegex(linhaAtualizada);
-                            
                         } 
                         else 
                            tipoBusca = -1;
-                        
                         //atuliza contador de linha
                         nLinha++;
                     }
@@ -122,7 +120,6 @@ public class Jarvis {
                 }
                 // Fim do Arquivo Atual
             }
-
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         } catch (FileNotFoundException ex) {
@@ -195,7 +192,7 @@ public class Jarvis {
                                 break;
                             }
                         }
-                        //se o inicio do coment�rio for menor que o fim da string, retorna a posicao do fim da string
+                        //se o inicio do comentario for menor que o fim da string, retorna a posicao do fim da string
                         if (in < fimString) {
                             return analisadorComentario(linha, fimString);
                         }
@@ -283,6 +280,7 @@ public class Jarvis {
                         for (int z = i; z < analisar.length; z++) { //Remonta a palavra
                             palavra += analisar[z];
                         }
+
                         if (m.group().equals("\"")) //Se deu error em string
                               tokensError.add(new TokenError(palavra,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha, i));
                         else
@@ -312,14 +310,10 @@ public class Jarvis {
                 }
             }
             
-            if (!isEntradaValida(acumulador) && i == 0) { //Deu error no primeiro elemento
-                tokensError.add(new TokenError(acumulador, nLinha, i));
-                acumulador = "";
-            }
-            else if (isEntradaValida(acumulador) && i + 1 == analisar.length){ //Eh ultima posicao
+            if (isEntradaValida(acumulador) && i + 1 == analisar.length){ //Eh ultima posicao
                 verificaRegexCriandoToken(acumulador, i);
             }
-            else if (!isEntradaValida(acumulador)) { //Nao eh o primeiro e nao eh caso especial
+            else if (!isEntradaValida(acumulador)) {
                 boolean precisaCompensar = false;
                 if(acumulador.length() > 1)
                 {
@@ -374,12 +368,6 @@ public class Jarvis {
     }
     
     private int buscadorDeSeparador(char separador, String palavra, int inicio){
-        //Separador especial
-        if(separador == '(')
-            separador = ')';
-        else if(separador == ')')
-            return -1;
-        
         char[] buscador = palavra.toCharArray();
         for (int i = inicio ;i < buscador.length; i++){
             if (separador == buscador[i])
