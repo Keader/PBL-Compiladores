@@ -48,8 +48,8 @@ public class TokenError {
     @Override
     public String toString(){
         if (coluna == -1)
-            return "* " + lexema + " * " + tipo + " :" + linha;
-        return "* " + lexema + " * " + tipo + " :" + linha + ":" + coluna;
+            return "[ " + lexema + " ] " + tipo + " :" + linha;
+        return "[ " + lexema + " ] " + tipo + " :" + linha + ":" + coluna;
     }
     
     private void autoDetectarError(String error){

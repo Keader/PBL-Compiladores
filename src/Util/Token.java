@@ -27,24 +27,22 @@ public class Token {
     }
 
     public String getClasse() {
-        if (classe == null) {
+        if (classe == null) 
             classe = PadraoRegex.values()[id].name();
-        }
         return classe;
     }
 
     @Override
     public String toString() {
-        return "- " + lexema + " - " + Jarvis.PadraoRegex.values()[id].name() + " :" + nLinha + ":" +nColuna;
+        return "- " + lexema + " - " + Jarvis.PadraoRegex.values()[id].name() + " :" + nLinha + ":" + nColuna + "\n";
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Token) {
             Token aux = (Token) obj;
-            if (aux.getId() == this.id && aux.getLexema().equals(this.lexema)) {
+            if (aux.getId() == this.id && aux.getLexema().equals(this.lexema))
                 return true;
-            }
         }
 
         return false;
