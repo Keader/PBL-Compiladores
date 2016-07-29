@@ -10,7 +10,7 @@ public class Token {
 
     private String lexema;
     private String classe;
-
+    
     public Token(int id, String lexema, int nLinha, int nColuna) {
         this.id = id;
         this.lexema = lexema;
@@ -34,7 +34,7 @@ public class Token {
 
     @Override
     public String toString() {
-        return "- " + lexema + " - " + Jarvis.PadraoRegex.values()[id].name() + " :" + nLinha + ":" + nColuna + "\n";
+    	return nLinha + "\t" + lexema + "\t" + Jarvis.PadraoRegex.values()[id].name();
     }
 
     @Override
@@ -44,7 +44,6 @@ public class Token {
             if (aux.getId() == this.id && aux.getLexema().equals(this.lexema))
                 return true;
         }
-
         return false;
     }
 }

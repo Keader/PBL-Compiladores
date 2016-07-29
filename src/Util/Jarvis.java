@@ -85,8 +85,8 @@ public class Jarvis {
 				if (listaDeArquivos[i].isDirectory()) 
 					continue;
 
-				//Lembrar de remover isso depois //XXX triplo x
-				if (!listaDeArquivos[i].getName().endsWith(".txt") || listaDeArquivos[i].getName().contains("_Saida_") || listaDeArquivos[i].getName().contains("_SaidaErro_")) 
+				//Lembrar de remover isso depois
+				if (!listaDeArquivos[i].getName().endsWith(".txt") || listaDeArquivos[i].getName().contains("_Saida_")) 
 					continue;
 
 				File arq = new File(listaDeArquivos[i].getName());
@@ -94,35 +94,26 @@ public class Jarvis {
 				//verificando se o arquivo existe para comecar a analisar
 				if (arq.exists()) {
 					BufferedReader leitor = new BufferedReader(new FileReader(arq));
-					int comentarioLinha = 0, comentarioColuna = 0;
 					boolean iniciouComentario = false;
 					nLinha = 0;
 
 					//pair para verificar o estado dos comentarios
-					PairIntBool pIB;
+					PairComentario pIB;
 					//Lendo do Arquivo
 					for (String linha = leitor.readLine(); linha != null; linha = leitor.readLine()) {
 						//verifica se abriu algum comentario                            
-						pIB = verificaRegex(linha, iniciouComentario);
+						pIB = analisaComentario(0, iniciouComentario, linha);
 						iniciouComentario = pIB.isIniciouComentario();
-
-						//se não fechou o comentário
-						if(iniciouComentario) {
-							comentarioLinha = nLinha;
-							if(pIB.getColuna() >= 0)
-								comentarioColuna = pIB.getColuna();
-						}
+						verificaRegex(pIB.getLinha());
 						//atuliza contador de linha
 						nLinha++;
 					}
 					//se não fechou comentário
 					if(iniciouComentario) 
-						tokensError.add(new TokenError("{","COMENTARIO_MAL_FORMADO", comentarioLinha, comentarioColuna));
+						tokensError.add(new TokenError("{","COMENTARIO_MAL_FORMADO", nLinha));
 
-					gerarSaida(tokens, arq.getName());
-					if(tokensError.size() > 0)
-						gerarSaida2(tokensError, arq.getName());
-
+					//gerando saidas (0 para saida normal, -1 para erro)
+					gerarSaida(arq.getName());
 					leitor.close();
 				}
 				// Fim do Arquivo Atual
@@ -138,53 +129,19 @@ public class Jarvis {
 
 	/*Ainda falta melhorar. Sempre que uma String nao for valida, tenta quebrar em pedacos menores
     verificando caractere por caractere.Fazendo primeiro o basicao*/
-	private PairIntBool verificaRegex(String entrada, boolean iniciouComentario) {
+	private void verificaRegex(String entrada) {
 		char analisar[] = entrada.toCharArray();
 		String acumulador = "";
 
-		//TODO inicio parte comentario
-		PairIntBool pairComentario = new PairIntBool(-1, iniciouComentario);
-		boolean isString = false; 
-		char c;
-
-		//se estiver esperando fechar comentario e nao existir, retorna logo
-		if(!(entrada.contains("}")) && pairComentario.isIniciouComentario())
-			return pairComentario;
-
-		for (int i = 0; i < analisar.length; i++) {
-			c = analisar[i];
-			//verifica se nao abriu um comentario
-			if(!pairComentario.isIniciouComentario()){
-				//iniciou comentário e não é string
-				if(c == '{' && !isString) {
-					pairComentario.setIniciouComentario(true);
-					pairComentario.setColuna(i);
-					continue;
-				}
-				else {
-					//começou ou terminou string ou char
-					if(c == '\"' || c == '\''){
-						isString = !isString;
-						pairComentario.setIniciouComentario(false);
-					}
-				}
-			}
-			//se abriu um comentario, verifica se fechou e nao eh uma string
-			else if(c == '}' && !isString) {
-				pairComentario.setIniciouComentario(false);
-				continue;
-			}
-			else
-				continue;
-			//TODO fim parte comentario
-
+		for (int i = 0; i < analisar.length; i++) {			
 			acumulador += analisar[i];
 			String atual = "" + analisar[i];
 			Pattern patern = Pattern.compile(AuxRegex.SEPARADORES.valor);
 			Matcher m = patern.matcher(atual);
 
 			//*********************************** PEGANDO SEPARADORES ************************************
-			if (m.matches()) { //Eh um separador
+			 //Eh um separador
+			if (m.matches()) {
 				//Remove o separador (o ultimo elemento adicionado)
 				acumulador = removeUltimoElemento(acumulador);
 				if (!acumulador.equals("")){
@@ -231,6 +188,7 @@ public class Jarvis {
 							tokensError.add(new TokenError(palavra,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha, i));
 						else
 							tokensError.add(new TokenError(palavra, nLinha, i));
+						
 						i = analisar.length;
 						continue;
 					}
@@ -249,7 +207,8 @@ public class Jarvis {
 						int temp = Integer.parseInt(prox);
 						acumulador += temp;
 						i = proximo;
-					} catch (NumberFormatException e) {
+					} 
+					catch (NumberFormatException e) {
 						tokensError.add(new TokenError(acumulador, nLinha, i));
 						acumulador = "";
 						continue;
@@ -259,6 +218,7 @@ public class Jarvis {
 			//Eh ultima posicao
 			if (isEntradaValida(acumulador) && i + 1 == analisar.length)
 				verificaRegexCriandoToken(acumulador, i);
+			
 			else if (!isEntradaValida(acumulador)) {
 				boolean precisaCompensar = false;
 				if(acumulador.length() > 1) {
@@ -275,8 +235,6 @@ public class Jarvis {
 					i--; 
 			}
 		}
-
-		return pairComentario;
 	}
 
 	private boolean isEntradaValida(String entrada) {
@@ -308,37 +266,74 @@ public class Jarvis {
 		}
 		return -1;
 	}
-
-	private void gerarSaida(List<Token> tokens, String arquivo){
-		try {
-			File arq = new File("_Saida_" + arquivo);
-			BufferedWriter bw = new BufferedWriter(new FileWriter(arq));
-			for(Token t : tokens)
-				bw.write(t.toString());
-			bw.close();
-		} 
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		//XXX isso é uma gambiarra, se não quiser que ela exista, ao inves de usar a lista de tokens como atributo vamos por como variavel local
-		tokens.clear();
-	}
 	
-	private void gerarSaida2(List<TokenError> tokens, String arquivo){
-		File n = new File("_SaidaErro_" + arquivo);
+	public PairComentario analisaComentario(int is, boolean iniciouComentario, String entrada){
+		PairComentario pairComentario = new PairComentario(-1, iniciouComentario);
+		boolean isString = false;
+		char[] analisar = entrada.toCharArray();
+	
+		//se estiver esperando fechar comentario e nao existir, retorna logo
+		if((!(entrada.contains("}"))) && pairComentario.isIniciouComentario()) {
+			pairComentario.setLinha("");
+			return pairComentario;
+		}
+	
+		for (int i = 0; i < analisar.length; i++) {
+			//verifica se nao abriu um comentario
+			if(!pairComentario.isIniciouComentario()){
+				//iniciou comentário e não é string
+				if(analisar[i] == '{' && !isString) {
+					pairComentario.setIniciouComentario(true);
+					pairComentario.setColuna(i);
+				}
+				else {
+					//começou ou terminou string ou char
+					if(analisar[i] == '\"' || analisar[i] == '\''){
+						isString = !isString;
+						pairComentario.setIniciouComentario(false);
+					}
+					pairComentario.setLinha(pairComentario.getLinha() + analisar[i]);
+				}
+			}
+			//se abriu um comentario, verifica se fechou e nao eh uma string
+			else if(analisar[i] == '}' && !isString)
+				pairComentario.setIniciouComentario(false);
+		}
+		return pairComentario;
+	}
+
+	/***
+	 * @param arquivo o nome do arquivo inicial
+	 */
+	private void gerarSaida(String arquivo){
 		try {
+			File n = new File("_Saida_" + arquivo);
 			BufferedWriter bw = new BufferedWriter(new FileWriter(n));
-			for(TokenError t : tokens) 
-				bw.write(t.toString());
+			for(int i = 0; i < tokens.size(); i++){
+				bw.write(tokens.get(i).toString());
+				bw.newLine();
+				bw.flush();
+			}
+			
+			//se possui erros, escreve eles
+			if(tokensError.size() > 0) {
+				bw.newLine();
+				bw.flush();
+				for(int i = 0; i < tokensError.size(); i++){
+					bw.write(tokensError.get(i).toString());
+					bw.newLine();
+					bw.flush();
+				}
+			}
 			
 			bw.close();
-		} 
+			//XXX isso é uma gambiarra, se não quiser que ela exista, ao inves de usar a lista de tokens como atributo vamos por como variavel local
+			tokens.clear();
+			tokensError.clear();
+		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		//XXX isso é uma gambiarra, se não quiser que ela exista, ao inves de usar a lista de tokens como atributo vamos por como variavel local
-		tokens.clear();
 	}
 
 	public List<Token> getTokens() {

@@ -1,0 +1,715 @@
+funcao "foi " 2 / var "sei " 'c' programa 8 + mesmo enquanto "foi " "xablau " "qual " 
+15 foi "teste " "sei " mesmo xablau "so " 22 leia 24 * 'h' 27 28 
+'D' inteiro * "testar " xablau pra pra 36 pra 'z' '5' foi 'F' 'o' 
+/ falso escreva pra foi pra - - 51 "testar " so '4' 'G' sei 
+testar mesmo * / 'X' 62 "testar " + "nao " 66 - const leia 70 
+- 'l' 73 foi 75 / 'm' so "nao " "qual " so sei pra 84 
+'w' so 87 88  senao senao's' 'm' "sei " * 95 "foi " * * 
+'7' 'a' 101 'x' var teste teste  senao107 "sei " booleano var 111 'q' 
+fim 114 115 'Y' entao caractere xablau  senaoxablau nao "nao " - 'z' "foi " 
+/ 128 programa mesmo 131 * verdadeiro 'j' teste 'y' 'O' '5' / testar 
+'M' real mesmo leia booleano enquanto + 148 149 real booleano entao * "xablau " 
++ - 'F' var programa sei - cadeia funcao 164 + / + 'P' 
+169 'j' - 172 la 174 "sei " 'b' 177 + 'u' 'L' const 'v' 
+/ - foi 'O' "teste " caractere 189 'o' "teste " + "testar " - / "qual " 
+* escreva * falso 201 xablau "teste " testar foi fim * "nao " / 'h' 
+'L' * pra 'W' testar 216 caractere "teste " mesmo + testar "sei " "pra " sei 
+"sei " sei "so " "sei " 'Y' "sei " '{' / ''' "sei " * * 237 var 
+'m' entao 241 fim "pra " 244  senaonao 'S' teste "qual " "mesmo " 'F' "testar " 
+sei "so " "qual " sei 257 entao la "pra " "teste " "teste " so inicio 265 'b' 
+/ "xablau " xablau - la 'K' '7' + 275 '9' + - - "pra " 
+'H' "qual " - 284 "testar " "xablau " 'a' enquanto sei 'O' 291 292 'w' '}' 
+cadeia "sei " "foi " sei 299 inicio 'B' la 303 "teste " testar 306 leia 308 
+so pra 311 'K' + '0' ''' 316 'c' 318 sei 'k' + * 
+nao "teste " teste * "foi " "la " pra "pra " inicio - inteiro 334 fim caractere 
+'r' 338 inteiro 340 + inicio "foi " - so "sei " 347 qual "so " ''' 
+testar * 'k' 354 teste se 357 358 "foi " 'F' / + se 364 
+inicio ''' "teste " "la " teste 370 fim falso 't' "sei " * "xablau " faca "xablau " 
+"mesmo " + "xablau " * 383 "qual " 'z' mesmo nao 388 const 390 programa inteiro 
+393 394 so booleano 397 'K' 'u' 'Q' funcao '9' 403 - inicio "mesmo " 
+* 408 'n' 'F' 411 - cadeia "nao " 'J' 'k' 'S' 418 mesmo 'O' 
+'P' 'e' faca 424 'L' 'J' + * 'k' la la "teste " 'Q'  senao
+* so / cadeia / 440 * entao testar + foi "la " const pra 
+* ''' escreva "xablau " 'T' "testar " teste 456 ''' - "teste " / - foi 
+"la " la teste 466 467 468 la "teste " - - xablau var + "qual " 
+'f' 'U' 479 xablau "teste " qual 'c' programa testar "testar " 487 "la " 489 faca 
+"so " "so " 493 / "xablau " 'X' "sei " - "sei " 'c' 501 * 503 504 
+/ faca real pra 'J' pra 511 "teste " 513 testar - + "xablau " ''' 
+const 520 sei ')' '7' 524 qual "nao " caractere "mesmo " 529 "mesmo " + "nao " 
+leia - faca / + - pra inteiro teste 'J' 'S' "so " teste + 
+faca mesmo funcao 'H' 551 + real "pra " 555 teste 557 "teste " + faca 
+* falso 563 / enquanto '7' 'R' "teste " 'L' 570 const 572 programa programa 
+- 576 xablau "pra " 'g' verdadeiro '2' "sei " nao sei falso "mesmo " 587 'i' 
+pra 590 "so " entao "qual " "so " se "sei " 'D' xablau pra 'i' 601 - 
+- + + *  senao608 xablau + 611 'i' "xablau " + foi 616 
+"nao " caractere 619 - "xablau " enquanto la + escreva verdadeiro 'O' 628 629 - 
+* "foi " + "sei " "foi " 'q' "so " + inicio booleano 641 falso la 644 
+645 cadeia "xablau " / entao pra leia const '2' * mesmo * * - 
++ "la " 661 fim "nao " xablau - la teste 668 669 670 "qual " sei 
+'j' 'c' inicio 676 / escreva const 680 teste faca teste 684 's' pra 
+'x' 'Q' "sei " - real '5' sei - nao se '}' escreva "nao " 700 
+- 'S' inicio xablau funcao 'l' "foi " verdadeiro 709 leia - "xablau " 'Z' inteiro 
++ pra / "sei " "pra " "so " caractere * 'j' ')' 725 - sei foi 
+/ testar ')' + sei * '7' "sei " se 738 mesmo 'o' "testar " 742 
+'J' "mesmo " "qual " funcao 747 748 'C' ''' 'c' '7' 'G' 754 755 756 
+757 "sei " 'u' sei 'B' qual qual "mesmo " - real var verdadeiro "pra " funcao 
+'T' "so " sei 'V' 'r' "pra " 777 778 'A' 780 la 782 "testar " testar 
+mesmo 'e' "qual " + - teste "so " la real 'i' "pra " "teste " 'w' / 
+sei 800 'R' booleano 803 '7' sei faca 'J' 808 'U' / "qual " "so " 
+813 '4' enquanto mesmo real teste 'P' "mesmo " 821 '7' "testar " sei 's' falso 
+caractere "sei " 'k' 830 't' 832 "so " 834 "foi " qual 837 "foi " "xablau " 'q' 
+* 842 'l' / "pra " 'S' mesmo verdadeiro inteiro - so 'Z' "sei " "testar " 
+mesmo sei + 'I' 859 mesmo 'h' 862 la '}' "sei " 866  senao868 
+escreva "la " pra 872 "xablau " - '2' cadeia "la " 'v' 879 sei xablau "so " 
+sei 884 + teste fim se 'A' 'K' 'M' la "sei " nao + mesmo 
+897 "nao " "sei " 900 faca sei 'q' 904 905 'N' funcao "nao " 'W'  senao
+911 la const xablau / "foi " 'r' fim / fim "so " "xablau " 923 testar 
+"teste " 'L' sei 928 leia - teste 932 933 "teste " qual "teste " + 'e' 
+939 falso 'O' falso real 'R' * / '1' teste cadeia 'B' var foi 
+sei so var caractere * * "nao " '}' 'R' la "la " falso 965 foi 
+'I' / se 970 qual "nao " "sei " 974 975 "sei " * / "xablau " '1' 
+'t' falso - cadeia 't' "qual " falso const "pra " * faca "foi " 'g' inicio 
+* 996 programa 'U' 'T' - "xablau " "la " so "nao " programa + 'Z' / 
+teste sei "teste " qual 1013 sei entao programa "nao " 'M' "la " 1020 la xablau 
+real 1024 "nao " "teste " inteiro inteiro + booleano inteiro verdadeiro 'L' 'A' var entao 
+''' const funcao + qual sei 1043 const se * - 'v' var mesmo 
+teste 1052 so "so " "nao " "la " sei "qual " "testar " + 'W' const so falso 
+'L' '4' '5' "so " so "sei " faca cadeia '6' '7' + "sei " '9' "sei " 
+so 'i' "teste " so sei caractere faca 'P' la / "teste " 'T' foi "nao " 
+'l' mesmo "pra " * se / cadeia '0' ''' nao pra 1104 * / 
+'E' 1108 'J' "pra " caractere 1112 "nao " "nao " 'v' so 'R' - 1119 "mesmo " 
+'I' - inicio 'z' * "nao " enquanto so "nao " + 'L' *  senao1134 
+1135 + foi escreva / / var 'o' "foi " 'Q' "nao " teste - "mesmo " 
++ 1150 + - pra 1154 * '9' 'n' "teste " - var '}' 1162 
+"qual " 1164 "so " 1166 'X' "pra " 1169 1170 booleano 's' 'X' * 1175 ''' 
+'j' 'e' 1179 / "teste " 't' cadeia 1184 foi 'I' mesmo booleano cadeia nao 
+"testar " 1192 'e' - * xablau 1197 - "qual " + "mesmo " sei + 'q' 
+falso entao * "sei " '(' 1210 'M' "la " 1213 "testar " "qual " 1216 sei 1218 
+'7' "nao " "pra " 1222 funcao 1224 xablau 1226 * 1228 + 1230 1231 inicio 
+teste "sei " xablau 'u' 'T' funcao xablau 1240 "sei " / xablau 'J' "teste " + 
+'u' * - * 'z' inteiro / sei - '2' 1257 1258 1259 * 
+'h' se 1263 "pra " "sei " / enquanto - programa "pra " 1271 "la " "xablau " * 
+* 1276 "sei " sei mesmo 1280 "foi " foi verdadeiro real 1285  senaoqual mesmo 
+"mesmo " 1290 pra qual "sei " "sei " 's' "teste " programa 1298 * ''' "testar " sei 
+'R' sei - "sei " "la " 1308 la 'b' verdadeiro 'g' "mesmo " 'L' entao 'X' 
+teste sei "testar " + + enquanto 1323 teste * mesmo / "so " * + 
+1331 'D' testar 1334 "mesmo " 'e' 1337 1338 1339 - 'f' se 1343 * 
+sei 1346 xablau * "qual " 1350 / * caractere falso '(' 1356 + programa 
+nao 1360 se + 1363 var "foi " "qual " 1367 1368 / '1' * 1372 
+cadeia falso sei inicio "testar " so 'i' pra 1381 + 1383 "la " 'h' 1386 
+const + sei 'v' funcao 1392 1393 entao pra inteiro pra / 1399 'S' 
+'E' "sei " so la / "nao " + '3' "xablau " "nao " 'x' "sei " / - 
+* faca testar la verdadeiro 1420 "testar " 1422 inteiro falso 1425 xablau 1427 / 
+teste 'R' "foi " qual "qual " "pra " * + * la sei 1440 1441 funcao 
+"so " "nao " entao * la "xablau " sei la 1451 'v' fim inicio 'C' entao 
+'b' * / 'E' 1461 1462 "xablau " leia 1465 'k' 'e' "foi " + xablau 
+1471 1472 '{' funcao inicio "testar " 'f' "sei " 1479 1480 + foi * 'f' 
+nao 'f' 'N' 'z' / 1490 'O' foi '(' teste pra 'x' 'Q' leia 
+/ 'Y' 1501 var "sei " 'T' "testar " - 1507 inteiro + 'M' const * 
+'V' *  senao1516 "sei " 'a' inteiro xablau + pra 'V' 1524 * / 
+"nao " real 'r' 1530 + fim / "testar " / "la " se - "nao " faca 
+se '6' + sei * + 1547 + * cadeia enquanto la "qual " programa 
+1555 - "mesmo " 'a' "qual " sei mesmo sei "foi " real 1565 / 1567 1568 
+"mesmo " 'j' '2' 'h' 1573 se 1575 * 'c' / funcao "nao " "pra " fim 
+teste 1584 "so " "xablau " 1587 "testar " 'p' "foi " 1591 't' - "pra " "teste " 'p' 
+/ 'F' foi 'x' 1601 'L' so inicio falso fim / 'G' const 'a' 
+1611 1612 ')' var "sei " / inicio escreva 'X' teste faca 'p' sei xablau 
+la 'O' 1627 1628 xablau real mesmo 1632 'E' "xablau " testar 1636 falso '(' 
+caractere * / '3' - + - la "nao " 'C' "xablau " pra "so " '8' 
+"mesmo " 'k' "qual " * 1657 cadeia 1659 * + escreva 1663 "testar " ''' const 
+programa 1668 / "teste " - 'V' leia "sei " 'b' fim leia funcao '7' 1680 
+verdadeiro "xablau " 1683 1684 sei '4' entao 1688 "sei " "pra " 1691 'K' 'C' + 
+1695  senaoescreva "foi " '0' 1700 "sei " so qual faca so pra + - 
+xablau sei "foi " / 'm' 1714 1715 - "nao " var faca 1720 mesmo sei 
+"nao " "teste " 1725 '0' 's' "so " / la inicio 1732 'p' ')' "foi " "foi " 
+'4' 1738 'h' "sei " 'U' + verdadeiro / inicio sei 1747 / - inicio 
+'M' inicio 1753 + 'l' * programa 'g' sei testar testar "foi " '}' 'w' 
+'f' "foi " 1767 "testar " * "pra " la 'y' + - programa 'v' "foi " so 
+enquanto 1780 * - '3' xablau 'K' + 'E' 1788 'H' 1790 1791 '0' 
+"testar " so "teste " xablau 'U' so 'e' "testar " - la "nao " "la " - programa 
+sei - 1809 "teste " "pra " real xablau pra booleano / + 1818 + "foi " 
+teste 1822 'I' "testar " enquanto 1826 1827 la 1829 sei "sei " 'e' 1833 'A' 
+"pra " "mesmo " fim + 'L' caractere - enquanto inteiro / "nao " "la " "sei " mesmo 
+sei mesmo 1851 la "qual " 1854 - "xablau " 'g' + / caractere + 1862 
+inicio "mesmo " - / '7' xablau - "testar " 'T' 1872 / 'm' '1' "nao " 
+1877 teste "testar " 'o' inicio "foi " 1883 1884 "testar " + + caractere 1889 - 
+"mesmo " teste 1893 inteiro 'C' "xablau " inicio + mesmo "so " + '8' escreva so 
+'9' '6' "foi " cadeia sei "pra " 1911 * programa / 'W' 'i' 'C' - 
+faca verdadeiro - 1922 1923 "so " sei 1926 "la " / enquanto se 1931 "teste " 
+qual 1934 * 'N' / "so " 1939 "testar " leia sei 'k' "mesmo " * * 
+falso "nao " enquanto nao / 'g' 1953 - xablau 'a' se sei "foi " teste 
+/ '2' "foi " "sei " testar teste pra 1968 1969 booleano fim 1972 testar '{' 
+1975 "nao " cadeia 'a' 1979 cadeia leia + + nao '5' * qual + 
+inteiro 'P' 1991 xablau testar "qual " 1995 'v' 'U' "foi "  senao2000 "xablau " 2002 
+real sei "la " "foi " - '3' + 'J' const sei 2013 * pra "sei " 
+2017 2018 'T' "testar " - 2022 '7' funcao entao * / falso foi "xablau " 
+'p' "mesmo " "teste " 2034 'G' "teste " pra "testar " 2039 fim "nao " escreva foi "nao " 
+"mesmo " mesmo 2047 const "xablau " 'W' 2051 2052 "pra " teste 'w' 'o' "sei " funcao 
+- "mesmo " 'P' + "pra " 'O' fim "mesmo " booleano 'R' "sei " pra 2071 2072 
+"qual " testar xablau falso 'v' real / foi "so " / pra const sei * 
+/ "testar " 2089 se / fim '{' 'o' mesmo "teste " 'E' caractere qual foi 
+"foi " - * 2104 "testar " fim 'E' 'W' 2109 verdadeiro var "qual " pra se 
+* 'S' 2117 2118 pra 'U' leia 'b' la 2124 "mesmo " pra / cadeia 
+enquanto const 'O' 2132 "sei " "xablau " 'i' 2136 'k' 2138 - / 2141 "so " 
+"teste " "teste " falso la * "foi " 2149 'O' 2151 ')' 'T' testar "teste " se 
+'y' "so " '}' testar caractere "foi " var 2164 foi 2166 - / 2169 + 
+2171 leia 2173 2174 'n' 'L' '6' funcao testar - '9' 2182 2183 qual 
+qual "foi " so sei cadeia 'h' + la nao "so " 2195 "foi " 2197 + 
+* 'E' "la " real "testar " 'I' funcao teste 2207 so "mesmo " + - so 
+so 'j' verdadeiro + * 2218 sei entao "xablau " const 's' 2224 var 2226 
+2227 falso qual 'H' nao "nao " 2233 pra 2235 mesmo '6' entao 'k' caractere 
+2241 2242 "nao " 2244 const "testar " '7' "qual " funcao funcao mesmo se programa - 
+2255 "foi " pra '2' / teste teste fim la 2264 2265 faca 2267 '2' 
++ booleano caractere so 'h' xablau * 2276 nao "teste " / "la " 2281 testar 
+sei xablau "xablau " 2286 2287 / 2289 pra 2291 fim 2293 '8' booleano sei 
+xablau "qual " "pra " so 2301 'm' * 'C' sei '7' 'G' testar / "foi " 
+la 2312 qual escreva * qual "la " 2318 caractere 2320 "xablau " la / 'W' 
+'j' + qual xablau var "sei " 'E' 2332 pra "so " 2335 inteiro '8' 2338 
+* + "so " * "testar " - 'N' nao "sei " ''' + 'Y' leia 's' 
+'t' "qual " 'j' "nao " 'Z' inteiro xablau 2360 * inteiro "sei " / 'r' - 
+nao 2368 se booleano 'R' / "mesmo " entao 2375 'm' 2377 escreva pra la 
+* qual xablau se cadeia 2386 teste var 'S' sei 'J' 2392 leia 2394 
+"qual " '4' "sei " / 'Y' + 2401 2402 cadeia qual 'S' fim 2407 2408 
+programa 2410 2411 "qual " "foi " fim qual foi "sei " 2418 "teste " so testar leia 
+faca 2424 'b' "sei " "qual " 'T' "pra " var 2431 'p' testar inicio '6' inicio 
+* inicio 'w' 2440 "qual " programa nao 2444 2445 2446 so '}' '5' + 
+2451 2452 so * so "sei " "xablau " 2458 entao 'q' 'L' "xablau " 'B' 'V' 
++ 't' booleano 2468 2469 2470 / "teste " - '1' 'k' 2476 'N' 's' 
+sei  senaoso xablau / so 2485 se / '(' verdadeiro sei "nao " 2492 
+'k' * 'z' sei "xablau " testar caractere verdadeiro mesmo inicio / 'b' '6' 2506 
+inteiro 2508 nao 't' - sei 'D' 2514 'B' / 'k' "teste " 2519 funcao 
+escreva + 2523 2524 sei - la 2528 cadeia entao la 2532 / programa 
+xablau 2536 foi * 'z' faca "pra " "foi " - '0' "pra " 'J' xablau verdadeiro 
+'1' so + real 'g' - 2555 'o' 'p' faca se "pra " mesmo "so " 
+'T' 2564 + la * "qual " sei 2570 / "sei " "la " "nao " 'A' "foi " 
+mesmo "sei " 2579 / 'w' 'S' "qual " "foi " "mesmo " 2586 '2' foi 2589 sei 
+'s' / "mesmo " 2594 teste enquanto entao sei 2599 2600 2601 * '8' '1' 
+qual 'F' 2607 * booleano pra caractere 2612 funcao "teste " "sei " teste 'V' qual 
+caractere 'q' verdadeiro '5' 2623 falso "so " / - xablau '}' escreva "testar " faca 
+verdadeiro 'P' 2635 * teste entao "pra " escreva / - '8' + 2645 "testar " 
+sei 'A' 2649 "sei " foi 'E' * "xablau " booleano real 2657 * "la " - 
+var mesmo 'D' "teste " + booleano "teste " qual 2669 cadeia '7' 'D' so 'E' 
+2675 "pra " * "teste " se "nao " 2681 foi caractere testar "xablau " teste "testar " 'q' 
+2689 leia  senaoverdadeiro xablau 'u' 'I' * + caractere 2699 2700 'c' - 
+"teste " * xablau "mesmo " enquanto "mesmo " testar "foi " pra so "sei " - testar 'b' 
+"la " - foi - 2721 "foi " sei 'k' sei 2726 var verdadeiro 2729 mesmo 
+'K' 2732 "xablau " se "nao " xablau so falso "mesmo " "nao " pra 'X' xablau "xablau " 
+entao la - 2748 'v' testar const "sei " '1' mesmo "la " "teste " programa 2758 
+'C' foi "so " 2762 inicio "qual " + 2766 't' "mesmo " 'D' se / / 
+inteiro 2774 / 2776 / / "testar " 's' / 2782 mesmo sei var '}' 
+var booleano 'v' "nao " se '0' + falso const teste 2797 funcao * 2800 
+qual teste se 2804 real + 2807 funcao * "foi " - / - - 
+2815 '6' programa qual 2819 inteiro "so " 2822 - / xablau '5' "qual " 2828 
+'Z' mesmo 't' nao "pra " 'e' - programa caractere + 'p' 2840 caractere '1' 
+testar 'Y' * faca 2847 'o' 'W' 2850 'F' foi * qual 'W' 2856 
+"testar " "testar " real 'A' * sei 'u' + cadeia  senaose 'Q' - programa 
+sei 2872 qual escreva so la testar + "foi " foi 'b' cadeia "la " sei 
+escreva "foi " 2887 "so " 2889 2890 teste 'x' '0' 2894 'B' "qual " teste qual 
+2899 'B' "so " testar + so 'F' - booleano "qual " entao 'S' falso qual 
+booleano 't' "testar " 2916 fim 'j' + "nao " cadeia sei * 2924 * * 
+'A' real nao 'W' 2931 'N' escreva inteiro 'x' sei "testar " 2938 "mesmo " 2940 
+se 2942 2943 caractere 2945 "sei " * - 'Z' 'A' testar sei 'f' 'u' 
+"pra " programa sei funcao 2959 'H' "la " 2962 'o' 2964 'Y' "teste " "sei " + 
+xablau '{' '(' 2972 * 'v' 2975 se * 'k' inteiro 2980 2981 * 
+funcao mesmo 2985 2986 2987 sei 2989 2990 "sei " * enquanto fim 2995 'h' 
+"testar " + / 'n' so 3002 entao * + "xablau " faca / inteiro / 
+- real 'q' - 'j' foi teste var entao "sei " 'b' / "so " 3024 
+nao 3026 - 3028 / + 'M' 3032 + 3034 3035 3036 + booleano 
+3039 se * sei '9' "la " "teste " funcao 3047 faca testar 'N' 3051 enquanto 
+"teste " 3054 funcao 3056 * qual "qual " 3060 la 3062 / "testar " - 'Z' 
+sei testar 3069 3070 'B' inteiro '4' "mesmo " * "sei " "testar " sei + "so " 
+ senao"teste " + / foi * 'x' 3088 "foi " "foi " foi "sei " '9' 'V' 
+qual 3096 / - "so " "xablau " - - 3103 'A' 'w' '6' "sei " - 
+booleano la 's' teste - 'C' foi "sei " funcao 3118 3119 3120 verdadeiro "xablau " 
+* + - leia teste nao '''  senao3131 'e' 'H' / "so " 3136 
++ "la " xablau "sei " / 3142 programa 'C' sei '5' + / booleano 3150 
+3151 teste 'j' "qual " funcao / nao 'r' "sei " pra "sei " 3162 pra "sei " 
+"pra " 'l' + pra 3169 "pra " "la " - programa "qual " "xablau " programa - * 
+testar 'y' 3181 verdadeiro const + var pra 'J' qual caractere 'G' faca 3192 
+* verdadeiro + 3196 cadeia / "la " nao mesmo funcao mesmo faca 3205 "so " 
+pra "pra " falso "so " 3211 3212 "testar " 3214 qual - 'J' nao 't' 3220 
+la + 'P' "sei " + nao 3227 so 3229 - qual "mesmo " 'C' "pra " 
+"nao " 'o' "pra " 3238 foi 3240 3241 "xablau " falso + 3245 sei sei "qual " 
+"foi " "mesmo " "sei " pra const 3254 const 'q' nao 3258 3259 'F' "foi " pra 
+'i' 3264 'h' "xablau " xablau 3268 / nao leia xablau / se "testar " / 
++ so / enquanto 'c' "mesmo " 'X' foi "sei " verdadeiro / sei teste "nao " 
+entao 'v' qual "xablau " so - "teste " foi teste 'S' foi sei programa '4' 
+teste 3306 '5' 3308 'v' escreva 'A' 'j' "mesmo " + "foi " 'V' / + 
+3319 + so 'Z' "xablau " inicio teste + "foi " 3328 3329 / + inicio 
+fim var / 3336 '1' testar 'r' '0' "mesmo " 'w' enquanto xablau 3345 inicio 
+'z' 'b' la ')' 'f' qual cadeia 3354 3355 foi 3357 3358 + - 
+const 3362 "foi " 'D' 'A' * real programa fim 3370 - - 3373 mesmo 
+mesmo "la " "sei " "la " 'z' "pra " "teste " programa inteiro foi la 3386 / 'O' 
+3389 const * 3392 3393 3394 caractere "so " sei leia + 'v' "sei " "sei " 
+"so " 3404 funcao testar / 3408 'k' - so / programa "pra " 3415 3416 
++ sei '0' la 'r' se - - 3425 'g' inteiro "sei " 3429 leia 
+"xablau " foi "testar " "la " - + 3437 const 3439 3440 "foi " 'N' 3443 "pra " 
+"sei " 3446 / 3448 la 3450 - '}' '8' "sei " "pra " booleano "mesmo " var 
+"sei " var + 'e' fim "xablau " programa 'l' 3467 "pra " booleano 'q' "so " 'k' 
++ 3474 3475 'L' la var / "foi " se sei falso 3484 3485 3486 
+* / ''' * "mesmo " / nao  senao'k' "pra " "foi " - "testar " leia 
+3501 "mesmo " caractere "sei " "foi " * inteiro 'K' 'u' "so " testar  senao* entao 
+"so " * 'Y' 'i' inteiro "sei " 3521 + "sei " so 3525 "qual " 'x' "mesmo " 
++ sei - - la real inicio - sei enquanto mesmo 3540 3541 foi 
+mesmo qual 'M' "teste " 3547 'U' 'j' xablau / "sei " -  senao"foi " nao 
+3557 'X' "so " pra mesmo "sei " - 'V' 'N' 3566 - "teste " pra teste 
+cadeia 3572 "pra " pra xablau foi * "sei " la inicio 3581 / real + 
+* se 'p' + * * '1' * / fim foi entao 3597 'e' 
+teste 'G' + se / * + 'i' "teste " so qual '0' inteiro mesmo 
+sei 3614 'j' "nao " sei xablau * entao xablau se "xablau " "sei " * - 
+'l' so "teste " 3630 testar pra 3633 - sei qual - 'K' "teste " / 
+3641 escreva "pra " nao cadeia 'o' - "nao " 3649 3650 pra pra "nao " pra 
+'R' escreva 3657 'G' "so " funcao enquanto "sei " so - 3665 * faca 3668 
+'D' '('  senaobooleano * '8' "foi " "xablau " inicio + *  senaonao 'c' 
+qual 'P' + "la " 'a' 'Z' * funcao testar - "la " 3694 sei "sei " 
+testar "teste " + 'c' 3701 foi escreva var xablau cadeia "so " foi funcao 3710 
+'f' 3712 3713 verdadeiro / nao xablau inteiro 3719 inteiro "mesmo " enquanto 'e' funcao 
+pra mesmo "la " inicio 3729 cadeia ')' falso escreva * "mesmo " 'b' 3737 "foi " 
+3739 foi 3741 xablau 3743 "nao " 'H' 3746 / "mesmo " 'M' pra "xablau " 3752 
+leia testar '{' funcao 3757 / - 'l' la ''' escreva "la " "foi " 'J' 
+falso inicio / 3770 '7' / 3773 'N' "teste " "sei " 'G' "sei " 'L' 'B' 
+"teste " 3782 teste nao "la " "mesmo " 'i' * + 3790 inicio 3792 leia 'y' 
+3795 la 3797 'a' cadeia / 3801 qual testar '1' "mesmo " nao * / 
+3809 + testar 'F' "pra " 'l' 'Y' 3816 qual 'a' 3819 so * pra 
+3823 'D' "sei " "pra " escreva "testar " 'X' 'l' 3831 la 3833 * sei "nao " 
+mesmo "foi " 3839 3840 teste 'e' 'm' 3844 leia "qual " fim teste "mesmo " / 
+real real '(' "mesmo " programa - cadeia cadeia + '7' 'D' 3862 testar xablau 
+"teste " 3866 + 'P' xablau / pra 'M' 3873 + so faca 'b' / 
+'{' '{' nao 'x' / "testar " "la " 'k' "pra " 'p' real "xablau " 3891 3892 
+'o' 3894 "so " "mesmo " sei caractere var / '1' "nao " * 3904 3905 "la " 
+'S' foi - caractere faca cadeia 3913 "foi " inicio / + inicio 'q' mesmo 
+funcao "qual " 'I' inicio - "nao "  senaofoi "sei " "so " escreva funcao la 's' 
+* 3936 'I' 3938 "la " "testar " "sei " 3942 "teste "  senaopra 3946 3947 - 
+'J' 3950 'I' real 3953 / escreva fim "testar " 'k' funcao 'U' 'b' 'Z' 
+'A' "mesmo " "so " - - 'm' '5' 3970 3971 "nao " 'H' "testar " 'W' * 
+programa nao '8' '}' qual "foi " teste "la " faca 3986 / "qual " programa "la " 
+"qual " caractere "sei " "sei " sei sei / 'B' + 4000 "xablau " "qual " 4003 "qual " 
+inteiro 'w' "so " testar 'I' 'i' + * "foi " "nao " inicio 'F' la 'F' 
+* 4020 'V' 'y' 'c' 'i' pra "teste " 'G' 'Y' funcao "la " / "qual " 
+- "sei " so 4036 'u' 4038 - 'z' + foi pra 4044 sei qual 
+qual leia enquanto 4050 'e' / "so " "so " "sei " * * 4058 * inicio 
+"teste " * 4063 nao entao * qual qual cadeia 'm' escreva / "foi " 4074 
+'n' / real / + +  senao'Q' enquanto '0' "la " "qual " 4087 / 
+ senao+ 'k' verdadeiro "teste " "qual " faca - 4097 so 4099 4100 real - 
+ senaoteste "mesmo " entao ')' "nao " escreva 'h' '2' + "qual " so leia 'Q' 
+"sei " 4118 4119 escreva 'a' leia 4123 "qual " - 4126 const pra + - 
++ nao "so " / 4135 'm' - "sei " 'u' "la " nao + caractere sei 
+funcao - sei inteiro - * leia "sei " sei xablau "testar " 4156 teste "qual " 
+4159 nao 'g' - 's' fim 4165 escreva nao / sei 'u' "qual " faca 
+"so " "so " + 4176 / escreva fim 4180 + '2' + 4184 const "so " 
+'L' / faca "nao " 4191 "teste " pra 4194 + verdadeiro - / inicio 'I' 
+escreva mesmo sei 4204 sei 4206 'Z' '(' programa "sei " pra '4' 4213 4214 
+"la " sei - "so " - testar "nao " enquanto nao mesmo qual "sei " la - 
+/ qual xablau / sei / "foi " "pra " 'D' - '8' / teste foi 
+4243 4244 const "pra " entao 'q' 4249 'c' testar fim + caractere 'V' '3' 
+escreva const / fim 't' "xablau " + 'K' 4265 'n' 'c' "la " "testar " falso 
+4271 4272 faca falso - xablau "qual " * "la " 'K' "sei " 'K' '(' "so " 
+/ + ''' / '6' "qual " booleano - "xablau " "la " 4295 4296 la "testar " 
+inicio 'V' inteiro programa caractere 'J' la "qual " inicio 4308 "qual " se "xablau " 4312 
+4313 teste + foi "teste " 'E' "qual " 4320 'e' - "teste " sei se xablau 
+"sei " 4328 enquanto 4330 'X' "qual " '0' 4334 so 4336 4337  senao'k' / 
++ testar teste 4344 4345 / 'N' 4348 "mesmo " 4350 4351 + + const 
++ "qual " 4357 4358 'C' "teste " "sei " funcao xablau 4364 / - foi 'w' 
+se "la " ''' '8' inicio 4374 - / 4377 sei 'J' 'E' "sei " sei 
+"pra " booleano 4385 ')' + 4388 '0' leia 'X' xablau * / programa 4396 
+'s' foi var 4400 escreva 4402 / 4404 "mesmo " 4406 / faca '2' 'p' 
+4411 'M' 4413 "xablau " 'X' "la " escreva "foi " teste la '{' 4422 const / 
+"la " "teste " foi "sei " fim qual 4431 xablau "xablau " testar 'o' xablau caractere "testar " 
++ mesmo "sei " + * * mesmo / "pra " "nao " teste mesmo qual mesmo 
+falso "qual " 'k' - + entao pra so * 4462 'Z' "la " 'O' - 
+'c' funcao real "teste " "testar " 'D' 4473 + 'X' 'g' - xablau 'o' ')' 
+inicio 'k' "testar " - 4485 programa "foi " sei 4489 + falso 4492 "sei " 'g' 
+4495 "so " funcao * + "qual " '4' foi verdadeiro - "teste " "nao " "nao " leia 
+foi 4510 falso 'f' falso la / - 4517 "la " sei falso 4521 "so " 
+leia inteiro "mesmo " faca 'c' 'B' escreva enquanto "sei " - "so " - "mesmo " 4536 
++ / * nao 4541 qual verdadeiro "mesmo " "nao " so 'f' sei "teste " 4550 
+- "nao " 4553 'C' '8' "mesmo " escreva 'U' nao inteiro 4561 "xablau " funcao - 
+programa - "qual " la / "sei " sei "nao " 'b' 4574 4575 4576 nao inteiro 
+pra 'K' mesmo * / / nao "nao " teste 4588 real nao 4591 nao 
++ 'e' * / "qual " 'L' sei / 'z' leia 4603 xablau 'K' "mesmo " 
+xablau / mesmo testar 'o' 4612 - caractere 'a' 'h' qual - + / 
+- 4622 4623 sei / /  senao- 'X' 'p' 'y' "teste " booleano sei 
+inicio "xablau " "mesmo " 4638 4639 cadeia "foi " sei so xablau funcao 4646 4647 var 
+/ escreva "sei " 'Q' verdadeiro 'K' nao "so " qual 'h' '6' - 4661 "xablau " 
+entao '(' "la " + '{' faca '9' 'G' "qual " inicio 4673  senao4675 4676 
+"sei " "qual " "xablau " so qual 'H' leia "pra " sei / faca "pra " xablau inicio 
+/ so 4693 verdadeiro verdadeiro ')' - se + '}' * "so " nao * 
+const 'Q' 'o' qual caractere 'J' programa 4712 4713 4714 + teste / 'U' 
+const '4' "pra " "nao " / 'm' 'a' so 4727 foi 4729 + 'h' - 
+inicio 'M' 'h' sei / - se "teste " booleano la 'b' verdadeiro foi sei 
+- 4748 - la qual 4752 "pra " 4754 'l' - + var "qual " - 
+4761 var  senaovar so const "teste " sei 4769 "nao " 'l' "teste " 'f' "so " 
+inteiro 4776 '}' 'x' se + 4781 nao '7' "mesmo " "xablau " - nao "testar " 
+/ 4790  senao4792 4793 4794 "xablau " "so " '1' * 4799 'Q' 'R' teste 
+4803 4804 "sei " so faca 4808 4809 / * 4812 'c' "xablau " const 'P' 
+"qual " real const "teste " "mesmo " 'T' entao cadeia + fim 4827 "nao " '9' "mesmo " 
++ '1' teste "xablau " * 't' 'N' 4838 '0' "teste " * 4842 'W' 4844 
+sei '4' '8' caractere "sei " 4850 "sei " inteiro - "xablau " faca sei teste 4858 
+'V' 4860 * 4862 qual teste - "pra " "xablau " 'a' 'O' 4870 sei '0' 
+/ "qual " verdadeiro const "sei " 4878 'U' 4880 4881 / 'G' real 4885 inteiro 
+xablau "so " sei teste '3' "xablau " testar 4894 mesmo const entao qual pra 4900 
+inicio 'F' 4903 4904 + falso / + so caractere qual - * 'D' 
+* * * ')' xablau * "pra " funcao - / 4925 'W' - - 
+- "testar " 4931 sei booleano 4934 * qual / 4938 * booleano * + 
+real "qual " verdadeiro sei qual 4948 "qual " "pra " pra 4952 const 4954 sei / 
+programa 4958 "la " * * booleano xablau falso / '5' 'N' "teste " + cadeia 
+inicio sei - booleano 'W' 4976 'c' 'S' entao ')' 'b' foi sei enquanto 
+"foi " cadeia 'S' / 4989 so 'V' "so " "sei " verdadeiro  senaoescreva * 'O' 
+4999 "foi " - '3' 5003 5004 / * "qual " 'l' teste 'U' 5011 "testar " 
+5013 "qual " 'Q' 'c' so "teste " leia "pra " testar 5022 mesmo - 'P' fim 
+caractere escreva inteiro 'T' "so " pra "qual " "foi " 5035 + 5037 5038 * "la " 
+foi funcao * / inicio foi '4' "qual " "pra " cadeia 5051 ')' "pra " 'q' 
+* "pra " funcao 'X' testar "teste " verdadeiro "xablau " - 'u' - 'O' + "teste " 
++ 'L' 5071 * se - 'J' xablau 'J' * foi 'l' 5081 "la " 
+* testar 5085 'z' 5087 nao '3' 5090 sei "testar " nao + 'l' booleano 
+escreva * entao "foi " 5101 verdadeiro so teste "qual " falso pra nao la 5110 
+/ 5112 / 5114 booleano "xablau " escreva 'n' 5119 var "nao " "teste " * se 
+5125 + 5127  senao'v' "so " 5131 * 'W' 'g' 5135 '}' / / 
+"qual " "sei " real foi 'n' '6' * fim * '7' cadeia 5150 5151 5152 
+"foi " verdadeiro sei 5156 'M' fim / / nao cadeia 5163 escreva "foi " qual 
+so - 'T' qual 5171 inteiro 5173 nao + 5176 5177 * foi entao 
+leia "xablau " - 'Y' "xablau " 5186 cadeia "sei " + "foi " testar real 'G' "sei " 
+so '}' foi faca 'E' "mesmo " 5201 * "teste " testar "testar " verdadeiro "sei " falso 
+"xablau " 5210 "testar " 'B' 5213 "testar " '3' so "xablau " "teste " 'h' 'T' 5221 testar 
+funcao "mesmo " 5225 5226 - 's' enquanto  senao'4' "so " 5233 - se 'u' 
+* se 5239 'b' faca so funcao - pra 'Q' 5247 + 'j' 5250 
+"nao " "teste " foi 'o' mesmo * "la " "testar " teste * 'e' "mesmo " / qual 
+mesmo 5266 testar 5268 "mesmo " 'H' '5' "teste " "pra " entao / "teste " inteiro nao 
+ senao'w' se pra sei 5284 "xablau " programa 'o' 'H' nao var leia - 
+"testar " "sei " programa "la " 5297 + xablau "nao " + 'z' "sei " "la " foi - 
+entao so sei + '0' so "foi " falso la faca pra * 'g' 5320 
+ senao* 5323 + "so " 5326 5327 "mesmo " "nao " / sei 'K' foi + 
+5335 - 'S' nao 'E' sei mesmo xablau qual teste 5345 inteiro inicio "mesmo " 
+qual "teste " 'l' escreva * + inicio 'e' / faca so foi 5361 'Q' 
+* 5364 falso programa "sei " 5368 5369 mesmo 5371 + "la " 5374 5375 + 
+'h' - nao 5380 verdadeiro caractere la so "sei " leia xablau / xablau "mesmo " 
+fim qual "pra " '2' mesmo 'L' / * 5399 const inteiro nao se 5404 
+falso 5406 inteiro funcao "sei " - testar 'f' '3' foi 5415 faca nao 'k' 
+qual mesmo nao 5422 ')' booleano "so " 5426 '9' 'z' qual + "sei " 'U' 
+"sei " caractere 'y' xablau 'i' 'P' se 5440 inteiro / "mesmo " * 'C' teste 
+5447 'C' la "qual " nao 5452 'C' sei * 5456 - 5458 "so " "teste " 
+'L' "pra " var 'M' "qual " "teste " "sei " + - / 5471 * 'C' se 
+escreva "nao " - la testar cadeia / 'L' foi - mesmo 5486 foi se 
+* pra foi caractere "mesmo " 5494 "nao " 5496 + "la " 'n' / "sei " la 
+foi 'y' "nao " 5506 "sei " faca - + inicio 'g' falso / 5515 teste 
+"qual " foi var 5520 'p' entao "so " + inteiro  senaosei "la " 'y' leia 
+5531 cadeia * la 5535 se 'V' - qual + 5541 * real / 
+5545 - "teste " "sei " * * fim 5552 programa - * "so " escreva * 
+cadeia * "foi " entao "nao " "foi "  senaoescreva 5567 / "testar " foi / * 
+inicio entao ')' 'j' 5577 'r' 5579 "so " / pra leia programa / + 
+"teste " "sei " "sei " 5590 qual 'k' programa "mesmo " testar nao 5597 "sei " const - 
+qual 'N' qual - 5605 5606 teste 'P' 5609 / '4' * "sei " so 
+'s' testar mesmo 5618 "qual " / var "pra " so enquanto '0' const teste se 
+leia * 'p' 5632 "xablau " "xablau " 'z' 5636 falso verdadeiro "sei " 5640 + foi 
+5643 'l' * / 'b' "mesmo " 'k' caractere 5651 'L' 5653 leia "mesmo " / 
+'1' foi 5659 5660 5661 "nao " / fim 'U' "mesmo " + "mesmo " la "teste " 
++ '4' 5673 5674 5675 'e' 5677 "sei " "so " "qual " + * enquanto 5684 
+'u' 'A' "nao " - caractere 'O' nao "xablau " "sei " faca '{' ')' 5697 fim 
+sei 'B' 'o' "pra " 5703 /  senaosei booleano / '0' * 5711 5712 
+"pra " var + la 5717 '4' inteiro leia inicio "qual " inicio 5724 * xablau 
+'G' 'Q' la / qual 5732 const 'u' se 'l' 5737 pra '7' 'F' 
+"sei " '5' enquanto se 5745 + 5747 inicio 5749 5750 caractere nao + 5754 
+cadeia 5756 + 'K' 5759 "sei " + 5762 5763 falso 'b' + * 'G' 
+pra 5770 + "foi " escreva '4' "foi " '2' 5777 * - var "xablau " mesmo 
+5783 cadeia cadeia 5786 entao "la " "mesmo " 'i' * so qual "mesmo " 'Z' 5796 
+"sei " - "so " const la programa 'A' 5804 - sei 'z' inteiro / enquanto 
+var sei 5813 5814 "teste " 5816 5817 qual 5819 - "foi " escreva - 5824 
+foi 'S' 'S' 5828 / testar - "nao " entao 5834 5835 pra mesmo 5838 
+''' fim 5841 5842 caractere xablau funcao 'B' * * "testar " leia  senaoverdadeiro 
+leia pra 'm' 'v' + 5858 + + - 5862 5863 / "foi " teste 
+- 5868 'l' sei + real so "la " 5875 "teste " so 5878 'W' 'a' 
+'L' escreva entao 'g' 5885 teste 5887 / 5889 'E' 5891 "testar " la mesmo 
+5895 5896 funcao * foi '4' '0' sei funcao 'B' "sei " "mesmo " leia 5908 
+entao + 5911 "sei " "testar " real mesmo 'P' "teste " var 5919 "nao " sei cadeia 
+* 'Z' "xablau " 5926 "testar " "sei " "la " + "teste " 5932 'u' 'w' 'H' 'r' 
+'S' "sei " - 'A' "sei " "la " "sei " 'V' / "qual " + 5948 5949 * 
+real 5952 foi sei + sei 5957 + 'z' "qual " ''' var - '7' 
+booleano nao 'z' '9' teste + 5971 + funcao "teste " inicio "nao " "sei " foi 
+- inicio escreva testar * - mesmo "teste " 'a' "so " enquanto "nao " foi qual 
+5993 'X' 't' 5996 inteiro "pra " - 6000 testar 6002 real 'M' 6005 - 
+'e' "sei " teste caractere / - 6013 'u' caractere "sei " 6017 + 6019 teste 
+'l' 6022 "testar " mesmo enquanto "la " 6027 - - '2' 6031 6032 xablau 6034 
+- sei "sei " inteiro + 6040 6041 teste "mesmo " 'Y' falso cadeia / ')' 
+* 'x' * entao so 'i' + booleano 6057 6058 la "sei " + booleano 
+programa verdadeiro "nao " 6066 / 'v' enquanto 'U' 6071 inteiro sei 'S' xablau "so " 
+'Y' - "foi " 6080 * 'I' "pra " "nao " qual * 6087 + 'J' sei 
+so '2' "so " "la " "xablau " "sei " * 6098 sei "nao " leia / 6103 verdadeiro 
+"so " 6106 * 6108 + "xablau " so '}' leia - "pra " '2' var 6118 
+"sei " const 6121 * nao / mesmo "teste " / 'K' 6129 'y' 6131 + 
+/ - xablau "sei " - "nao " booleano 'W' "foi " 6142 verdadeiro 6144 inicio "testar " 
+6147 foi 6149 * - teste foi + enquanto 6156 6157 + sei - 
+/ 'Q' "mesmo " inteiro / '7' "sei " / 6169 xablau inicio 6172 "so " ')' 
+* * teste var "sei " teste "sei " 6182 sei * '{' programa teste sei 
+6189 6190 inicio caractere qual qual fim 6196 "pra " 'q' * pra 'm' la 
+faca * 'V' pra + 6208 sei "so " foi testar 6213 + falso testar 
+'G' 'c' la "pra " 6221 "so "  senaoescreva so "foi " 'm' sei escreva 6230 
+- entao leia + + qual 6237 la sei "sei " foi "qual " "teste " var 
+'R' "foi " 6247 * 6249 nao "pra " 6252 "nao " / 6255 '8' 6257 - 
+"qual " "foi " teste / 'l' const xablau '1' '7' - 'l' * "sei " so 
+"xablau " * 'S' 'C' "foi " 6278  senao6280 6281 6282 "sei " xablau + "so " 
+6287 + 6289 6290 "sei " 'O' xablau "nao " "teste " 6296 6297 foi * 'Z' 
+6301 sei enquanto + - '9' "nao " '{' + + 6311 sei so enquanto 
+'K' faca "xablau " "foi " 6319 "sei " 'k' programa const 6324 '{' sei * '{' 
+'g' "sei " "testar " - / "teste " - 6336 qual 6338 pra enquanto falso enquanto 
+/ 'X' inicio verdadeiro "testar " / 6349 "so " 6351 + "sei " "la " "sei " falso 
+'I' - verdadeiro booleano foi 'C' 6363 / 6365 '7' so foi '5' + 
+'J' qual + 6374 "testar " "mesmo " pra caractere 6379 - + var sei sei 
+"nao " booleano + verdadeiro 'k' enquanto teste * 6393 * escreva "qual " '8' 'h' 
+'a' 'j' '2' sei "teste " 'x' so verdadeiro - "teste " 't' "qual " "la " foi 
+6413 6414 - '(' sei escreva 6419 '2' - "xablau " 'n' 6424 "sei " escreva 
+"pra " 't' 6429 / 'c' "mesmo " 'i' "so " se 6436 "so " + "pra " fim 
+6441 '3' 'q' / 6445 "so " * 'r' * escreva 'Q' 'T' + falso 
+'m' "xablau " 'v' 6458 cadeia escreva "sei " / 'w' 'T' "so " 'I' + 6468 
+"pra " + + fim "teste " var '9' sei - inteiro nao 'u' so 'B' 
+* / "xablau " pra + - 6489 sei "mesmo " nao enquanto "sei " 6495 + 
+6497 6498 sei "xablau " "qual " pra nao cadeia '0' caractere 6507 real + falso 
+const 'Q' "teste " cadeia mesmo * "so " 6518 qual "qual " mesmo 6522 'q' 'x' 
++ caractere 'y' foi "testar " 'y'  senao'{' * funcao 6535 funcao 'N' "la " 
+6539 + "xablau " +  senao6544 booleano - 'I' testar cadeia 'L' "foi " + 
+* 'X' "pra " / fim foi enquanto + + 'q' 6563 programa 6565 qual 
+6567 6568 * + la 6572 so / 'o' 6576 'a' - 'R' "pra " 
+so 6582 6583 / "la " falso cadeia "qual " "sei " "la " + '1' programa mesmo 
+6595 'a' inicio 6598 real pra 'h' "testar " 'b' so - "foi " 'e' escreva 
+la 6610 enquanto sei mesmo "sei " var 'T' "sei " "teste " + 6620 6621 6622 
++ sei qual 'Y' programa "sei " '{' 'y' nao - "qual " escreva xablau 'K' 
+- funcao qual 'h' teste 't' inicio '8' 6645 falso 6647 * 6649 "sei " 
+"la " "sei " programa real - + 'A' 6658 + "xablau " 'u' "nao " 'y' * 
+6665 - 'l' 'o' sei 'w' qual 's' teste / var nao verdadeiro / 
+"so " 'e' enquanto 'B' 6683 xablau foi sei 6687 inteiro - teste 6691 6692 
+* 6694 't' + "sei " 6698 qual 6700 "so " "mesmo " '}' '9' falso "la " 
+verdadeiro 6708 6709 inteiro inteiro  senao"foi " mesmo 6715 6716 'W'  senao''' 'O' 
+sei - mesmo la 'E' 6726 'j' verdadeiro 6729 'l' - qual 6733 xablau 
+'Q' "sei " + "foi " 6739 "so " leia * booleano 'S' "nao " 'E' + * 
+leia booleano 6751 nao + 't' cadeia "testar " - '8' 'A' 'E' "sei " "teste " 
+"nao " / var "pra " * enquanto / "xablau " 6771 'o' so 'C' * se 
+ senao6778 escreva foi * 6782  senao6784 '4' 6786 6787 + 6789 * 
+"la " 'V' / / ''' so 6797 "sei " 'b' + pra 'w' "teste " - 
+'(' foi sei xablau teste "teste " + "testar " testar cadeia 6815 / "so " pra 
+'}' + * 6822 'x' "pra "  senaoverdadeiro caractere / faca booleano 6831 entao 
+"sei " funcao const booleano "nao " fim 6839 leia + "qual " "qual " xablau * 6846 
++ 6848 mesmo ''' * "pra " "pra " "so " / 6856 - 6858 booleano teste 
+leia "la " qual testar "nao " var 'A' 6868 caractere / caractere testar + leia 
+inicio "testar " xablau 6878 "sei " se 6881 entao "sei " sei sei const testar 'j' 
+- faca 'e' inteiro "mesmo " 'Q' la 6896 nao ''' "so " la 6901 "la " 
+"foi " "sei " real / 'g' + foi sei 6911 sei - leia + sei 
+verdadeiro 6918 6919 booleano 6921 so * inicio caractere foi cadeia verdadeiro 'z' programa 
+'S' so  senaoinicio booleano / 'G' "xablau " + foi 6941 6942 so "pra " 
+"qual " "foi " 'D' "so " - testar foi 6952 6953 "so " foi la 'G' 'R' 
+"mesmo " + '}' qual verdadeiro testar 6965 'j' sei inicio 6969 foi xablau + 
+teste 6974 + 'K' la 'y' / 'w' 'F' cadeia * cadeia nao "xablau " 
+programa teste 6989 - "nao " teste + faca so 'B' 6997 's' / sei 
+real 'c' + 7004 7005 7006 7007 nao * so 7011 var "xablau " + 
+"sei " inicio "sei " "xablau " "nao " "sei " "sei " real pra const programa - "foi " inteiro 
+real - so "so " "sei " "sei " 7035 "sei " mesmo "pra " caractere xablau "testar " '1' 
+- enquanto * / escreva "qual " "testar " 7050 7051 "pra " testar + + 'm' 
+- 7058 so inteiro / 'l' testar 7064 "teste " * "nao " "sei " mesmo "qual " 
+mesmo inicio so 'A' 7075 / "sei " nao fim "foi " 7081 '(' "testar " + 
+'Z' "pra " 7087 7088 'O' xablau * "sei " 7093 - mesmo 'e' 'H' nao 
+"sei " falso / 'U' teste 'q' '5' 7106 '8' 'T' 7109 so pra 7112 
+ senaofalso "xablau " / - * nao 7120 7121 qual * fim foi 'e' 
+7127 'G' inteiro 'B' / foi 7133 faca testar testar 7137 '}' 7139 nao 
+'z' escreva pra "xablau " foi 7146 - pra qual 'L' / 7152 7153 7154 
+'A' "la " 7157 * foi sei - "nao " se faca '{' "nao " 7167 'X' 
++ "teste " 'P' "sei " cadeia so - falso + - 7179 'I' "qual " 7182 
+pra 7184 foi 'O' verdadeiro 7188 7189 "testar " - 7192 'l' ')' "qual " 7196 
+7197 * 7199 "la " nao + / "qual " leia enquanto + 7208 'q' cadeia 
+entao * + 't' "la " / "la " 7218 const * '}' enquanto 7223 7224 
+7225 'O' 7227 falso 7229 const "foi " "qual " inicio - booleano "pra " sei real 
+var 7240 7241 7242 '}' + * programa so / 7249 + 'e' + 
+7253 "pra " programa 'I' 7257 fim leia 7260 sei - / 'l' "pra " enquanto 
+'W' xablau falso "sei " 'b' "teste " 7273 7274 7275 se cadeia var escreva 'x' 
+inicio - qual xablau + sei nao "la "  senao7290 7291 enquanto * - 
+fim - "so " la 'y' 'y' se verdadeiro inteiro 7304 sei 'O' 7307 funcao 
+7309 'P' * + "la " "mesmo " + testar - cadeia mesmo + 7321 sei 
+7323 '5' teste leia "testar " 'h' "testar " 7330 so 7332 "qual " 7334 7335 teste 
+/ 'x' "la " 'g' - / programa "qual " '{' -  senao7348 + 7350 
+'x' - nao 'P' 7355 inteiro 'S' 7358 7359 * 's' const 'q' 'a' 
+"la " '9' enquanto testar + "foi " mesmo + "sei " sei  senao'a' - entao 
++ 'Y' / - entao teste 's' "so " + "qual " 7389 / xablau pra 
+"qual " se / "sei " - const 7399 pra 7401 inteiro  senaoenquanto - testar 
+- teste nao "mesmo " caractere sei cadeia falso 'k' 7416 'c' qual * "so " 
+fim 7422 7423 teste "sei " 7426 enquanto + 'H' 'e' 'b' la + "testar " 
+caractere 7436 qual cadeia 'g' 7440 / "sei " enquanto testar 'J' 7446 real sei 
+'y' sei "qual " "testar " teste + + 'M' 'j' pra la falso "sei " cadeia 
+"la " qual 'A' var - * caractere so - sei so "xablau " "sei " / 
+testar sei 'c' "nao " testar 7482 'z' 7484 'y'  senao"testar " 'p' qual "teste " 
+escreva 7492 'e' '8' 'i' 'a' "so " '3' "testar " 'B' "foi " / + leia 
+7505 so 'f' 'P' "teste " 'A' 'T' "la " "qual "  senao7515 "teste " + so 
+'g' la  senao"nao " "nao "  senaonao - entao nao 7529 7530 booleano "sei " 
+xablau "foi " caractere xablau 'T' inteiro * mesmo "xablau " la xablau inteiro / leia 
+- teste faca 7550 booleano "testar " / "testar " 7555 7556 - 7558 + 7560 
+7561 / 'E' xablau nao "la " / "testar " escreva inicio real caractere 'o' caractere 
+"la " testar * - mesmo leia 7581 sei "mesmo " 7584 7585 inicio 7587 "nao " 
+nao 'j' 7591 "mesmo " "foi " caractere 7595 7596 enquanto xablau 7599 escreva + nao 
+qual "teste " sei 7606 "sei " "pra " 'K' + 'v' / qual sei "qual " 7616 
+testar 7618 la "pra " so "testar " * 7624 teste 7626 '}' "sei " verdadeiro 'V' 
+mesmo 'j' xablau real 7635 'C' mesmo 7638 booleano caractere + / 'A' 7644 
+entao sei 'c' 7648 "teste " qual testar * real 7654 "nao " qual "xablau " - 
+"sei " foi 'h' 'E' / "pra " 'k' leia sei 'b' 7669 'S' "xablau " 7672 
+7673 "pra " + faca "mesmo " booleano + "foi " programa se inteiro testar so 'N' 
+var 7688 7689 teste "teste " 'D' * / booleano 7696 teste * se nao 
+* fim teste "xablau " 'T' 'V' 'j' 7708 so 'A' 'z' "pra " + 7714 
+'q' / / 'h' "nao " * 'v' 'F' mesmo / "sei " * "nao " programa 
+caractere 7730 "testar " nao inteiro "mesmo " "so " 'e' + 7738 faca + la "xablau " 
+* fim 7745 foi 'B' teste "pra " booleano sei 7752 testar / sei cadeia 
+'p' "sei " so 'z' * foi xablau 7764 7765 "nao " qual "teste " pra var 
+* 'O' - xablau 7775 7776 "xablau " 'g'  senao7780 escreva xablau 7783 'f' 
+"teste " funcao "testar " 7788 "mesmo "  senao7791 verdadeiro - 'r' 'P' inteiro 7797 "pra " 
+"xablau " teste qual 'J' inicio 7804 'I' 7806 escreva / * / 7811 so 
+"mesmo " "teste " mesmo 7816 - 'l' "foi " so 7821 'q' 7823 "so " se * 
+foi * - 's' / 'Y' xablau 7834 pra "pra " inicio la * 7840 
+"foi " caractere la + falso 7846 - 'H' 7849 escreva 7851 'V' "foi " 7854 
+/ funcao 7857 la 7859 sei 7861 enquanto entao 7864 - 'T' + funcao 
+booleano "xablau " 7871 - + '5' 'Z' testar 7877 7878 / "nao " 7881 fim 
+* / / programa + 'W' - la / + funcao + + "so " 
+7897 7898 + 'W' ''' var qual real caractere cadeia "la " 7908 escreva "teste " 
+- 7912 7913 7914 leia mesmo 'F' 7918 7919 'a' 7921 "nao " nao 'U' 
+entao 7926 fim 'F' '2' 7930 "teste " 7932 testar cadeia testar 7936 'U' escreva 
+entao 'b' 'c' - / "la " 'o' escreva leia inicio 'p' "teste " const / 
+7953 "foi " "mesmo " 'r' 'v' "sei " 7959 7960 7961 so 7963 7964 real / 
+var enquanto foi se la "pra " -  senao7975 "mesmo " 7977 sei * "nao " 
+- nao 'T' 'k' * '7' 7987 '7' enquanto + 'j' 7992 "so " so 
+7995 7996 "qual " - "foi " 'R' const 'l' 8003 8004 * 8006 "testar " "teste " 
+"testar " "so " "mesmo " real 'O' 8014 '7' '4' pra "pra " 8019 'n' 8021 8022 
+8023 "mesmo " '8' + 'u' 8028 teste 8030 la * teste testar - + 
++ "sei " 8039 8040 + 8042 "sei " 8044 pra 8046 / teste var 'F' 
+caractere verdadeiro 'z' 'j' se "la " caractere sei - 8060 8061 escreva "sei " inicio 
+'X' sei xablau 8068 "foi " 8070 "la " + 'V' * "sei " "teste " 'P' ''' 
+8079 "la " / const se 8084 'B' 8086 'm' * so 'D' / 'T' 
++ "teste " pra 'T' foi inteiro 'q' programa 8101 '8' 8103 8104 "la " 8106 
+verdadeiro + booleano '7' 'r' mesmo fim 8114 faca "xablau " entao "la " "sei " 8120 
+"mesmo " 8122 - 'y' 'P' / "mesmo " 'K' 'W' se 'N' cadeia enquanto verdadeiro 
+'m' 8136 nao + 8139 8140 "la " 8142 * - sei '3' "sei " 8148 
+"sei " 8150 'a' 8152 teste 'J' 8155 - cadeia / enquanto "sei " * 'r' 
+"so " const 8165 "qual " 'b' '5' / 'H' programa 'A' enquanto 8174 - so 
+8177 * "foi " 8180 - 8182 xablau + "sei " faca 8187 'F' programa 'F' 
+8191 8192 testar xablau testar '0' entao  senao- sei 'U' "so " real 'x' 
+pra 8206 8207 "teste " / 's' faca "foi " var '1' ')' 'D' "testar " / 
+"qual " 8220 "so "  senaotestar leia + * nao + / 'w' "sei " pra 
+testar 8234 teste 8236 se - 'M' * 'F' cadeia real 8244 "mesmo " '6' 
+"xablau " falso '4' 8250 'n' - "nao " "mesmo " var se faca 8258 entao foi 
+/ 'm' foi - + 8266 "xablau " 'Z' qual teste 'j' inteiro const leia 
++ sei - + 8279 'M' leia + + 8284 "nao " 8286 / 's' 
+so testar / / 'x' + inteiro * 8297 fim var '2' - "qual " 
+* + sei 8306 8307 8308 '6' + + leia 'k' "foi " - pra 
+teste "sei " escreva 8320 la * + inicio "mesmo " "sei " 8327 nao mesmo + 
+cadeia 8332 'q' 8334 + teste xablau enquanto testar "nao " "mesmo " la + * 
+8345 8346 + 'T' / '7' "teste " '4' nao 8354 enquanto inicio  senao'M' 
+nao 'H' var funcao + "teste " programa qual "foi " testar / 8370 'U' "la " 
+qual entao teste 8376 "so " nao "nao " * * teste "pra " so 8385 "teste " 
+faca funcao funcao '}' 'L' "nao " - 8394 testar 'x' - so funcao funcao 
+8401 - real 8404 8405 sei sei 8408 "xablau " cadeia xablau 8412 "qual " "foi " 
+'Z' cadeia "xablau " - ')' la 'D' 't' 'k' * 'z' sei 8427 + 
+mesmo 'S' 'G' - 8433 - teste "foi " faca faca 8439 fim enquanto xablau 
+"mesmo " la xablau 'p' "sei " '4' 8449 mesmo "mesmo " * inteiro var 8455 8456 
+'K' testar 'w' "xablau " - "so " xablau / inteiro falso 'N' / 8469 cadeia 
+nao "la " "mesmo " * 'z' / 8477 falso '(' * '0' 'u' cadeia 8484 
+* - 8487 8488 * 8490 "mesmo " programa "mesmo " "la " real -  senaomesmo 
+nao qual "qual " qual const "pra " mesmo entao "sei " la 8509 mesmo leia 'i' 
+testar / var 8516 so 8518 teste 8520 + enquanto - const teste  senao
+'b' inicio 8529 "testar " teste faca falso pra booleano sei "mesmo " "so " booleano qual 
+sei testar - "mesmo " 'K' escreva * 8548 - const 8551 "teste " - "mesmo " 
+sei '8' sei "nao " leia / * "la " 'Z' "sei " "qual " 8566 + 8568 
+/ 'o' - 8572 - so "mesmo " enquanto '4' '9' 8579 testar inteiro 8582 
+"teste " "sei " "so " 'C' la * + - 8591 8592 mesmo 8594 verdadeiro nao 
+"sei " "la " "pra " sei leia "so " qual booleano * "la " - + "la " / 
+8611 / - "sei " '4' "la " - teste 8619 8620 - xablau 'q' / 
+la inicio cadeia real "sei " 8630 * '9' teste 8634 8635 const 8637 / 
+"sei " sei + 8642 "xablau " "nao " 8645 8646 const fim 'a' "pra " inteiro so 
+- "nao " 8655 testar "xablau " + 8659 * '6' 'G' 8663 qual + enquanto 
+foi sei 'P' funcao real / 8673 "testar " - + 8677 8678 "so " 8680 
+'P' 8682 "nao " - falso "foi " "foi " 8688 "sei " "sei " la fim 'a' foi 
+"la " programa 'V' + 8699 sei la 8702 "so " verdadeiro sei 'I' "teste " / 
+qual 8710 8711 8712 real "qual " * foi '{' - 8719 'W' * qual 
+'a' '9' mesmo 8726 + falso 'Q' * la sei "la " faca cadeia * 
+teste testar "mesmo " se "testar " caractere - / '7' + "mesmo " sei 'm' 'E' 
+"nao " 8752 / / 's' 8756 'I' foi "testar " '7' entao fim + / 
+8765 "so " nao "qual " la + "mesmo " 8772 la "qual " - sei 'w' 8778 
+inteiro 8780 * so 'k' '0' 'Q' faca / 'X' "xablau " - - 8792 
++ "sei " "mesmo " verdadeiro / 8798 leia 8800 inteiro 8802 'p' 'j' * caractere 
+sei verdadeiro "so " "mesmo " "la " '6' + testar - "xablau " / pra 8819 8820 
+la '5' '(' * qual + 8827 - xablau "pra " la 8832 falso entao 
+escreva / "nao " caractere "testar " booleano var enquanto "qual " "la " 8845 8846 8847 testar 
+caractere se pra "mesmo " nao "mesmo " * enquanto ')' 'Z' + 8860 'x' real 
+- "la " 'Z' const "testar " "sei " + teste 'C' verdadeiro '2' escreva 8875 "xablau " 
+caractere * / "la " '7' "nao " verdadeiro booleano "qual " teste - 'k' 'j' 8890 
+8891 'c' 'K' 'a' "so " pra - 8898 teste - booleano "sei " qual 8904 
+"so " "xablau " 8907 8908 * * 8911 nao "mesmo " 8914 verdadeiro '7' - '9' 
+sei real 'N' 8922 *  senao8925 8926 so 8928 nao "mesmo " "nao " 8932 
+'m' "qual " "qual " sei 'f' - so 'P' "sei " testar const 8944 8945 'p' 
+"xablau " '9' 8949 8950 xablau xablau / 8954 escreva mesmo "foi " + - * 
+xablau 'i' qual / '3' nao la + pra 8970 'L' verdadeiro 8973 8974 
+'h' "so " - sei "xablau " so 'z' - 'Q' 8984 + 8986 real "xablau " 
+booleano foi programa - 8993  senaoqual 8996 la * fim 9000  senao')' 
+* falso 'L' 9006 foi / 9009 sei 9011 'U' xablau * "mesmo " 9016 
+9017 + inteiro mesmo - xablau inteiro pra 'Q' ''' mesmo entao sei "foi " 
+9031 sei * "mesmo " / "so " + "mesmo " real mesmo enquanto cadeia "xablau " fim 
+qual 9046 / "sei " - testar "foi " foi 'I' sei - "pra " "testar " + 
+- 9060 9061 inteiro 9063 pra 9065 inteiro 9067 9068 ')' escreva + 'y' 
+"xablau " * testar 'f' - nao "teste " pra '1' 9082 var booleano 9085 9086 
+pra * 's' "sei " 9091 mesmo se teste pra "la " 'N' / 9099 9100 
++ enquanto 'p' faca 'B' 9106 9107 9108 "mesmo " cadeia * 'u' 9113 'L' 
+mesmo + "testar " 'e' "so " 9120 mesmo sei 9123 "foi " entao "testar " 'k' "testar " 
+"xablau " escreva escreva programa nao entao real qual foi - 9139 '6' 9141 'H' 
+const 'h' "nao " falso 9147 9148 'M' 9150 testar real 9153 sei 'q' "pra " 
+9157 sei "mesmo " "sei " pra + 9163 9164 + + '9' / inteiro 9170 
+- 9172 "mesmo " '8' funcao 'C'  senao- sei "testar " xablau 9182 9183 - 
+'j' 'r' xablau 9188 9189 '4' nao - 9193 "foi " 9195 qual + xablau 
+9199 9200 * 9202 leia "testar " 9205 testar "pra " "sei " 'm' qual 9211 "sei " 
+programa xablau + 9216 9217 "teste " + 'D' "xablau " qual 9223 9224 sei 9226 
+9227 "foi " mesmo - 'Q' 9232 + nao 9235 'G' 'q' 'e' "xablau " 'O' 
+se testar so  senao"mesmo " 9246 'm' '{' * "foi " * 'N' so sei 
+'R' nao "la " 9258 'L' / sei 9262 'T' so / * 9267 9268 
+"pra " 9270 + verdadeiro "sei " * qual 9276 "qual " + * 9280 'O' xablau 
+'j' foi * + 9287 leia 'e' / '3' * / funcao 9295 "sei " 
+inicio 9298 caractere "sei " foi "pra " testar 9304 "xablau " 9306 9307 'V' 9309 "sei " 
+/ cadeia "testar " * sei 9316 9317 xablau pra "so " 'A' ''' 9323 * 
+"sei " inteiro - + "so " so "qual " 9332 + 9334 nao 9336 - 9338 
+/ / '6' / 'T' *  senao"so " 9347 "testar " booleano "so " var - 
++ nao foi 9356 "nao " 9358 sei teste "sei " 'j' funcao 9364 - - 
+9367 9368 "qual " 9370 9371 - xablau / 9375 9376 't' -  senaola 
+'m' funcao - cadeia - / 9387 'r' - "foi " 'f' "sei " enquanto / 
+"so " * la mesmo + 'q' "la " nao "pra " 'A' so 'X' 9407 + 
+se sei + inteiro "qual " 9414 9415 funcao + 9418 9419 inicio "xablau " "teste " 
+"foi " "sei " 9425 "nao " + 9428 mesmo teste "pra " leia pra - 9435 xablau 
+'Q' "xablau " testar 9440 'S' escreva sei - leia '0' 9447 9448 "xablau " teste 
+inteiro mesmo / 'k' "sei " so mesmo "testar " 9459 verdadeiro "sei " - 9463 inteiro 
+"nao " "teste " real const 9469 mesmo + 9472 ')' "mesmo " 'a' / 9477 "sei " 
+- * 9481 "qual " 'J' cadeia entao funcao "xablau " 9488 real teste 'f' "xablau " 
+'t' mesmo 9495 so fim xablau "xablau " / - / testar + "nao " pra 
+inicio "testar " / qual '8' "mesmo " '(' 9514 xablau verdadeiro "so " funcao 9519 const 
+9521 * + "foi " 'O' / - 9528 falso 9530 teste 'E' 'B' "qual " 
+9535 9536 "qual " 9538 "xablau " 9540 xablau sei "testar " 'f' faca "qual " 'l' fim 
+/ + booleano var / * enquanto mesmo * 9558 / * - 'p' 
+'{' + "mesmo " + 'V' enquanto "teste " 9570 'm' se '5' "nao " 'v'  senao
+9577 + teste / "qual " + 9583 '}' qual 9586 sei 'Y' "sei " inicio 
+mesmo 9592 "pra " "qual " * "pra " 'l' escreva "sei " sei falso * qual funcao 
+"mesmo " * faca '3' '9' inicio  senaopra const "nao " "sei " teste "teste " 'w' 
+"teste " 9620 + 9622 / nao 'Y' '3' 'V' 'C' sei mesmo * var 
+- - 9635 'i' "nao "  senaofoi 9640 'J' 'T' caractere 'l' 9645 'C' 
+escreva fim "qual " inteiro + booleano nao sei 'Z' "xablau " 'g' + 'c' / 
+* 9662 - qual pra 't' "qual " testar sei la 'V' sei la 9674 
+"sei " faca la 'T' "sei " + 9681 se so "testar " + teste sei / 
+"qual " 9690 'E' 9692 "xablau " 'w' se "sei " 'q' / - faca / "pra " 
+9703 "mesmo " - "sei " "nao " "foi " programa 9710 "la " mesmo 9713 9714 qual "xablau " 
+const "mesmo " * entao 9721 "pra " se 9724 * - 'B' "mesmo " + leia 
+sei + mesmo programa 9735 mesmo 'a' 9738 cadeia "nao " "la " "testar " 'I' verdadeiro 
+9745 xablau 9747 teste 9749 fim faca qual 9753 "la " 9755 "pra " 9757 'v' 
+9759 'N' enquanto fim - 9764 "foi " 'p' cadeia '0' testar la 9771 9772 
+la "foi " - - - / 'C' 9780 cadeia "mesmo " "sei " 9784 't' - 
+* 9788 inteiro - "teste " "la " "sei " 'm' * xablau foi 'q' 't' "so " 
+inteiro 9802  senao'a' / leia 9807 "qual " entao la mesmo fim programa + 
++ foi + se "teste " "xablau " ''' enquanto "pra " mesmo 'U' so  senao')' 
+qual / / entao / * se "xablau " 9837 'f' - + 9841 "sei " 
+* '1' la teste 9847 testar "sei " "teste " la so verdadeiro 9854 sei 9856 
+nao 9858 "so " 9860 "mesmo " "teste " mesmo 9864 "nao " 'O' '9' 'O' - sei 
+"pra " 9872 leia 9874 9875 9876 teste /  senaola so 'f' '4' 9884 
+* verdadeiro 9887 9888 cadeia '0'  senao'I' * 'V' - escreva "so " 'c' 
+'B' fim 't' faca const '7' + programa sei * * "sei " * "testar " 
+"qual " sei "sei " '8' 9917 "so " * fim 9921 "testar " so '(' 'h' * 
+"mesmo " entao / "qual " inteiro qual 9933 "foi " 9935 'E' 9937 faca * 'M' 
+9941 '2' + faca xablau "sei " "so " 't' "xablau " la programa leia "la " 'Y' 
+9955 xablau "foi " teste "sei " - 9961 la verdadeiro 'X' testar xablau + enquanto 
+'S' sei inteiro + programa nao / - '(' enquanto const 9980 programa 'g' 
+'7' + 9985 real verdadeiro escreva / programa "xablau " "la " "teste " 'f' pra "foi " 
+const booleano 'l' 
