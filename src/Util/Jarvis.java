@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class Jarvis {
 	private final List<Token> tokens;
-	private final List<TokenError> tokensError;
+	private final List<Token> tokensError;
 	private int nLinha;
 
 	public Jarvis() {
@@ -109,7 +109,7 @@ public class Jarvis {
 					}
 					//se nao fechou comentario
 					if(iniciouComentario)
-						tokensError.add(new TokenError("{","COMENTARIO_MAL_FORMADO", nLinha));
+						tokensError.add(new Token("{","COMENTARIO_MAL_FORMADO", nLinha, true));
 
 					//gerando saidas (0 para saida normal, -1 para erro)
 					gerarSaida(arq.getName());
@@ -144,9 +144,9 @@ public class Jarvis {
 				acumulador = removeUltimoElemento(acumulador);
 				if (!acumulador.equals("")){
 					//Se passa no regex, cria token
-					if (!verificaRegexCriandoToken(acumulador, i)) {
+					if (!verificaRegexCriandoToken(acumulador)) {
 						//Se nao passa, cria token de error
-						tokensError.add(new TokenError(acumulador, nLinha, i));
+						tokensError.add(new Token(acumulador, nLinha, true));
 					}
 				}
 				acumulador = "";
@@ -163,13 +163,13 @@ public class Jarvis {
 						}
 
 						//Se passa no regex, cria token
-						if (!verificaRegexCriandoToken(palavra, i)) {
+						if (!verificaRegexCriandoToken(palavra)) {
 							//Se deu error em string
 							if (m.group().equals("\""))
-								tokensError.add(new TokenError(palavra,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha, i));
+								tokensError.add(new Token(palavra,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha, true));
 							//Outros erros (ele auto-identifica)
 							else
-								tokensError.add(new TokenError(palavra, nLinha, i));
+								tokensError.add(new Token(palavra, nLinha, true));
 						}
 						i = formador;
 						continue;
@@ -183,9 +183,9 @@ public class Jarvis {
 						}
 						//Se deu error em string
 						if (m.group().equals("\""))
-							tokensError.add(new TokenError(palavra,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha, i));
+							tokensError.add(new Token(palavra,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha, true));
 						else
-							tokensError.add(new TokenError(palavra, nLinha, i));
+							tokensError.add(new Token(palavra, nLinha, true));
 
 						i = analisar.length;
 						continue;
@@ -207,7 +207,7 @@ public class Jarvis {
 						i = proximo;
 					}
 					catch (NumberFormatException e) {
-						tokensError.add(new TokenError(acumulador, nLinha, i));
+						tokensError.add(new Token(acumulador, nLinha, true));
 						acumulador = "";
 						continue;
 					}
@@ -215,7 +215,7 @@ public class Jarvis {
 			}
 			//Eh ultima posicao
 			if (isEntradaValida(acumulador) && i + 1 == analisar.length)
-				verificaRegexCriandoToken(acumulador, i);
+				verificaRegexCriandoToken(acumulador);
 
 			else if (!isEntradaValida(acumulador)) {
 				boolean precisaCompensar = false;
@@ -224,8 +224,8 @@ public class Jarvis {
 					precisaCompensar = true;
 				}
 
-				if(!verificaRegexCriandoToken(acumulador, i))
-					tokensError.add(new TokenError(acumulador, nLinha, i));
+				if(!verificaRegexCriandoToken(acumulador))
+					tokensError.add(new Token(acumulador, nLinha, true));
 
 				acumulador = "";
 				if (precisaCompensar)
@@ -242,10 +242,10 @@ public class Jarvis {
 		return false;
 	}
 
-	private boolean verificaRegexCriandoToken(String entrada, int pos) {
+	private boolean verificaRegexCriandoToken(String entrada) {
 		for (PadraoRegex regex : PadraoRegex.values()) {
 			if (Pattern.matches(regex.valor, entrada)) {
-				tokens.add(new Token(regex.ordinal(), entrada, nLinha, pos));
+				tokens.add(new Token(regex.ordinal(), entrada, nLinha));
 				return true;
 			}
 		}
@@ -285,7 +285,7 @@ public class Jarvis {
 					pairComentario.setColuna(i);
 				}
 				else {
-					//come�ou ou terminou string ou char
+					//comecou ou terminou string ou char
 					if(analisar[i] == '\"' || analisar[i] == '\''){
 						isString = !isString;
 						pairComentario.setIniciouComentario(false);
@@ -314,7 +314,7 @@ public class Jarvis {
 			}
 
 			//se possui erros, escreve eles
-			if(tokensError.size() > 0) {
+			if(!tokensError.isEmpty()) {
 				bw.newLine();
 				bw.flush();
 				for(int i = 0; i < tokensError.size(); i++){
@@ -338,7 +338,7 @@ public class Jarvis {
 		return tokens;
 	}
 
-	public List<TokenError> getTokensError() {
+	public List<Token> getTokensError() {
 		return tokensError;
 	}
 }
