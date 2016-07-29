@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.JOptionPane;
 
 /**
@@ -82,11 +81,11 @@ public class Jarvis {
 			//Percorre os arquivos na pasta
 			for (int i = 0; i < listaDeArquivos.length; i++) {
 				//Se for diretorio, passa pro proximo
-				if (listaDeArquivos[i].isDirectory()) 
+				if (listaDeArquivos[i].isDirectory())
 					continue;
 
 				//Lembrar de remover isso depois
-				if (!listaDeArquivos[i].getName().endsWith(".txt") || listaDeArquivos[i].getName().contains("_Saida_")) 
+				if (!listaDeArquivos[i].getName().endsWith(".txt") || listaDeArquivos[i].getName().contains("_Saida_"))
 					continue;
 
 				File arq = new File(listaDeArquivos[i].getName());
@@ -101,15 +100,15 @@ public class Jarvis {
 					PairComentario pIB;
 					//Lendo do Arquivo
 					for (String linha = leitor.readLine(); linha != null; linha = leitor.readLine()) {
-						//verifica se abriu algum comentario                            
+						//verifica se abriu algum comentario
 						pIB = analisaComentario(0, iniciouComentario, linha);
 						iniciouComentario = pIB.isIniciouComentario();
 						verificaRegex(pIB.getLinha());
 						//atuliza contador de linha
 						nLinha++;
 					}
-					//se não fechou comentário
-					if(iniciouComentario) 
+					//se nao fechou comentï¿½rio
+					if(iniciouComentario)
 						tokensError.add(new TokenError("{","COMENTARIO_MAL_FORMADO", nLinha));
 
 					//gerando saidas (0 para saida normal, -1 para erro)
@@ -118,22 +117,21 @@ public class Jarvis {
 				}
 				// Fim do Arquivo Atual
 			}
-		} 
+		}
 		catch (FileNotFoundException ex) {
 			ex.printStackTrace();
-		} 
+		}
 		catch (NullPointerException | IOException ex) {
 			ex.printStackTrace();
-		} 
+		}
 	}
 
-	/*Ainda falta melhorar. Sempre que uma String nao for valida, tenta quebrar em pedacos menores
-    verificando caractere por caractere.Fazendo primeiro o basicao*/
+
 	private void verificaRegex(String entrada) {
 		char analisar[] = entrada.toCharArray();
 		String acumulador = "";
 
-		for (int i = 0; i < analisar.length; i++) {			
+		for (int i = 0; i < analisar.length; i++) {
 			acumulador += analisar[i];
 			String atual = "" + analisar[i];
 			Pattern patern = Pattern.compile(AuxRegex.SEPARADORES.valor);
@@ -148,12 +146,12 @@ public class Jarvis {
 					//Se passa no regex, cria token
 					if (!verificaRegexCriandoToken(acumulador, i)) {
 						//Se nao passa, cria token de error
-						tokensError.add(new TokenError(acumulador, nLinha, i)); 
+						tokensError.add(new TokenError(acumulador, nLinha, i));
 					}
 				}
 				acumulador = "";
 				//Se nao for um espaco
-				if (!m.group().equals(" ")){ 
+				if (!m.group().equals(" ")){
 					char separador = m.group().charAt(0);
 					int formador = buscadorDeSeparador(separador, entrada, i+1);
 					// Se encontrou o outro separador
@@ -170,14 +168,14 @@ public class Jarvis {
 							if (m.group().equals("\""))
 								tokensError.add(new TokenError(palavra,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha, i));
 							//Outros erros (ele auto-identifica)
-							else 
+							else
 								tokensError.add(new TokenError(palavra, nLinha, i));
 						}
 						i = formador;
 						continue;
 					}
 					//Terminou a linha e nao achou o separador
-					else { 
+					else {
 						String palavra = "";
 						for (int z = i; z < analisar.length; z++) {
 							//Remonta a palavra
@@ -188,18 +186,18 @@ public class Jarvis {
 							tokensError.add(new TokenError(palavra,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha, i));
 						else
 							tokensError.add(new TokenError(palavra, nLinha, i));
-						
+
 						i = analisar.length;
 						continue;
 					}
 				}
 				//Caso seja espaco, continua
-				else 
+				else
 					continue;
 			}
 			//***************************************** FIM SEPARADORES ***********************
 			//Trata caso especial de 5.0
-			if (Pattern.matches(AuxRegex.CASO_ESPECIAL.valor, acumulador)){ 
+			if (Pattern.matches(AuxRegex.CASO_ESPECIAL.valor, acumulador)){
 				int proximo = i + 1;
 				if (proximo < analisar.length){
 					String prox = ""+analisar[proximo];
@@ -207,7 +205,7 @@ public class Jarvis {
 						int temp = Integer.parseInt(prox);
 						acumulador += temp;
 						i = proximo;
-					} 
+					}
 					catch (NumberFormatException e) {
 						tokensError.add(new TokenError(acumulador, nLinha, i));
 						acumulador = "";
@@ -218,7 +216,7 @@ public class Jarvis {
 			//Eh ultima posicao
 			if (isEntradaValida(acumulador) && i + 1 == analisar.length)
 				verificaRegexCriandoToken(acumulador, i);
-			
+
 			else if (!isEntradaValida(acumulador)) {
 				boolean precisaCompensar = false;
 				if(acumulador.length() > 1) {
@@ -232,13 +230,13 @@ public class Jarvis {
 				acumulador = "";
 				if (precisaCompensar)
 					//Ja que eu removi o ultimo elemento, decremento o contador para criar a nova sentenca
-					i--; 
+					i--;
 			}
 		}
 	}
 
 	private boolean isEntradaValida(String entrada) {
-		for (PadraoRegex regex : PadraoRegex.values()) 
+		for (PadraoRegex regex : PadraoRegex.values())
 			if (Pattern.matches(regex.valor, entrada))
 				return true;
 		return false;
@@ -266,28 +264,28 @@ public class Jarvis {
 		}
 		return -1;
 	}
-	
+
 	public PairComentario analisaComentario(int is, boolean iniciouComentario, String entrada){
 		PairComentario pairComentario = new PairComentario(-1, iniciouComentario);
 		boolean isString = false;
 		char[] analisar = entrada.toCharArray();
-	
+
 		//se estiver esperando fechar comentario e nao existir, retorna logo
 		if((!(entrada.contains("}"))) && pairComentario.isIniciouComentario()) {
 			pairComentario.setLinha("");
 			return pairComentario;
 		}
-	
+
 		for (int i = 0; i < analisar.length; i++) {
 			//verifica se nao abriu um comentario
 			if(!pairComentario.isIniciouComentario()){
-				//iniciou comentário e não é string
+				//iniciou comentario e nao eh string
 				if(analisar[i] == '{' && !isString) {
 					pairComentario.setIniciouComentario(true);
 					pairComentario.setColuna(i);
 				}
 				else {
-					//começou ou terminou string ou char
+					//comeï¿½ou ou terminou string ou char
 					if(analisar[i] == '\"' || analisar[i] == '\''){
 						isString = !isString;
 						pairComentario.setIniciouComentario(false);
@@ -314,7 +312,7 @@ public class Jarvis {
 				bw.newLine();
 				bw.flush();
 			}
-			
+
 			//se possui erros, escreve eles
 			if(tokensError.size() > 0) {
 				bw.newLine();
@@ -325,9 +323,9 @@ public class Jarvis {
 					bw.flush();
 				}
 			}
-			
+
 			bw.close();
-			//XXX isso é uma gambiarra, se não quiser que ela exista, ao inves de usar a lista de tokens como atributo vamos por como variavel local
+			//XXX isso e uma gambiarra, se nao quiser que ela exista, ao inves de usar a lista de tokens como atributo vamos por como variavel local
 			tokens.clear();
 			tokensError.clear();
 		}
