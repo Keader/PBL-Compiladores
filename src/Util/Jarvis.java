@@ -107,7 +107,7 @@ public class Jarvis {
 						//atuliza contador de linha
 						nLinha++;
 					}
-					//se nao fechou coment�rio
+					//se nao fechou comentario
 					if(iniciouComentario)
 						tokensError.add(new TokenError("{","COMENTARIO_MAL_FORMADO", nLinha));
 
