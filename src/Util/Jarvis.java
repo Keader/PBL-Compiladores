@@ -85,7 +85,7 @@ public class Jarvis {
 					continue;
 
 				//Lembrar de remover isso depois
-				if (!listaDeArquivos[i].getName().endsWith(".txt") || listaDeArquivos[i].getName().contains("_Saida_"))
+				if (!listaDeArquivos[i].getName().endsWith(".txt") || listaDeArquivos[i].getName().contains("s_"))
 					continue;
 
 				File arq = new File(listaDeArquivos[i].getName());
@@ -161,7 +161,6 @@ public class Jarvis {
 							//Remonta a palavra
 							palavra += analisar[z];
 						}
-
 						//Se passa no regex, cria token
 						if (!verificaRegexCriandoToken(palavra)) {
 							//Se deu error em string
@@ -305,7 +304,7 @@ public class Jarvis {
 	 */
 	private void gerarSaida(String arquivo){
 		try {
-			File n = new File("_Saida_" + arquivo);
+			File n = new File("s_" + arquivo);
 			BufferedWriter bw = new BufferedWriter(new FileWriter(n));
 			for(int i = 0; i < tokens.size(); i++){
 				bw.write(tokens.get(i).toString());
