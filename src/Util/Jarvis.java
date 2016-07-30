@@ -35,7 +35,7 @@ public class Jarvis {
 		ID("[a-zA-Z]([a-zA-Z]|\\d|_)*?"),
 		NRO("\\d+(\\.\\d+)?"),
 		DELIMITADOR("(;)|(,)|(\\()|(\\))"),
-		CADEIA_CARACTERES("\"[a-zA-Z]([a-zA-Z]|\\d|\\p{Blank})*?\""),
+		CADEIA_DE_CARACTERES("\"[a-zA-Z]([a-zA-Z]|\\d|\\p{Blank})*?\""),
 		CARACTERE("'([a-zA-Z]|\\d)'");
 
 		public String valor;
