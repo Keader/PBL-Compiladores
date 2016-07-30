@@ -26,7 +26,7 @@ public class Jarvis {
 	public Jarvis() {
 		tokens = new LinkedList<>();
 		tokensError = new LinkedList<>();
-		nLinha = 0;
+		nLinha = 1;
 	}
 
 	public enum PadraoRegex {
@@ -94,7 +94,7 @@ public class Jarvis {
 				if (arq.exists()) {
 					BufferedReader leitor = new BufferedReader(new FileReader(arq));
 					boolean iniciouComentario = false;
-					nLinha = 0;
+					nLinha = 1;
 
 					//pair para verificar o estado dos comentarios
 					PairComentario pIB;
@@ -265,8 +265,8 @@ public class Jarvis {
 	}
 
 	public PairComentario analisaComentario(int is, boolean iniciouComentario, String entrada){
-		PairComentario pairComentario = new PairComentario(-1, iniciouComentario);
-		boolean isString = false;
+		PairComentario pairComentario = new PairComentario(iniciouComentario);
+		boolean isString = false, isChar = false;
 		char[] analisar = entrada.toCharArray();
 
 		//se estiver esperando fechar comentario e nao existir, retorna logo
@@ -279,21 +279,26 @@ public class Jarvis {
 			//verifica se nao abriu um comentario
 			if(!pairComentario.isIniciouComentario()){
 				//iniciou comentario e nao eh string
-				if(analisar[i] == '{' && !isString) {
+				if(analisar[i] == '{' && !isString && !isChar) 
 					pairComentario.setIniciouComentario(true);
-					pairComentario.setColuna(i);
-				}
 				else {
-					//comecou ou terminou string ou char
-					if(analisar[i] == '\"' || analisar[i] == '\''){
+					//comecou uma string
+					if(analisar[i] == '\"'){
 						isString = !isString;
+						isChar = false;
+						pairComentario.setIniciouComentario(false);
+					}
+					//comecou um char
+					else if(analisar[i] == '\''){
+						isChar = !isChar;
+						isString = false;
 						pairComentario.setIniciouComentario(false);
 					}
 					pairComentario.setLinha(pairComentario.getLinha() + analisar[i]);
 				}
 			}
 			//se abriu um comentario, verifica se fechou e nao eh uma string
-			else if(analisar[i] == '}' && !isString)
+			else if(analisar[i] == '}' && !isString && !isChar)
 				pairComentario.setIniciouComentario(false);
 		}
 		return pairComentario;
