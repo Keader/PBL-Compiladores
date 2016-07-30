@@ -56,7 +56,7 @@ public class Jarvis {
 	}
 
 	public enum AuxRegex {
-		SEPARADORES("\"|\\s|'"),
+		SEPARADORES("(\")|(\\s+)|(')"),
 		CASO_ESPECIAL("\\d+\\.");
 
 		public String valor;
@@ -80,7 +80,7 @@ public class Jarvis {
 				//Se for diretorio ou for arquivo de saida , passa pro proximo
 				if (listaDeArquivos[i].isDirectory()
                    || listaDeArquivos[i].getName().startsWith("s_")
-                   || listaDeArquivos[i].getName().endsWith(".jar") )
+                   || listaDeArquivos[i].getName().endsWith(".jar"))
 					continue;
 
 				//verificando se o arquivo existe para comecar a analisar
@@ -102,7 +102,7 @@ public class Jarvis {
 					}
 					//se nao fechou comentario
 					if(iniciouComentario)
-						tokensError.add(new Token("{","COMENTARIO_MAL_FORMADO", nLinha, true));
+						tokensError.add(new Token("{comentario","COMENTARIO_MAL_FORMADO", nLinha, true));
 
 					//gerando saidas (0 para saida normal, -1 para erro)
 					gerarSaida(listaDeArquivos[i].getName());
@@ -144,7 +144,7 @@ public class Jarvis {
 				}
 				acumulador = "";
 				//Se nao for um espaco
-				if (!m.group().equals(" ")){
+				if (!m.group().matches("\\s+")){
 					char separador = m.group().charAt(0);
 					int formador = buscadorDeSeparador(separador, entrada, i+1);
 					// Se encontrou o outro separador
