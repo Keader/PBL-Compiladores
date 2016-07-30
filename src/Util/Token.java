@@ -8,6 +8,7 @@ public class Token {
 
     private int id;
     private int nLinha;
+    private int tipo;
     private String lexema;
     private String erro;
     private boolean isError;
@@ -17,13 +18,15 @@ public class Token {
      * @param id identificador do token
      * @param lexema lexema do token
      * @param nLinha numero da linha em que foi criado
+     * @param tipo tipo do lexema, para diferenciar lexemas do mesmo identificador. Esta variavel contem o grupo do lexema no regex
      */
-    public Token(int id, String lexema, int nLinha) {
+    public Token(int id, String lexema, int nLinha, int tipo) {
         this.id = id;
         this.lexema = lexema;
         this.nLinha = nLinha;
         isError = false;
         erro = "";
+        this.tipo = tipo;
     }
 
     /**
@@ -38,6 +41,7 @@ public class Token {
         isError = error;
         erro = "";
         id = 0;
+        tipo = 0;
 
         if(isError)
             autoDetectarError(lexema);
@@ -56,6 +60,7 @@ public class Token {
         nLinha = linha;
         isError = error;
         id = 0;
+        tipo = 0;
     }
 
     public int getId() {

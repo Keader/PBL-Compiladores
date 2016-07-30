@@ -77,12 +77,8 @@ public class Jarvis {
 
 			//Percorre os arquivos na pasta
 			for (int i = 0; i < listaDeArquivos.length; i++) {
-				//Se for diretorio, passa pro proximo
-				if (listaDeArquivos[i].isDirectory())
-					continue;
-
-				//Lembrar de remover isso depois
-				if (!listaDeArquivos[i].getName().endsWith(".txt") || listaDeArquivos[i].getName().startsWith("s_"))
+				//Se for diretorio ou for arquivo de saida , passa pro proximo
+				if (listaDeArquivos[i].isDirectory() || listaDeArquivos[i].getName().startsWith("s_"))
 					continue;
 
 				//verificando se o arquivo existe para comecar a analisar
@@ -238,8 +234,17 @@ public class Jarvis {
 
 	private boolean verificaRegexCriandoToken(String entrada) {
 		for (PadraoRegex regex : PadraoRegex.values()) {
-			if (Pattern.matches(regex.valor, entrada)) {
-				tokens.add(new Token(regex.ordinal(), entrada, nLinha));
+            Pattern patern = Pattern.compile(regex.valor);
+            Matcher m = patern.matcher(entrada);
+            if (m.matches()) {
+                int grupo = 0;
+                for (int i = 1; i <= m.groupCount(); i++) {
+                    if (m.group(i) != null) {
+                        grupo = i;
+                        break;
+                    }
+                }
+				tokens.add(new Token(regex.ordinal(), entrada, nLinha, grupo));
 				return true;
 			}
 		}
@@ -324,7 +329,6 @@ public class Jarvis {
 			}
 
 			bw.close();
-			//XXX isso e uma gambiarra, se nao quiser que ela exista, ao inves de usar a lista de tokens como atributo vamos por como variavel local
 			tokens.clear();
 			tokensError.clear();
 		}
