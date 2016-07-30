@@ -32,7 +32,7 @@ public class Jarvis {
 	public enum PadraoRegex {
 		PALAVRA_RESERVADA("(programa)|(const)|(var)|(funcao)|(inicio)|(fim)|(se)|(entao)|(senao)|(enquanto)|(faca)|(leia)|(escreva)|(inteiro)|(real)|(booleano)|(verdadeiro)|(falso)|(cadeia)|(caractere)"),
         OPERADOR("(nao)|(e)|(ou)|(\\+)|(\\-)|(\\*)|(\\/)|(<>)|(=)|(<)|(<=)|(>)|(>=)"),
-		ID("[a-zA-Z]([a-zA-Z]|\\d|_)*?"),
+		ID("([a-zA-Z])([a-zA-Z]|(\\d)|(_))*?"),
 		NRO("\\d+(\\.\\d+)?"),
 		DELIMITADOR("(;)|(,)|(\\()|(\\))"),
 		CADEIA_DE_CARACTERES("\"[a-zA-Z]([a-zA-Z]|\\d|\\p{Blank})*?\""),
@@ -45,8 +45,8 @@ public class Jarvis {
 	}
 
 	public enum ErrorRegex {
-		NRO_MAL_FORMADO("(\\.\\d+(.+)?)|(\\d+\\.(.+)?)"),
-		CARACTERE_MAL_FORMADO("'\\w*'?|'\\W+'?");
+		NRO_MAL_FORMADO("(\\d+\\.(.+)?)"),
+		CARACTERE_MAL_FORMADO("^(')(.+)?");
 
 		//Error na String e Comentario eh lancado sem o uso desse Enum.
 		public String valor;
@@ -78,7 +78,9 @@ public class Jarvis {
 			//Percorre os arquivos na pasta
 			for (int i = 0; i < listaDeArquivos.length; i++) {
 				//Se for diretorio ou for arquivo de saida , passa pro proximo
-				if (listaDeArquivos[i].isDirectory() || listaDeArquivos[i].getName().startsWith("s_"))
+				if (listaDeArquivos[i].isDirectory()
+                   || listaDeArquivos[i].getName().startsWith("s_")
+                   || listaDeArquivos[i].getName().endsWith(".jar") )
 					continue;
 
 				//verificando se o arquivo existe para comecar a analisar
