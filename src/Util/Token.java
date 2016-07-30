@@ -112,6 +112,6 @@ public class Token {
                 return;
             }
         }
-        erro += "SIMBOLO_DESCONHECIDO";
+        erro += "SIMBOLO_INVALIDO";
     }
 }
