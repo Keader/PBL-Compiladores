@@ -33,7 +33,7 @@ public class Jarvis {
 		PALAVRA_RESERVADA("(programa)|(const)|(var)|(funcao)|(inicio)|(fim)|(se)|(entao)|(senao)|(enquanto)|(faca)|(leia)|(escreva)|(inteiro)|(real)|(booleano)|(verdadeiro)|(falso)|(cadeia)|(caractere)"),
 		ID("[a-zA-Z]([a-zA-Z]|\\d|_)*?"),
 		NRO("\\d+(\\.\\d+)?"),
-		OPERADOR("(nao)|(e)|(ou)|(\\+)|(\\-)|(\\*)|(\\/)|(<>)|(=)|(<)|(<=)|(>)|(>=)|"),
+		OPERADOR("(nao)|(e)|(ou)|(\\+)|(\\-)|(\\*)|(\\/)|(<>)|(=)|(<)|(<=)|(>)|(>=)"),
 		DELIMITADOR("(;)|(,)|(\\()|(\\))"),
 		CADEIA_CARACTERES("\"[a-zA-Z]([a-zA-Z]|\\d|\\p{Blank})*?\""),
 		CARACTERE("'([a-zA-Z]|\\d)'");
