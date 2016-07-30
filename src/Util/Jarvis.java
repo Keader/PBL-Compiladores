@@ -30,13 +30,11 @@ public class Jarvis {
 	}
 
 	public enum PadraoRegex {
-		PALAVRA_RESERVADA("programa|const|var|funcao|inicio|fim|se|entao|senao|enquanto|faca|leia|escreva|inteiro|real|booleano|verdadeiro|falso|cadeia|caractere"), //Esta usando atualmente a lista de reservados, possivelmente mudara para o Regex
-		IDENTIFICADOR("[a-zA-Z]([a-zA-Z]|\\d|_)*?"),
-		NUMERO("\\d+(\\.\\d+)?"),
-		OP_ARITMETICO("\\+|\\-|\\*|\\/"),
-		OP_RELACIONAL("(<>)|=|<|(<=)|>|(>=)"),
-		OP_LOGICO("nao|e|ou"),
-		DELIMITADOR(";|,|\\(|\\)"),
+		PALAVRA_RESERVADA("(programa)|(const)|(var)|(funcao)|(inicio)|(fim)|(se)|(entao)|(senao)|(enquanto)|(faca)|(leia)|(escreva)|(inteiro)|(real)|(booleano)|(verdadeiro)|(falso)|(cadeia)|(caractere)"),
+		ID("[a-zA-Z]([a-zA-Z]|\\d|_)*?"),
+		NRO("\\d+(\\.\\d+)?"),
+		OPERADOR("(nao)|(e)|(ou)|(\\+)|(\\-)|(\\*)|(\\/)|(<>)|(=)|(<)|(<=)|(>)|(>=)|"),
+		DELIMITADOR("(;)|(,)|(\\()|(\\))"),
 		CADEIA_CARACTERES("\"[a-zA-Z]([a-zA-Z]|\\d|\\p{Blank})*?\""),
 		CARACTERE("'([a-zA-Z]|\\d)'");
 
@@ -47,9 +45,8 @@ public class Jarvis {
 	}
 
 	public enum ErrorRegex {
-		NUMERO_MAL_FORMADO("(\\.\\d+(.+)?)|(\\d+\\.(.+)?)"),
-		CARACTERE_MAL_FORMADO("'\\w*'?|'\\W+'?"),
-		DELIMITADOR_MAL_FORMADO("^\\((.+)?[^\\)]$|^[^\\(](.+)?[\\)]$");
+		NRO_MAL_FORMADO("(\\.\\d+(.+)?)|(\\d+\\.(.+)?)"),
+		CARACTERE_MAL_FORMADO("'\\w*'?|'\\W+'?");
 
 		//Error na String e Comentario eh lancado sem o uso desse Enum.
 		public String valor;
@@ -85,14 +82,12 @@ public class Jarvis {
 					continue;
 
 				//Lembrar de remover isso depois
-				if (!listaDeArquivos[i].getName().endsWith(".txt") || listaDeArquivos[i].getName().contains("s_"))
+				if (!listaDeArquivos[i].getName().endsWith(".txt") || listaDeArquivos[i].getName().startsWith("s_"))
 					continue;
 
-				File arq = new File(listaDeArquivos[i].getName());
-
 				//verificando se o arquivo existe para comecar a analisar
-				if (arq.exists()) {
-					BufferedReader leitor = new BufferedReader(new FileReader(arq));
+				if (listaDeArquivos[i].exists()) {
+					BufferedReader leitor = new BufferedReader(new FileReader(listaDeArquivos[i]));
 					boolean iniciouComentario = false;
 					nLinha = 1;
 
@@ -112,7 +107,7 @@ public class Jarvis {
 						tokensError.add(new Token("{","COMENTARIO_MAL_FORMADO", nLinha, true));
 
 					//gerando saidas (0 para saida normal, -1 para erro)
-					gerarSaida(arq.getName());
+					gerarSaida(listaDeArquivos[i].getName());
 					leitor.close();
 				}
 				// Fim do Arquivo Atual
@@ -165,7 +160,7 @@ public class Jarvis {
 						if (!verificaRegexCriandoToken(palavra)) {
 							//Se deu error em string
 							if (m.group().equals("\""))
-								tokensError.add(new Token(palavra,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha, true));
+								tokensError.add(new Token(palavra,"CADEIA_MAL_FORMADA", nLinha, true));
 							//Outros erros (ele auto-identifica)
 							else
 								tokensError.add(new Token(palavra, nLinha, true));
@@ -182,7 +177,7 @@ public class Jarvis {
 						}
 						//Se deu error em string
 						if (m.group().equals("\""))
-							tokensError.add(new Token(palavra,"CADEIA_DE_CARACTERES_MAL_FORMADA", nLinha, true));
+							tokensError.add(new Token(palavra,"CADEIA_MAL_FORMADA", nLinha, true));
 						else
 							tokensError.add(new Token(palavra, nLinha, true));
 
@@ -279,7 +274,7 @@ public class Jarvis {
 			//verifica se nao abriu um comentario
 			if(!pairComentario.isIniciouComentario()){
 				//iniciou comentario e nao eh string
-				if(analisar[i] == '{' && !isString && !isChar) 
+				if(analisar[i] == '{' && !isString && !isChar)
 					pairComentario.setIniciouComentario(true);
 				else {
 					//comecou uma string
