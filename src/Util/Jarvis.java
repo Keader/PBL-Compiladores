@@ -329,6 +329,11 @@ public class Jarvis {
 					bw.flush();
 				}
 			}
+            else
+            {
+                bw.write("Sucesso!");
+                bw.flush();
+            }
 
 			bw.close();
 			tokens.clear();
