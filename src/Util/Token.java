@@ -83,6 +83,10 @@ public class Token {
         return isError;
     }
 
+    public int getTipo() {
+        return tipo;
+    }
+
     @Override
     public String toString() {
         if(isError)
