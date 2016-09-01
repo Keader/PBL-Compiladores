@@ -9,6 +9,7 @@ public class Analisador {
 
         Jarvis jarvis = new Jarvis();
         jarvis.Executar();
+        System.exit(0);
     }
 
 }
