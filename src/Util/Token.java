@@ -1,10 +1,8 @@
 package Util;
 
-import Util.Jarvis.ErrorRegex;
-import Util.Jarvis.PadraoRegex;
 import java.util.regex.Pattern;
 
-public class Token {
+public class Token implements Lib{
 
     private int id;
     private int nLinha;
