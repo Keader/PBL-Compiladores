@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
  * conroller.
  *
  */
-public class Jarvis {
+public class Jarvis implements Lib{
 	private final List<Token> tokens;
 	private final List<Token> tokensError;
 	private int nLinha;
@@ -27,42 +27,6 @@ public class Jarvis {
 		tokens = new LinkedList<>();
 		tokensError = new LinkedList<>();
 		nLinha = 1;
-	}
-
-	public enum PadraoRegex {
-		PALAVRA_RESERVADA("(programa)|(const)|(var)|(funcao)|(inicio)|(fim)|(se)|(entao)|(senao)|(enquanto)|(faca)|(leia)|(escreva)|(inteiro)|(real)|(booleano)|(verdadeiro)|(falso)|(cadeia)|(caractere)"),
-        OPERADOR("(nao)|(e)|(ou)|(\\+)|(\\-)|(\\*)|(\\/)|(<>)|(=)|(<)|(<=)|(>)|(>=)"),
-		ID("([a-zA-Z])([a-zA-Z]|(\\d)|(_))*?"),
-		NRO("\\d+(\\.\\d+)?"),
-		DELIMITADOR("(;)|(,)|(\\()|(\\))"),
-		CADEIA_DE_CARACTERES("\"[a-zA-Z]([a-zA-Z]|\\d|\\p{Blank})*?\""),
-		CARACTERE("'([a-zA-Z]|\\d)'");
-
-		public String valor;
-		private PadraoRegex(String valor) {
-			this.valor = valor;
-		}
-	}
-
-	public enum ErrorRegex {
-		NRO_MAL_FORMADO("(\\d+\\.(.+)?)"),
-		CARACTERE_MAL_FORMADO("^(')(.+)?");
-
-		//Error na String e Comentario eh lancado sem o uso desse Enum.
-		public String valor;
-		private ErrorRegex(String valor) {
-			this.valor = valor;
-		}
-	}
-
-	public enum AuxRegex {
-		SEPARADORES("(\")|(\\s+)|(')"),
-		CASO_ESPECIAL("\\d+\\.");
-
-		public String valor;
-		private AuxRegex(String valor) {
-			this.valor = valor;
-		}
 	}
 
 	public void Executar() {
