@@ -50,6 +50,7 @@ public interface Lib {
     public static final int TK_PARENTESE_F          = 39;
     //Cadeia de Caracteres
     public static final int TK_CADEIA_DE_CARACTERES = 40;
+    //Caractere
     public static final int TK_CARACTERE_L          = 41; //Caractere Literal
 
     //Enums
