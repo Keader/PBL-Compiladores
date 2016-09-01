@@ -127,7 +127,7 @@ public class Token implements Lib{
     }
 
     /**
-     * Metodo que traduz o id e tipo do token e um identificador unico
+     * Metodo que transforma/cria o id e tipo do token e um identificador unico
      * @return numero do identificador
      */
     private int criaIdUnico(){
