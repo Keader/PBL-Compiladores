@@ -68,9 +68,15 @@ public class Jarvis implements Dicionario{
 					if(iniciouComentario)
 						tokensError.add(new Token("{comentario","COMENTARIO_MAL_FORMADO", nLinha, true));
 
-					//gerando saidas (0 para saida normal, -1 para erro)
+					//gerando saidas
 					gerarSaida(listaDeArquivos[i].getName());
 					leitor.close();
+
+                   //Se nao ha erros lexicos, iniciar analise sintatica
+                   if (tokensError.isEmpty()){
+                       AnalisadorSintatico sintatico = new AnalisadorSintatico(tokens);
+                       sintatico.iniciarAnalise();
+                   }
 				}
 				// Fim do Arquivo Atual
 			}
