@@ -52,7 +52,9 @@ public interface Dicionario {
     public static final int TK_CADEIA_DE_CARACTERES = 40;
     //Caractere Literal
     public static final int TK_CARACTERE_L          = 41;
-    //Espaco Livre do 41-99 para possiveis modificacoes nos items acima.
+	//EOF ($)
+	public static final int TK_OEF                  = 42;
+    //Espaco Livre do 42-99 para possiveis modificacoes nos items acima.
     //**************************************************************************
     //Regras
     public static final int R_PROGRAMA                     = 100;
@@ -116,7 +118,7 @@ public interface Dicionario {
     public static final int R_DEC_ENQUANTO                 = 158;
     public static final int R_PASSA_PARAM                  = 159;
     public static final int R_PASSA_PARAM_I                = 160;
-    
+
     //Enums
     public enum PadraoRegex {
         PALAVRA_RESERVADA("(programa)|(const)|(var)|(funcao)|(inicio)|(fim)|(se)|(entao)|(senao)|(enquanto)|(faca)|(leia)|(escreva)|(inteiro)|(real)|(booleano)|(verdadeiro)|(falso)|(cadeia)|(caractere)"),
