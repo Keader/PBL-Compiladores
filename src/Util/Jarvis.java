@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
  * conroller.
  *
  */
-public class Jarvis implements Lib{
+public class Jarvis implements Dicionario{
 	private final List<Token> tokens;
 	private final List<Token> tokensError;
 	private int nLinha;

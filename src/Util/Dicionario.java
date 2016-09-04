@@ -3,7 +3,7 @@ package Util;
 /**
  * Esta interface representa um dicionario.
  */
-public interface Lib {
+public interface Dicionario {
     //Palavras Reservadas
     public static final int TK_PROGRAMA             =  1;
     public static final int TK_CONST                =  2;

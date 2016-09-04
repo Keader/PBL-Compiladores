@@ -2,7 +2,7 @@ package Util;
 
 import java.util.regex.Pattern;
 
-public class Token implements Lib{
+public class Token implements Dicionario{
 
     private int id;
     private int nLinha;
