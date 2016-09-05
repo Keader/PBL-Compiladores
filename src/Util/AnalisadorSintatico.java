@@ -14,6 +14,11 @@ public class AnalisadorSintatico {
         this.tokens = tokens;
     }
 
-    public void iniciarAnalise(){}
+    public void iniciarAnalise(){
+		for (Token token : tokens){
+
+		}
+		//Fim do For
+	}
 
 }
