@@ -54,7 +54,7 @@ public interface Dicionario {
     public static final int TK_CARACTERE_L          = 41;
 	//EOF ($)
 	public static final int TK_OEF                  = 42;
-    //Espaco Livre do 42-99 para possiveis modificacoes nos items acima.
+    //Espaco Livre do 43-99 para possiveis modificacoes nos items acima.
     //**************************************************************************
     //Regras
 	/* Obs: R = Regra, C = condicao. A ausencia de C eh a condicao inicial.
