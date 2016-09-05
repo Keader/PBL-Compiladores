@@ -2,7 +2,7 @@ package Util;
 
 import java.util.regex.Pattern;
 
-public class Token implements Lib{
+public class Token implements Dicionario{
 
     private int id;
     private int nLinha;
@@ -10,6 +10,7 @@ public class Token implements Lib{
     private String lexema;
     private String erro;
     private boolean isError;
+    private int idUnico;
 
     /**
      * Construtor de Tokens comuns
@@ -25,6 +26,7 @@ public class Token implements Lib{
         isError = false;
         erro = "";
         this.tipo = tipo;
+        idUnico = criaIdUnico();
     }
 
     /**
@@ -40,6 +42,7 @@ public class Token implements Lib{
         erro = "";
         id = 0;
         tipo = 0;
+        idUnico = 0;
 
         if(isError)
             autoDetectarError(lexema);
@@ -59,6 +62,7 @@ public class Token implements Lib{
         isError = error;
         id = 0;
         tipo = 0;
+        idUnico = 0;
     }
 
     public int getId() {
@@ -85,6 +89,10 @@ public class Token implements Lib{
         return tipo;
     }
 
+    public int getIdUnico(){
+        return idUnico;
+    }
+
     @Override
     public String toString() {
         if(isError)
@@ -92,6 +100,7 @@ public class Token implements Lib{
 
     	return nLinha + " " + lexema + " " + PadraoRegex.values()[id].name().toLowerCase();
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -115,5 +124,88 @@ public class Token implements Lib{
             }
         }
         erro += "SIMBOLO_INVALIDO";
+    }
+
+    /**
+     * Metodo que transforma/cria o id e tipo do token e um identificador unico
+     * @return numero do identificador
+     */
+    private int criaIdUnico(){
+
+        switch (id){
+            //Palavras reservadas
+            case 0:{
+
+              switch(tipo){
+                  case  1: return TK_PROGRAMA;
+                  case  2: return TK_CONST;
+                  case  3: return TK_VAR;
+                  case  4: return TK_FUNCAO;
+                  case  5: return TK_INICIO;
+                  case  6: return TK_FIM;
+                  case  7: return TK_SE;
+                  case  8: return TK_ENTAO;
+                  case  9: return TK_SENAO;
+                  case 10: return TK_ENQUANTO;
+                  case 11: return TK_FACA;
+                  case 12: return TK_LEIA;
+                  case 13: return TK_ESCREVA;
+                  case 14: return TK_INTEIRO;
+                  case 15: return TK_REAL;
+                  case 16: return TK_BOOLEANO;
+                  case 17: return TK_VERDADEIRO;
+                  case 18: return TK_FALSO;
+                  case 19: return TK_CADEIA;
+                  case 20: return TK_CARACTERE;
+                  default: break;
+              }
+              break;
+            }
+            //Operadores
+            case 1:{
+
+                switch(tipo){
+                  case  1: return TK_NAO;
+                  case  2: return TK_E;
+                  case  3: return TK_OU;
+                  case  4: return TK_SOMA;
+                  case  5: return TK_SUBTRACAO;
+                  case  6: return TK_MULTIPLICACAO;
+                  case  7: return TK_DIVISAO;
+                  case  8: return TK_DIFERENTE;
+                  case  9: return TK_IGUAL;
+                  case 10: return TK_MENOR;
+                  case 11: return TK_MENORIGUAL;
+                  case 12: return TK_MAIOR;
+                  case 13: return TK_MAIORIGUAL;
+                  default: break;
+              }
+              break;
+            }
+            //Identificador
+            case 2: return TK_ID;
+            //Numero
+            case 3: return TK_NUMERO;
+            //Delimitadores
+            case 4:{
+
+                switch(tipo){
+                  case  1: return TK_PONTOVIRGULA;
+                  case  2: return TK_VIRGULA;
+                  case  3: return TK_PARENTESE_A;
+                  case  4: return TK_PARENTESE_F;
+                  default: break;
+              }
+              break;
+            }
+            //Cadeia de Caractere
+            case 5: return TK_CADEIA_DE_CARACTERES;
+            case 6: return TK_CARACTERE_L;
+            //Este caso nunca devera ocorrer
+            default:
+                break;
+        }
+        //Isso nunca devera ocorrer
+        return -1;
     }
 }
