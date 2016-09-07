@@ -150,13 +150,13 @@ public class Token implements Dicionario{
                   case 11: return TK_FACA;
                   case 12: return TK_LEIA;
                   case 13: return TK_ESCREVA;
-                  case 14: return TK_INTEIRO;
-                  case 15: return TK_REAL;
-                  case 16: return TK_BOOLEANO;
+                  case 14: return TK_TIPO;
+                  case 15: return TK_TIPO;
+                  case 16: return TK_TIPO;
                   case 17: return TK_VERDADEIRO;
                   case 18: return TK_FALSO;
-                  case 19: return TK_CADEIA;
-                  case 20: return TK_CARACTERE;
+                  case 19: return TK_TIPO;
+                  case 20: return TK_TIPO;
                   default: break;
               }
               break;
