@@ -25,6 +25,7 @@ public interface Dicionario {
     public static final int TK_FALSO                = 18;
     public static final int TK_CADEIA               = 19;
     public static final int TK_CARACTERE            = 20;
+    public static final int TK_TIPO                 = 43; //TEM Q MUDAR DEPOIS, PREGUICA N DEIXA MUDAR TUDO AGORA
     //Operadores
     public static final int TK_NAO                  = 21;
     public static final int TK_E                    = 22;
