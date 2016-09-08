@@ -572,6 +572,9 @@ public class AnalisadorSintatico implements Dicionario {
                 stack.push(R_EXP_RELACIONAL_BOOL);
                 stack.push(TK_VIRGULA);
                 break;
+            case R_EPSILON:
+                stack.pop();
+                break;
             default:
                 System.err.println("Entrou no Default de gerarProducao com o valor: "+valor);
                 break;
