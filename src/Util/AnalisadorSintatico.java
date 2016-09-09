@@ -71,7 +71,7 @@ public class AnalisadorSintatico implements Dicionario {
                 stack.push(R_EXP_RELACIONAL_BOOL);
                 stack.push(TK_IGUAL);
                 stack.push(TK_ID);
-                stack.push(TK_TIPO);
+                stack.push(R_TIPO);
                 break;
             case R_DEC_CONST_I:
                 stack.pop();
@@ -89,7 +89,7 @@ public class AnalisadorSintatico implements Dicionario {
                 stack.push(R_EXP_RELACIONAL_BOOL);
                 stack.push(TK_IGUAL);
                 stack.push(TK_ID);
-                stack.push(TK_TIPO);
+                stack.push(R_TIPO);
                 break;
             case R_DEC_VAR:
                 stack.pop();
@@ -105,7 +105,7 @@ public class AnalisadorSintatico implements Dicionario {
                 stack.push(R_DEC_VAR_I);
                 stack.push(TK_ID);
                 stack.push(R_ARRAY);
-                stack.push(TK_TIPO);
+                stack.push(R_TIPO);
                 break;
             case R_DEC_VAR_I:
                 stack.pop();
@@ -121,7 +121,7 @@ public class AnalisadorSintatico implements Dicionario {
                 stack.push(R_DEC_VAR_I);
                 stack.push(TK_ID);
                 stack.push(R_ARRAY);
-                stack.push(TK_TIPO);
+                stack.push(R_TIPO);
                 break;
             case R_DEC_FUNC:
                 stack.pop();
@@ -149,21 +149,21 @@ public class AnalisadorSintatico implements Dicionario {
                 stack.push(R_PARAMETROS);
                 stack.push(TK_PARENTESE_A);
                 stack.push(TK_ID);
-                stack.push(TK_TIPO);
+                stack.push(R_TIPO);
                 break;
             case R_PARAMETROS:
                 stack.pop();
                 stack.push(R_PARAMETROS_I);
                 stack.push(TK_ID);
                 stack.push(R_ARRAY_PARAM);
-                stack.push(TK_TIPO);
+                stack.push(R_TIPO);
                 break;
             case R_PARAMETROS_I:
                 stack.pop();
                 stack.push(R_PARAMETROS_I);
                 stack.push(TK_ID);
                 stack.push(R_ARRAY_PARAM);
-                stack.push(TK_TIPO);
+                stack.push(R_TIPO);
                 stack.push(TK_VIRGULA);
                 break;
             case R_DEC_MAIN:
@@ -574,6 +574,26 @@ public class AnalisadorSintatico implements Dicionario {
                 break;
             case R_EPSILON:
                 stack.pop();
+                break;
+            case R_TIPO:
+                stack.pop();
+                stack.push(TK_INTEIRO);
+                break;
+            case R_TIPO_C2:
+                stack.pop();
+                stack.push(TK_REAL);
+                break;
+            case R_TIPO_C3:
+                stack.pop();
+                stack.push(TK_BOOLEANO);
+                break;
+            case R_TIPO_C4:
+                stack.pop();
+                stack.push(TK_CADEIA);
+                break;
+            case R_TIPO_C5:
+                stack.pop();
+                stack.push(TK_CARACTERE);
                 break;
             default:
                 System.err.println("Entrou no Default de gerarProducao com o valor: "+valor);
