@@ -25,7 +25,6 @@ public interface Dicionario {
     public static final int TK_FALSO                = 18;
     public static final int TK_CADEIA               = 19;
     public static final int TK_CARACTERE            = 20;
-    public static final int TK_TIPO                 = 43; //TEM Q MUDAR DEPOIS, PREGUICA N DEIXA MUDAR TUDO AGORA
     //Operadores
     public static final int TK_NAO                  = 21;
     public static final int TK_E                    = 22;
@@ -186,6 +185,11 @@ public interface Dicionario {
     public static final int R_PASSA_PARAM_I               = 218;
     public static final int R_PASSA_PARAM_I_C2            = 219;
     public static final int R_EPSILON                     = 220;
+    public static final int R_TIPO                        = 221;
+    public static final int R_TIPO_C2                     = 222;
+    public static final int R_TIPO_C3                     = 223;
+    public static final int R_TIPO_C4                     = 224;
+    public static final int R_TIPO_C5                     = 225;
 
     //Enums
     public enum PadraoRegex {
