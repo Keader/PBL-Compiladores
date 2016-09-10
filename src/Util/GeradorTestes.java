@@ -14,7 +14,7 @@ public class GeradorTestes {
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(n));
 
-			String c = "abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+			String c = "abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890\'\"";
 			String[] operadores = {"+ ", "- ", "* ", "/ "};
 			String[] variaveis = {"teste ", "sei ", "la ", "qual ", "foi ", "xablau ", "nao ", "sei ", "mesmo ", "so ", "pra ", "testar "};
 			String[] reservadas = {"programa ", "const ", "var ", "funcao ", "inicio ", "fim ", "se ", "entao ", " senao", "enquanto ", "faca ", "leia ", "escreva ", "inteiro ",

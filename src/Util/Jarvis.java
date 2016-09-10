@@ -74,6 +74,7 @@ public class Jarvis implements Dicionario{
 
                    //Se nao ha erros lexicos, iniciar analise sintatica
                    if (tokensError.isEmpty()){
+                	   System.out.println("Analisador Léxico: [OK]");
                        AnalisadorSintatico sintatico = new AnalisadorSintatico(tokens);
                        sintatico.iniciarAnalise();
                    }
@@ -299,8 +300,7 @@ public class Jarvis implements Dicionario{
 					bw.flush();
 				}
 			}
-            else
-            {
+            else {
                 bw.write("Sucesso!");
                 bw.flush();
             }
