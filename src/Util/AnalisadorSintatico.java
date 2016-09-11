@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 /**
  *
  * @author Bradley
@@ -18,7 +16,7 @@ public class AnalisadorSintatico implements Dicionario {
     private List<Token> tokens;
     private Stack<Integer> stack;
     private static int [][]tabela;
-    private static String arquivoTabela;
+    private static String arquivoTabela = "Matriz_Compiladores_teste.csv";
 
     public AnalisadorSintatico(List<Token> tokens){
         this.tokens = tokens;
@@ -28,37 +26,28 @@ public class AnalisadorSintatico implements Dicionario {
     public void iniciarAnalise(){ }
 
     public static void main(String args[]){
-    	montarTabelaPredicao("Matriz_Compiladores_teste.csv");
+    	montarTabelaPredicao(arquivoTabela);
     }
     
     public static void montarTabelaPredicao(String arquivoTabela){
     	try {
 			BufferedReader leitor = new BufferedReader(new FileReader(arquivoTabela));
 			//capturando quantidade de regras
-			int qtdRegras = Integer.parseInt(leitor.readLine().split(";")[0]);
-			String [] terminais = leitor.readLine().split(";");
-			tabela = new int[qtdRegras][terminais.length - 1];
+			String [] primeiraLinha = leitor.readLine().split(";");
+			int qtdRegras = Integer.parseInt(primeiraLinha[0]);
+			int qtdTerminais = Integer.parseInt(primeiraLinha[1]);
+			tabela = new int[qtdRegras][qtdTerminais];
 			String []auxLinha;
-			
+					
 			//preenche a tabela
 			for(int i = 0; i < qtdRegras; i++){
+				Arrays.fill(tabela[i], -1);
 				auxLinha = leitor.readLine().split(";");
-				for(int x = 1; x < auxLinha.length; x++){
-					if(auxLinha[x] == "") 
-						tabela[i][x-1] = -1;
-					else 
-						tabela[i][x-1] = Dicionario.getRegraId(auxLinha[x]);
-				}
+				for(int x = 1; x < auxLinha.length; x++)
+					tabela[i][x-1] = Dicionario.getRegraId(auxLinha[x]);				
 			}
-			
+
 			leitor.close();
-			
-	    	for(int i = 0; i < qtdRegras; i++){
-	    		for(int x = 0 ; x < terminais.length - 1; x++){
-	    			System.out.print(tabela[i][x] + " ");
-	    		}
-    			System.out.println();
-	    	}
 
 		} 
     	catch (FileNotFoundException e) {
