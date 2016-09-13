@@ -2,7 +2,7 @@
 Gramatica;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;19;16;20;17;18;21;22;23;24;25;26;27;29;28;30;31;32;33;34;40;41;35;36;37;38;39;42;43
 <Program>;R_PROGRAMA_C3;R_PROGRAMA;R_PROGRAMA_C2;R_PROGRAMA_C3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 <Inicio_Const_Var_Func>;;R_INICIO_CONST_VAR_FUNC;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
-<Declaracao_Const_Var_Deriva>;R_DEC_CONST_VAR_DERIVADA_C2;;R_DEC_CONST_VAR_DERIVADA;<Decl_Func>R_DEC_CONST_VAR_DERIVADA_C2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+<Declaracao_Const_Var_Deriva>;R_DEC_CONST_VAR_DERIVADA_C2;;R_DEC_CONST_VAR_DERIVADA;R_DEC_CONST_VAR_DERIVADA_C2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 <Inicio_Var_Func>;;;R_INICIO_VAR_FUNC;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 <Inicio_Func>;R_INICIO_FUNC;;;R_INICIO_FUNC;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 <Decl_Const>;;R_DEC_CONST_CONTINUO;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -24,10 +24,6 @@ public class AnalisadorSintatico implements Dicionario {
     }
 
     public void iniciarAnalise(){ }
-
-    public static void main(String args[]){
-    	montarTabelaPredicao(arquivoTabela);
-    }
     
     public static void montarTabelaPredicao(String arquivoTabela){
     	try {
@@ -89,7 +85,7 @@ public class AnalisadorSintatico implements Dicionario {
                 stack.push(R_DEC_MAIN);
                 stack.push(R_DEC_FUNC);
                 break;
-            case  R_INICIO_VAR_FUNC:
+            case R_INICIO_VAR_FUNC:
                 stack.pop();
                 stack.push(R_DEC_MAIN);
                 stack.push(R_DEC_FUNC);
