@@ -79,7 +79,7 @@ public class Jarvis implements Dicionario{
                 	    System.out.println("[Log]Analise Lexica para o arquivo: [" + listaDeArquivos[i].getName() + "] aprovada.");
                         System.out.println("[Log]Iniciando Analise Sintatica para o arquivo: [" + listaDeArquivos[i].getName() + "]...");
                         //dando inicio a thread do Sintatico //XXX Marcador
-                        new AnalisadorSintatico(tokens);
+                        new AnalisadorSintatico(tokens).start();
                     }
                     else if (tokens.isEmpty())
                         Debug.ErrPrintln("[*] O arquivo: [" + listaDeArquivos[i].getName() + "] nao gerou nenhum Token. Pulando analise sintatica.");

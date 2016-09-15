@@ -17,7 +17,6 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
         //criando uma copia da lista
         this.tokens.addAll(tokens);
         stack = new Stack<>();
-        this.start();
     }
 
     @Override
@@ -53,9 +52,9 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
                 }
                 Debug.ErrPrintln("Entrada acabou mas na pilha nao tem o EOF");
             }
-
+            
             tokenAtual = tokens.get(posicao).getIdUnico();
-
+            
             if (tokenAtual == stack.peek()) {
                 stack.pop();
                 posicao++;
