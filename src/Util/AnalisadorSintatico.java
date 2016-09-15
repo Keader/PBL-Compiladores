@@ -24,7 +24,7 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
     	try {
         	iniciarAnalise();
 			this.finalize();
-		} 
+		}
     	catch (Throwable e) {
 			e.printStackTrace();
 		}

@@ -19,7 +19,7 @@ public class GeradorTestes {
 			String[] variaveis = {"teste ", "sei ", "la ", "qual ", "foi ", "xablau ", "nao ", "sei ", "mesmo ", "so ", "pra ", "testar "};
 			String[] reservadas = {"programa ", "const ", "var ", "funcao ", "inicio ", "fim ", "se ", "entao ", " senao", "enquanto ", "faca ", "leia ", "escreva ", "inteiro ",
 					"real ", "booleano ", "verdadeiro ", "falso ", "cadeia ", "caractere "};
-			
+
 			Random sorteio = new Random();
 			int sortNum;
 			String texto = "";
@@ -31,33 +31,33 @@ public class GeradorTestes {
 					texto = variaveis[sortNum];
 				}
 				else if(sortNum == 1){
-					sortNum = sorteio.nextInt(reservadas.length);			
+					sortNum = sorteio.nextInt(reservadas.length);
 					texto = reservadas[sortNum];
 				}
 				else if(sortNum == 2){
 					texto = i + " ";
 				}
 				else if(sortNum == 3){
-					sortNum = sorteio.nextInt(operadores.length);			
+					sortNum = sorteio.nextInt(operadores.length);
 					texto = operadores[sortNum];
 				}
 				else if(sortNum == 4){
-					sortNum = sorteio.nextInt(c.length());	
+					sortNum = sorteio.nextInt(c.length());
 					texto = "\'" + c.charAt(sortNum) + "\' ";
 				}
 				else if(sortNum == 5){
 					sortNum = sorteio.nextInt(variaveis.length);
 					texto = "\"" + variaveis[sortNum] + "\" ";
 				}
-				
+
 				bw.write(texto);
-				if(i % 14 == 0 && i > 0) 
+				if(i % 14 == 0 && i > 0)
 					bw.newLine();
 				bw.flush();
 			}
 			bw.close();
-		} 
-		catch (FileNotFoundException e) {} 
+		}
+		catch (FileNotFoundException e) {}
 		catch (IOException e) {}
 	}
 }
