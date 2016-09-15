@@ -53,8 +53,8 @@ public interface Dicionario {
     //Caractere Literal
     public static final int TK_CARACTERE_L          = 40;
 	//EOF ($)
-	public static final int TK_OEF                  = 41;
-	public static final int TK_EPSILON              = 42;
+	public static final int TK_EOF                  = 41;
+	public static final int MAX_TOKEN_VALUE         = 42;
 
     //Espaco Livre do 43-99 para possiveis modificacoes nos items acima.
     //**************************************************************************

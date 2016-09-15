@@ -29,10 +29,67 @@ public class AnalisadorSintatico implements Dicionario {
     	System.out.println(getIdProducao(R_PROGRAMA, TK_PROGRAMA));
     	System.out.println(getIdProducao(R_PROGRAMA, TK_CARACTERE));
     	System.out.println(getIdProducao(R_PROGRAMA, TK_CONST));
+        System.out.println(getIdProducao(R_CORPO, TK_VAR));
     }
-    
-    public void iniciarAnalise(){}
-    
+
+    public void iniciarAnalise() {
+        if (tokens.isEmpty()) {
+            return;
+        }
+
+        int posicao = 0;
+        int max = tokens.size() - 1;
+        int tokenAtual = 0;
+
+        stack.push(TK_EOF);
+        stack.push(R_PROGRAMA);
+
+        while (!stack.isEmpty()) {
+            int stackPeek = stack.peek();
+            //Entrada acabou, verifica se o ultimo elemento da pilha eh EOF
+            if (posicao > max) {
+                if (stack.peek() == TK_EOF) {
+                    stack.pop();
+                    continue;
+                }
+                System.err.println("Entrada acabou mas na pilha nao tem o EOF");
+            }
+
+            tokenAtual = tokens.get(posicao).getIdUnico();
+
+            if (tokenAtual == stack.peek()) {
+                stack.pop();
+                posicao++;
+            }
+            //Se eh menor que o numero maximo que um token pode alcancar eh um terminal, da error direto
+            else if (stack.peek() < MAX_TOKEN_VALUE) {
+                System.err.println("[Error] O terminal: " + stack.peek() + " nao eh igual ao token atual: " + tokenAtual);
+                break;
+            }
+            else {
+                int producao = getIdProducao(stack.peek(), tokenAtual);
+
+                if (producao != -1)
+                    gerarProducao(producao);
+                //Gerada producao invalida (-1)
+                else {
+                    System.err.println("A regra: " + stack.peek() + " com o token: " + tokenAtual + " nao gerou producao valida.");
+                    break;
+                }
+            }
+        }
+        //Este erro ficara aparecendo de forma errada, ate remover os Break la de cima
+        //Os breaks serao substituidos por tratamentos de erros em algum momento hu3
+        if (posicao <= max)
+        {
+            System.err.println("Pilha acabou antes da entrada, posicao: " + posicao);
+            return;
+        }
+
+        System.out.println("Sucesso na analise sintatica.");
+
+    }
+
     public static void montarTabelaPredicao(String arquivoTabela){
     	try {
 			BufferedReader leitor = new BufferedReader(new FileReader(arquivoTabela));
@@ -43,15 +100,15 @@ public class AnalisadorSintatico implements Dicionario {
 			int qtdTerminais = Integer.parseInt(primeiraLinha[1]);
 			tabela = new int[tamanhoTabela][qtdTerminais];
 			String []auxLinha;
-			
+
 			//consumindo uma linha
 			System.out.println(Arrays.toString(leitor.readLine().split(";")));
-			
+
 			//preenche a tabela com -1
 			for(int i = 0; i < tamanhoTabela; i++){
-				Arrays.fill(tabela[i], -1);			
+				Arrays.fill(tabela[i], -1);
 			}
-			//preenche a tabela com a predição
+			//preenche a tabela com a predicao
 			for(int i = 0; i < qtdRegras; i++){
 				auxLinha = leitor.readLine().split(";");
 				for(int x = 1; x < auxLinha.length; x++)
@@ -59,15 +116,15 @@ public class AnalisadorSintatico implements Dicionario {
 			}
 
 			leitor.close();
-		} 
+		}
     	catch (FileNotFoundException e) {
     		System.out.println("Erro no arquivo da Tabela");
-		} 
+		}
     	catch (IOException e) {
     		System.out.println("Erro no arquivo da Tabela");
     	}
     }
-    
+
     public static int getIdProducao(int regra, int token){
     	if(tabela == null)
     		montarTabelaPredicao(arquivoTabela);

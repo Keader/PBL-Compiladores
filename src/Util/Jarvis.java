@@ -44,7 +44,9 @@ public class Jarvis implements Dicionario{
 				//Se for diretorio ou for arquivo de saida , passa pro proximo
 				if (listaDeArquivos[i].isDirectory()
                    || listaDeArquivos[i].getName().startsWith("s_")
-                   || listaDeArquivos[i].getName().endsWith(".jar"))
+                   || listaDeArquivos[i].getName().endsWith(".jar")
+                   || listaDeArquivos[i].getName().endsWith(".xlsx")
+                   || listaDeArquivos[i].getName().endsWith(".csv"))
 					continue;
 
 				//verificando se o arquivo existe para comecar a analisar
@@ -68,16 +70,18 @@ public class Jarvis implements Dicionario{
 					if(iniciouComentario)
 						tokensError.add(new Token("{comentario","COMENTARIO_MAL_FORMADO", nLinha, true));
 
+                    //Se nao ha erros lexicos, iniciar analise sintatica
+                    if (tokensError.isEmpty() && !tokens.isEmpty()){
+                	    System.out.println("[Log]Analise Lexica para o arquivo: [" + listaDeArquivos[i].getName() + "] aprovada.");
+                        System.out.println("[Log]Iniciando Analise Sintatica para o arquivo: [" + listaDeArquivos[i].getName() + "]...");
+                        AnalisadorSintatico sintatico = new AnalisadorSintatico(tokens);
+                        sintatico.iniciarAnalise();
+                    }
+                    else if (tokens.isEmpty())
+                        System.err.println("[*] O arquivo: [" + listaDeArquivos[i].getName() + "] nao gerou nenhum Token. Pulando analise sintatica.");
 					//gerando saidas
 					gerarSaida(listaDeArquivos[i].getName());
 					leitor.close();
-
-                   //Se nao ha erros lexicos, iniciar analise sintatica
-                   if (tokensError.isEmpty()){
-                	   System.out.println("Analisador Léxico: [OK]");
-                       AnalisadorSintatico sintatico = new AnalisadorSintatico(tokens);
-                       sintatico.iniciarAnalise();
-                   }
 				}
 				// Fim do Arquivo Atual
 			}
