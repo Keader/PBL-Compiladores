@@ -15,6 +15,7 @@ import java.util.Stack;
 public class AnalisadorSintatico implements Dicionario {
     private List<Token> tokens;
     private Stack<Integer> stack;
+    private static int tamanhoTabela = R_TIPO_C5 + 5;
     private static int [][]tabela;
     private static String arquivoTabela = "Matriz_Compiladores_teste.csv";
 
@@ -23,28 +24,41 @@ public class AnalisadorSintatico implements Dicionario {
         stack = new Stack<>();
     }
 
-    public void iniciarAnalise(){ }
+    public static void main(String []a){
+    	//TODO teste aqui
+    	System.out.println(getIdProducao(R_PROGRAMA, TK_PROGRAMA));
+    	System.out.println(getIdProducao(R_PROGRAMA, TK_CARACTERE));
+    	System.out.println(getIdProducao(R_PROGRAMA, TK_CONST));
+    }
+    
+    public void iniciarAnalise(){}
     
     public static void montarTabelaPredicao(String arquivoTabela){
     	try {
 			BufferedReader leitor = new BufferedReader(new FileReader(arquivoTabela));
 			//capturando quantidade de regras
 			String [] primeiraLinha = leitor.readLine().split(";");
+			//int qtdRegras = Integer.parseInt(primeiraLinha[0]);
 			int qtdRegras = Integer.parseInt(primeiraLinha[0]);
 			int qtdTerminais = Integer.parseInt(primeiraLinha[1]);
-			tabela = new int[qtdRegras][qtdTerminais];
+			tabela = new int[tamanhoTabela][qtdTerminais];
 			String []auxLinha;
-					
-			//preenche a tabela
+			
+			//consumindo uma linha
+			System.out.println(Arrays.toString(leitor.readLine().split(";")));
+			
+			//preenche a tabela com -1
+			for(int i = 0; i < tamanhoTabela; i++){
+				Arrays.fill(tabela[i], -1);			
+			}
+			//preenche a tabela com a predição
 			for(int i = 0; i < qtdRegras; i++){
-				Arrays.fill(tabela[i], -1);
 				auxLinha = leitor.readLine().split(";");
 				for(int x = 1; x < auxLinha.length; x++)
-					tabela[i][x-1] = Dicionario.getRegraId(auxLinha[x]);				
+					tabela[Dicionario.getRegraId(auxLinha[0])][x-1] = Dicionario.getRegraId(auxLinha[x]);
 			}
 
 			leitor.close();
-
 		} 
     	catch (FileNotFoundException e) {
     		System.out.println("Erro no arquivo da Tabela");
@@ -54,7 +68,7 @@ public class AnalisadorSintatico implements Dicionario {
     	}
     }
     
-    public int getIdProducao(int regra, int token){
+    public static int getIdProducao(int regra, int token){
     	if(tabela == null)
     		montarTabelaPredicao(arquivoTabela);
 
