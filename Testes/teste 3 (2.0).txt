@@ -1,0 +1,25 @@
+const inicio
+    inteiro a = k, b = 2 * 3 + 7 * 5;
+    caractere c = 'k', b = hehe;
+    real isRealLife = 0;
+    cadeia cadeira = "cadeira", not = "niet";
+fim
+
+funcao inteiro zuera (inteiro a, inteiro b, caractere c, real k) inicio
+    var inicio
+        inteiro a, b, c;
+        real <<3,true,3,true>> isolado;
+    fim
+
+    b = b * b - c + a;
+    leia(b);
+    leia(c);
+    a = (b + c);
+    inicio
+        a = a + 4;
+    fim    
+    => a =>;
+fim
+
+programa inicio
+fim

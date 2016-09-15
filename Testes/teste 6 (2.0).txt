@@ -1,0 +1,55 @@
+funcao calcular_media(inteiro a, inteiro b, booleano c, real d)
+inicio
+    se (nao (c <> verdadeiro)) entao 
+    inicio
+        variavel = "Isso eh interessante";
+    fim
+
+    senao
+    inicio
+        variavel = "hu3hu3hu3 brbrbr";
+        var
+        inicio
+            inteiro kappa;
+            real keepo;
+            inteiro pq;
+        fim
+        t = -2;
+        kappa = variavel-30;
+        keepo = -30-30;
+        pq = constante;
+        
+        enquanto(verdadeiro) faca
+        inicio
+            enquanto (verdadeiro) faca
+            inicio
+                
+            fim
+        fim
+    fim
+
+    var
+    inicio
+        caractere opa;
+    fim
+    opa = 'o';
+fim
+
+programa
+inicio
+    var
+    inicio
+        inteiro valor;
+        real    quantidade;
+        cadeia nome, produto;
+    fim
+    
+    leia(valor);
+    enquanto (valor > -20) faca
+    inicio
+        leia(nome, produto, quantidade);
+        estoque = quantidade -12;
+    fim
+    
+    media_menos_60 = calcular_media(a, b, c, d)-60;
+fim

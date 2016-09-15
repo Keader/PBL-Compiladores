@@ -1,5 +1,0 @@
-programa inicio
-{variaveis que armazenam valores inteiros para X e para Y}
-inteiro valorX = 10, valorY = 2;
-escreva (valorX + valorY);
-fim

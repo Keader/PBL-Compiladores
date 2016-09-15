@@ -1,0 +1,36 @@
+funcao inteiro fibonacci (inteiro valor)
+inicio
+    var
+    inicio
+        inteiro retorno;
+    fim
+    
+    se (nao(valor <> 0) ou nao(valor <> 1)) entao
+    inicio
+        retorno = 1;
+    fim
+    
+    senao
+    inicio
+        retorno = valor + fibonacci(valor - 1) + fibonacci(valor - 2);
+    fim
+    
+    => retorno =>;
+fim
+
+programa
+inicio
+    var
+    inicio
+        inteiro numero, valor;
+    fim
+    
+    escreva ("Digite o numero correspondente ao valor fibbonaci desejado ");
+    leia (numero);
+    
+    valor = fibonacci(numero);
+    
+    escreva ("O valor do fibonacci de ", numero, "corresponde a ", valor);
+fim
+        
+        

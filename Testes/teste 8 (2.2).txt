@@ -1,0 +1,99 @@
+funcao mergeSort(inteiro << >>vetor, inteiro posicaoInicio, inteiro posicaoFim)
+Inicio
+    var
+    inicio
+        inteiro i, j, k, metadeTamanho, <<10>>vetorTemp;
+    fim
+
+    se (posicaoInicio <> posicaoFim) entao
+    inicio
+        metadeTamanho = (posicaoInicio + posicaoFim ) / 2;
+        mergeSort(vetor, posicaoInicio, metadeTamanho);
+        mergeSort(vetor, metadeTamanho + 1, posicaoFim);
+
+        i = posicaoInicio;
+        j = metadeTamanho + 1;
+        k = 0;
+        
+        enquanto(i < metadeTamanho + 1 ou j  < posicaoFim + 1) faca
+        inicio
+            se (nao(i <> metadeTamanho + 1 )) entao
+            inicio
+                <<k>>vetorTemp = <<j>>vetor;
+                j = j + 1;
+                k = k + 1;
+            fim
+            senao
+            inicio
+                se (nao(j <> posicaoFim + 1)) entao
+                inicio
+                    <<k>>vetorTemp = <<i>>vetor;
+                    j = j + 1;
+                    k = k + 1;
+                fim
+                senao
+                inicio
+                    se (<<i>>vetor < <<j>>vetor) entao
+                    inicio
+                        <<k>>vetorTemp = <<i>>vetor;
+                        j = j + 1;
+                        k = k + 1;
+                    fim
+                    senao
+                    inicio
+                        <<k>>vetorTemp = <<j>>vetor;
+                        j = j + 1;
+                        k = k + 1;
+                    fim
+                fim
+            fim
+        fim
+        i = posicaoInicio;
+        enquanto ( i <= posicaoFim) faca
+        inicio
+
+            <<i>>vetor = <<i-posicaoInicio>>vetorTemp;
+            i = i + 1;
+        fim
+    fim
+fim
+
+
+programa
+inicio
+    var
+    inicio
+        inteiro tamanho, i;
+    fim
+    
+    i = 0;
+
+    escreva ("Digite o tamanho do vetor");
+    leia (tamanho);
+    
+    var
+    inicio
+        inteiro <<tamanho>> vetor;
+    fim
+    
+    enquanto (i < tamanho) faca
+    inicio
+        escreva("Digite um numero para preencher o vetor");
+        leia(<<i>> vetor);
+    i = i + 1;
+    fim
+    
+    escreva ("Ordenando");
+    mergeSort(vetor, 0, tamanho);
+    escreva ("Vetor ordenado com sucesso");
+    
+    i = 0;
+    enquanto (i < tamanho) faca
+    inicio
+        escreva(<<i>>vetor);
+    i = i + 1;
+    fim
+    
+    escreva ("Obrigado por usar o aplicativo");
+    
+fim
