@@ -1,10 +1,21 @@
 package Util;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+
 /**
  * Esta interface representa um dicionario.
  */
-public interface Dicionario {
-    //Palavras Reservadas
+public interface Dicionario {	
+	//singleton da tabela
+	public static final int [][] tabela = montarTabela();
+    static final int tamanhoTabela = 230;
+    static final String arquivoTabela = "Matriz_Compiladores_teste.csv";
+   
+	//Palavras Reservadas
     public static final int TK_PROGRAMA             =  0;
     public static final int TK_CONST                =  1;
     public static final int TK_VAR                  =  2;
@@ -364,5 +375,51 @@ public interface Dicionario {
 			case "R_TIPO_C5" 					: return R_TIPO_C5;
 			default 							: return -1;
 		}
+	}
+	
+
+    public static int getIdProducao(int regra, int token){
+    	if(tabela == null)
+    		montarTabela();
+
+		return tabela[regra][token];
+    }
+
+	static int[][] montarTabela() {
+	 	try {
+			BufferedReader leitor = new BufferedReader(new FileReader(arquivoTabela));
+			//capturando quantidade de regras
+			String [] primeiraLinha = leitor.readLine().split(";");
+			int qtdRegras = Integer.parseInt(primeiraLinha[0]);
+			int qtdTerminais = Integer.parseInt(primeiraLinha[1]);
+			int [][]auxTabela = new int[tamanhoTabela][qtdTerminais];
+			String []auxLinha;
+			
+			//consumindo uma linha
+			leitor.readLine().split(";");
+
+			//preenche a tabela com -1
+			for(int i = 0; i < tamanhoTabela; i++){
+				Arrays.fill(auxTabela[i], -1);			
+			}
+			//preenche a tabela com a predicao
+			for(int i = 0; i < qtdRegras; i++){
+				auxLinha = leitor.readLine().split(";");
+				for(int x = 1; x < auxLinha.length; x++)
+					auxTabela[Dicionario.getRegraId(auxLinha[0])][x-1] = Dicionario.getRegraId(auxLinha[x]);
+			}
+
+			leitor.close();			
+			
+			return auxTabela;
+		} 
+    	catch (FileNotFoundException e) {
+    		Debug.ErrPrintln("Erro no arquivo da Tabela");
+		} 
+    	catch (IOException e) {
+    		Debug.ErrPrintln("Erro no arquivo da Tabela");
+    	}		
+	 	
+	 	return null;
 	}
 }

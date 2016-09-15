@@ -22,7 +22,7 @@ public class Jarvis implements Dicionario{
 	private final List<Token> tokens;
 	private final List<Token> tokensError;
 	private int nLinha;
-
+		
 	public Jarvis() {
 		tokens = new LinkedList<>();
 		tokensError = new LinkedList<>();
@@ -74,12 +74,13 @@ public class Jarvis implements Dicionario{
                     if (tokensError.isEmpty() && !tokens.isEmpty()){
                 	    System.out.println("[Log]Analise Lexica para o arquivo: [" + listaDeArquivos[i].getName() + "] aprovada.");
                         System.out.println("[Log]Iniciando Analise Sintatica para o arquivo: [" + listaDeArquivos[i].getName() + "]...");
-                        AnalisadorSintatico sintatico = new AnalisadorSintatico(tokens);
-                        sintatico.iniciarAnalise();
+                        //dando inicio a thread do Sintatico //XXX Marcador
+                        new AnalisadorSintatico(tokens);
                     }
                     else if (tokens.isEmpty())
-                        System.err.println("[*] O arquivo: [" + listaDeArquivos[i].getName() + "] nao gerou nenhum Token. Pulando analise sintatica.");
-					//gerando saidas
+                        Debug.ErrPrintln("[*] O arquivo: [" + listaDeArquivos[i].getName() + "] nao gerou nenhum Token. Pulando analise sintatica.");
+				
+                    //gerando saidas
 					gerarSaida(listaDeArquivos[i].getName());
 					leitor.close();
 				}
