@@ -34,7 +34,7 @@ public class Jarvis implements Dicionario{
 			File dir = new File(System.getProperty("user.dir"));
 
 			if (!dir.exists()) {
-				JOptionPane.showMessageDialog(null, "Programa nao possui autorizacao para ler pastas do usuario", "Error", JOptionPane.ERROR_MESSAGE);
+				Debug.messagePane("Programa nao possui autorizacao para ler pastas do usuario", "Error", JOptionPane.ERROR_MESSAGE);
 				System.exit(-1);
 			}
 			File listaDeArquivos[] = dir.listFiles();
@@ -46,7 +46,11 @@ public class Jarvis implements Dicionario{
                    || listaDeArquivos[i].getName().startsWith("s_")
                    || listaDeArquivos[i].getName().endsWith(".jar")
                    || listaDeArquivos[i].getName().endsWith(".xlsx")
-                   || listaDeArquivos[i].getName().endsWith(".csv"))
+                   || listaDeArquivos[i].getName().endsWith(".classpath")
+                   || listaDeArquivos[i].getName().endsWith(".project")
+                   || listaDeArquivos[i].getName().endsWith(".md")
+	               || listaDeArquivos[i].getName().endsWith(".gitignore")
+		           || listaDeArquivos[i].getName().endsWith(".csv"))
 					continue;
 
 				//verificando se o arquivo existe para comecar a analisar

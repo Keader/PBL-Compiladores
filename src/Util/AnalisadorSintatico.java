@@ -20,10 +20,11 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
         this.start();
     }
 
+    @Override
     public void run(){
     	try {
         	iniciarAnalise();
-			this.finalize();
+			Debug.messagePane("Sucesso na analise sintatica.", "SUCESSO");
 		} 
     	catch (Throwable e) {
 			e.printStackTrace();
@@ -82,7 +83,6 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
         	Debug.ErrPrintln("Pilha acabou antes da entrada, posicao: " + posicao);
             return;
         }
-        Debug.println("Sucesso na analise sintatica.");
     }
 
     public void gerarProducao(int valor){
