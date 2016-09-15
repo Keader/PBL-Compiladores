@@ -80,14 +80,11 @@ public class AnalisadorSintatico implements Dicionario {
         }
         //Este erro ficara aparecendo de forma errada, ate remover os Break la de cima
         //Os breaks serao substituidos por tratamentos de erros em algum momento hu3
-        if (posicao <= max)
-        {
+        if (posicao <= max) {
             System.err.println("Pilha acabou antes da entrada, posicao: " + posicao);
             return;
         }
-
         System.out.println("Sucesso na analise sintatica.");
-
     }
 
     public static void montarTabelaPredicao(String arquivoTabela){
@@ -95,18 +92,17 @@ public class AnalisadorSintatico implements Dicionario {
 			BufferedReader leitor = new BufferedReader(new FileReader(arquivoTabela));
 			//capturando quantidade de regras
 			String [] primeiraLinha = leitor.readLine().split(";");
-			//int qtdRegras = Integer.parseInt(primeiraLinha[0]);
 			int qtdRegras = Integer.parseInt(primeiraLinha[0]);
 			int qtdTerminais = Integer.parseInt(primeiraLinha[1]);
 			tabela = new int[tamanhoTabela][qtdTerminais];
 			String []auxLinha;
-
+			
 			//consumindo uma linha
 			System.out.println(Arrays.toString(leitor.readLine().split(";")));
-
+			
 			//preenche a tabela com -1
 			for(int i = 0; i < tamanhoTabela; i++){
-				Arrays.fill(tabela[i], -1);
+				Arrays.fill(tabela[i], -1);			
 			}
 			//preenche a tabela com a predicao
 			for(int i = 0; i < qtdRegras; i++){
@@ -116,10 +112,15 @@ public class AnalisadorSintatico implements Dicionario {
 			}
 
 			leitor.close();
-		}
+			
+			for(int i = 0; i < tamanhoTabela; i++){
+				if(i > 99)
+				System.out.println(Arrays.toString(tabela[i]));
+			}
+		} 
     	catch (FileNotFoundException e) {
     		System.out.println("Erro no arquivo da Tabela");
-		}
+		} 
     	catch (IOException e) {
     		System.out.println("Erro no arquivo da Tabela");
     	}
