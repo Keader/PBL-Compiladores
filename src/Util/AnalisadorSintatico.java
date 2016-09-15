@@ -25,7 +25,7 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
     	try {
         	iniciarAnalise();
 			Debug.messagePane("Sucesso na analise sintatica.", "SUCESSO");
-		} 
+		}
     	catch (Throwable e) {
 			e.printStackTrace();
 		}

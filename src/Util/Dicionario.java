@@ -9,12 +9,12 @@ import java.util.Arrays;
 /**
  * Esta interface representa um dicionario.
  */
-public interface Dicionario {	
+public interface Dicionario {
 	//singleton da tabela
 	public static final int [][] tabela = montarTabela();
     static final int tamanhoTabela = 230;
     static final String arquivoTabela = "Matriz_Compiladores_teste.csv";
-   
+
 	//Palavras Reservadas
     public static final int TK_PROGRAMA             =  0;
     public static final int TK_CONST                =  1;
@@ -376,7 +376,7 @@ public interface Dicionario {
 			default 							: return -1;
 		}
 	}
-	
+
 
     public static int getIdProducao(int regra, int token){
     	if(tabela == null)
@@ -394,13 +394,13 @@ public interface Dicionario {
 			int qtdTerminais = Integer.parseInt(primeiraLinha[1]);
 			int [][]auxTabela = new int[tamanhoTabela][qtdTerminais];
 			String []auxLinha;
-			
+
 			//consumindo uma linha
 			leitor.readLine().split(";");
 
 			//preenche a tabela com -1
 			for(int i = 0; i < tamanhoTabela; i++){
-				Arrays.fill(auxTabela[i], -1);			
+				Arrays.fill(auxTabela[i], -1);
 			}
 			//preenche a tabela com a predicao
 			for(int i = 0; i < qtdRegras; i++){
@@ -409,17 +409,17 @@ public interface Dicionario {
 					auxTabela[Dicionario.getRegraId(auxLinha[0])][x-1] = Dicionario.getRegraId(auxLinha[x]);
 			}
 
-			leitor.close();			
-			
+			leitor.close();
+
 			return auxTabela;
-		} 
+		}
     	catch (FileNotFoundException e) {
     		Debug.ErrPrintln("Erro no arquivo da Tabela");
-		} 
+		}
     	catch (IOException e) {
     		Debug.ErrPrintln("Erro no arquivo da Tabela");
-    	}		
-	 	
+    	}
+
 	 	return null;
 	}
 }

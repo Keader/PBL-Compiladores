@@ -22,7 +22,7 @@ public class Jarvis implements Dicionario{
 	private final List<Token> tokens;
 	private final List<Token> tokensError;
 	private int nLinha;
-		
+
 	public Jarvis() {
 		tokens = new LinkedList<>();
 		tokensError = new LinkedList<>();
@@ -83,7 +83,7 @@ public class Jarvis implements Dicionario{
                     }
                     else if (tokens.isEmpty())
                         Debug.ErrPrintln("[*] O arquivo: [" + listaDeArquivos[i].getName() + "] nao gerou nenhum Token. Pulando analise sintatica.");
-				
+
                     //gerando saidas
 					gerarSaida(listaDeArquivos[i].getName());
 					leitor.close();
