@@ -298,17 +298,15 @@ public class Jarvis implements Dicionario{
 					bw.flush();
 				}
 			}
-            else {
-            	//Se nao ha erros lexicos, iniciar analise sintatica
-                if (!tokens.isEmpty()){
-                	Debug.println("[Log] Análise Lexica para o arquivo: [" + arquivo + "] aprovada.");
-                	Debug.println("[Log] Iniciando Analise Sintatica para o arquivo: [" + arquivo + "]...");
-                    //dando inicio a thread do Sintatico //XXX Marcador
-                    new AnalisadorSintatico(tokens).run();
-                }
-                else
-                    Debug.ErrPrintln("[*] O arquivo: [" + arquivo + "] nao gerou nenhum Token. Pulando analise sintatica.");
+            //Se nao ha erros lexicos, iniciar analise sintatica
+            else if (!tokens.isEmpty()){
+                Debug.println("[Log] Analise Lexica para o arquivo: [" + arquivo + "] aprovada.");
+                Debug.println("[Log] Iniciando Analise Sintatica para o arquivo: [" + arquivo + "]...");
+                //dando inicio a thread do Sintatico //XXX Marcador
+                new AnalisadorSintatico(tokens).run();
             }
+            else
+                Debug.ErrPrintln("[*] O arquivo: [" + arquivo + "] nao gerou nenhum Token. Pulando analise sintatica.");
 
 			bw.close();
 			tokens.clear();
