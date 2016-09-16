@@ -74,16 +74,6 @@ public class Jarvis implements Dicionario{
 					if(iniciouComentario)
 						tokensError.add(new Token("{comentario","COMENTARIO_MAL_FORMADO", nLinha, true));
 
-                    //Se nao ha erros lexicos, iniciar analise sintatica
-                    if (tokensError.isEmpty() && !tokens.isEmpty()){
-                	    System.out.println("[Log]Analise Lexica para o arquivo: [" + listaDeArquivos[i].getName() + "] aprovada.");
-                        System.out.println("[Log]Iniciando Analise Sintatica para o arquivo: [" + listaDeArquivos[i].getName() + "]...");
-                        //dando inicio a thread do Sintatico //XXX Marcador
-                        new AnalisadorSintatico(tokens).start();
-                    }
-                    else if (tokens.isEmpty())
-                        Debug.ErrPrintln("[*] O arquivo: [" + listaDeArquivos[i].getName() + "] nao gerou nenhum Token. Pulando analise sintatica.");
-
                     //gerando saidas
 					gerarSaida(listaDeArquivos[i].getName());
 					leitor.close();
@@ -298,7 +288,6 @@ public class Jarvis implements Dicionario{
 				bw.newLine();
 				bw.flush();
 			}
-
 			//se possui erros, escreve eles
 			if(!tokensError.isEmpty()) {
 				bw.newLine();
@@ -310,8 +299,15 @@ public class Jarvis implements Dicionario{
 				}
 			}
             else {
-                bw.write("Sucesso!");
-                bw.flush();
+            	//Se nao ha erros lexicos, iniciar analise sintatica
+                if (!tokens.isEmpty()){
+                	Debug.println("[Log] Análise Lexica para o arquivo: [" + arquivo + "] aprovada.");
+                	Debug.println("[Log] Iniciando Analise Sintatica para o arquivo: [" + arquivo + "]...");
+                    //dando inicio a thread do Sintatico //XXX Marcador
+                    new AnalisadorSintatico(tokens).run();
+                }
+                else
+                    Debug.ErrPrintln("[*] O arquivo: [" + arquivo + "] nao gerou nenhum Token. Pulando analise sintatica.");
             }
 
 			bw.close();

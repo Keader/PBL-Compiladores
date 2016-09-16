@@ -187,23 +187,21 @@ public class Token implements Dicionario{
             //Numero
             case 3: return TK_NUMERO;
             //Delimitadores
-            case 4:{
-
+            case 4: {
                 switch(tipo){
-                  case  1: return TK_PONTOVIRGULA;
-                  case  2: return TK_VIRGULA;
-                  case  3: return TK_PARENTESE_A;
-                  case  4: return TK_PARENTESE_F;
-                  default: break;
-              }
+	                case 1: return TK_PONTOVIRGULA;
+	                case 2: return TK_VIRGULA;
+	                case 3: return TK_PARENTESE_A;
+	                case 4: return TK_PARENTESE_F;
+	                default: break;
+                }
               break;
             }
             //Cadeia de Caractere
             case 5: return TK_CADEIA_DE_CARACTERES;
             case 6: return TK_CARACTERE_L;
             //Este caso nunca devera ocorrer
-            default:
-                break;
+            default: break;
         }
         //Isso nunca devera ocorrer
         return -1;

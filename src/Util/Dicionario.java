@@ -410,7 +410,7 @@ public interface Dicionario {
 			}
 
 			leitor.close();
-
+			
 			return auxTabela;
 		}
     	catch (FileNotFoundException e) {
