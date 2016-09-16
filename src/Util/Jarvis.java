@@ -42,15 +42,7 @@ public class Jarvis implements Dicionario{
 			//Percorre os arquivos na pasta
 			for (int i = 0; i < listaDeArquivos.length; i++) {
 				//Se for diretorio ou for arquivo de saida , passa pro proximo
-				if (listaDeArquivos[i].isDirectory()
-                   || listaDeArquivos[i].getName().startsWith("s_")
-                   || listaDeArquivos[i].getName().endsWith(".jar")
-                   || listaDeArquivos[i].getName().endsWith(".xlsx")
-                   || listaDeArquivos[i].getName().endsWith(".classpath")
-                   || listaDeArquivos[i].getName().endsWith(".project")
-                   || listaDeArquivos[i].getName().endsWith(".md")
-	               || listaDeArquivos[i].getName().endsWith(".gitignore")
-		           || listaDeArquivos[i].getName().endsWith(".csv"))
+				if (listaDeArquivos[i].isDirectory() || verificaTipos(listaDeArquivos[i].getName()))
 					continue;
 
 				//verificando se o arquivo existe para comecar a analisar
@@ -74,7 +66,7 @@ public class Jarvis implements Dicionario{
 					if(iniciouComentario)
 						tokensError.add(new Token("{comentario","COMENTARIO_MAL_FORMADO", nLinha, true));
 
-                    //gerando saidas
+					//gerando saidas
 					gerarSaida(listaDeArquivos[i].getName());
 					leitor.close();
 				}
@@ -90,6 +82,17 @@ public class Jarvis implements Dicionario{
 	}
 
 
+	private boolean verificaTipos(String arquivo) {
+		return 
+				arquivo.startsWith("s_") || arquivo.endsWith(".jar")
+				|| arquivo.endsWith(".xlsx")
+				|| arquivo.endsWith(".classpath")
+				|| arquivo.endsWith(".project")
+				|| arquivo.endsWith(".md")
+				|| arquivo.endsWith(".gitignore")
+				|| arquivo.endsWith(".csv");
+	}
+
 	private void verificaRegex(String entrada) {
 		char analisar[] = entrada.toCharArray();
 		String acumulador = "";
@@ -101,7 +104,7 @@ public class Jarvis implements Dicionario{
 			Matcher m = patern.matcher(atual);
 
 			//*********************************** PEGANDO SEPARADORES ************************************
-			 //Eh um separador
+			//Eh um separador
 			if (m.matches()) {
 				//Remove o separador (o ultimo elemento adicionado)
 				acumulador = removeUltimoElemento(acumulador);
@@ -206,16 +209,16 @@ public class Jarvis implements Dicionario{
 
 	private boolean verificaRegexCriandoToken(String entrada) {
 		for (PadraoRegex regex : PadraoRegex.values()) {
-            Pattern patern = Pattern.compile(regex.valor);
-            Matcher m = patern.matcher(entrada);
-            if (m.matches()) {
-                int grupo = 0;
-                for (int i = 1; i <= m.groupCount(); i++) {
-                    if (m.group(i) != null) {
-                        grupo = i;
-                        break;
-                    }
-                }
+			Pattern patern = Pattern.compile(regex.valor);
+			Matcher m = patern.matcher(entrada);
+			if (m.matches()) {
+				int grupo = 0;
+				for (int i = 1; i <= m.groupCount(); i++) {
+					if (m.group(i) != null) {
+						grupo = i;
+						break;
+					}
+				}
 				tokens.add(new Token(regex.ordinal(), entrada, nLinha, grupo));
 				return true;
 			}
@@ -298,17 +301,15 @@ public class Jarvis implements Dicionario{
 					bw.flush();
 				}
 			}
-            else {
-            	//Se nao ha erros lexicos, iniciar analise sintatica
-                if (!tokens.isEmpty()){
-                	Debug.println("[Log] Análise Lexica para o arquivo: [" + arquivo + "] aprovada.");
-                	Debug.println("[Log] Iniciando Analise Sintatica para o arquivo: [" + arquivo + "]...");
-                    //dando inicio a thread do Sintatico //XXX Marcador
-                    new AnalisadorSintatico(tokens).run();
-                }
-                else
-                    Debug.ErrPrintln("[*] O arquivo: [" + arquivo + "] nao gerou nenhum Token. Pulando analise sintatica.");
-            }
+			else if (!tokens.isEmpty()){
+				//Se nao ha erros lexicos, iniciar analise sintatica
+				Debug.println("[Log] Análise Lexica para o arquivo: [" + arquivo + "] aprovada.");
+				Debug.println("[Log] Iniciando Analise Sintatica para o arquivo: [" + arquivo + "]...");
+				//dando inicio a thread do Sintatico //XXX Marcador
+				new AnalisadorSintatico(tokens, arquivo).run();
+			}
+			else
+				Debug.ErrPrintln("[*] O arquivo: [" + arquivo + "] nao gerou nenhum Token. Pulando analise sintatica.");
 
 			bw.close();
 			tokens.clear();

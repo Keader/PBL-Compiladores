@@ -11,13 +11,23 @@ import java.util.Stack;
 public class AnalisadorSintatico extends Thread implements Dicionario {
 	private List<Token> tokens;
 	private Stack<Integer> stack;
-
+	private String arquivo;
+	
 	public AnalisadorSintatico(List<Token> tokens){
 		this.tokens = new ArrayList<Token>();
 		//criando uma copia da lista
 		this.tokens.addAll(tokens);
 		stack = new Stack<>();
 	}
+	
+	public AnalisadorSintatico(List<Token> tokens, String arquivo){
+		this.tokens = new ArrayList<Token>();
+		//criando uma copia da lista
+		this.tokens.addAll(tokens);
+		stack = new Stack<>();
+		this.arquivo = arquivo;
+	}
+
 
 	@Override
 	public synchronized void run(){
@@ -44,7 +54,7 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 
 		//enquanto a pilha não está vazia
 		while (!stack.isEmpty()) {
-			Debug.println(stack);
+			Debug.println("[" + arquivo + "] " + stack);
 			int stackPeek = stack.peek();
 			//Entrada acabou, verifica se o ultimo elemento da pilha eh EOF
 			if (posicao > maxQtdTokens) {
@@ -53,9 +63,8 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 					stack.pop();
 					break;
 				}
-				else {
+				else 
 					Debug.ErrPrintln("Entrada acabou mas na pilha nao tem o EOF");
-				}
 			}
 
 			tokenAtual = tokens.get(posicao).getIdUnico();
@@ -81,7 +90,6 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 				}
 			}
 		}
-		Debug.println(stack);
 		//Este erro ficara aparecendo de forma errada, ate remover os Break la de cima
 		//Os breaks serao substituidos por tratamentos de erros em algum momento hu3
 		if (posicao <= maxQtdTokens) {
@@ -90,7 +98,7 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 		}
 	}
 
-	public void gerarProducao(int valor){
+	public synchronized void gerarProducao(int valor){
 		switch(valor){
 			case R_PROGRAMA:
 				stack.pop();
