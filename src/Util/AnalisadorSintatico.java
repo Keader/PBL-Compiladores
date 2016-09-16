@@ -52,13 +52,13 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 		stack.push(TK_EOF);
 		stack.push(R_PROGRAMA);
 
-		//enquanto a pilha não está vazia
+		//enquanto a pilha nao esta vazia
 		while (!stack.isEmpty()) {
 			Debug.println("[" + arquivo + "] " + stack);
 			int stackPeek = stack.peek();
 			//Entrada acabou, verifica se o ultimo elemento da pilha eh EOF
 			if (posicao > maxQtdTokens) {
-				//verifica se o proximo é o ultimo
+				//verifica se o proximo eh o ultimo
 				if (stack.peek() == TK_EOF) {
 					stack.pop();
 					break;
@@ -77,7 +77,7 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 			//Se eh menor que o numero maximo que um token pode alcancar eh um terminal, da error direto
 			else if (stack.peek() < MAX_TOKEN_VALUE) {
 				Debug.ErrPrintln("[Error] O terminal: " + stack.peek() + " nao eh igual ao token atual: " + tokenAtual);
-				break;
+				return;
 			}
 			else {
 				int producao = Dicionario.getIdProducao(stack.peek(), tokenAtual);
@@ -86,12 +86,11 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 				//Gerada producao invalida (-1)
 				else {
 					Debug.ErrPrintln("A regra: " + stack.peek() + " com o token: " + tokenAtual + " nao gerou producao valida.");
-					break;
+					return;
 				}
 			}
 		}
-		//Este erro ficara aparecendo de forma errada, ate remover os Break la de cima
-		//Os breaks serao substituidos por tratamentos de erros em algum momento hu3
+		//Os returns serao substituidos por tratamentos de erros em algum momento hu3
 		if (posicao <= maxQtdTokens) {
 			Debug.ErrPrintln("Pilha acabou antes da entrada, posicao: " + posicao);
 			return;
@@ -675,6 +674,7 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 			default:
 				Debug.ErrPrintln("Entrou no Default de gerarProducao com o valor: " + valor);
 				break;
-		}		
+		}
 	}
+
 }
