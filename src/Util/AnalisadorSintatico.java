@@ -21,9 +21,8 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 		this.arquivo = arquivo;
 	}
 
-
 	@Override
-	public synchronized void run(){
+	public void run(){
 		try {
 			iniciarAnalise();
 		}
@@ -66,6 +65,7 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 			//Se eh menor que o numero maximo que um token pode alcancar eh um terminal, da error direto
 			else if (stack.peek() < MAX_TOKEN_VALUE) {
 				Debug.messagePane("O terminal: " + stack.peek() + " nao eh igual ao token atual: " + tokenAtual, "Erro", Debug.ERRO);
+				Debug.ErrPrintln("O terminal: " + stack.peek() + " nao eh igual ao token atual: " + tokenAtual);
 				return;
 			}
 			else {

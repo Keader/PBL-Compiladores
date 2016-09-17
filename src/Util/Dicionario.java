@@ -228,7 +228,6 @@ public interface Dicionario {
         //Error na String e Comentario eh lancado sem o uso desse Enum.
         public String valor;
 
-
         private ErrorRegex(String valor) {
             this.valor = valor;
         }
@@ -392,21 +391,20 @@ public interface Dicionario {
 			String [] primeiraLinha = leitor.readLine().split(";");
 			int qtdRegras = Integer.parseInt(primeiraLinha[0]);
 			int qtdTerminais = Integer.parseInt(primeiraLinha[1]);
-			int [][]auxTabela = new int[tamanhoTabela][qtdTerminais];
-			String []auxLinha;
+			int [][] auxTabela = new int[tamanhoTabela][qtdTerminais];
+			String [] auxLinha;
 
 			//consumindo uma linha
 			leitor.readLine().split(";");
 
 			//preenche a tabela com -1
-			for(int i = 0; i < tamanhoTabela; i++){
+			for(int i = 0; i < tamanhoTabela; i++)
 				Arrays.fill(auxTabela[i], -1);
-			}
 			//preenche a tabela com a predicao
 			for(int i = 0; i < qtdRegras; i++){
 				auxLinha = leitor.readLine().split(";");
 				for(int x = 1; x < auxLinha.length; x++)
-					auxTabela[Dicionario.getRegraId(auxLinha[0])][x-1] = Dicionario.getRegraId(auxLinha[x]);
+					auxTabela[Dicionario.getRegraId(auxLinha[0])][x-1] = getRegraId(auxLinha[x]);
 			}
 
 			leitor.close();

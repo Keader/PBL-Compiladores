@@ -35,7 +35,7 @@ public class Jarvis implements Dicionario{
 
 			if (!dir.exists()) {
 				Debug.messagePane("Programa nao possui autorizacao para ler pastas do usuario", "Error", JOptionPane.ERROR_MESSAGE);
-				System.exit(-1);
+				return;
 			}
 			File listaDeArquivos[] = dir.listFiles();
 
@@ -304,12 +304,13 @@ public class Jarvis implements Dicionario{
 			else if (!tokens.isEmpty()){
 				//Se nao ha erros lexicos, iniciar analise sintatica
 				Debug.println("[Log] Analise Lexica para o arquivo: [" + arquivo + "] aprovada.");
-				Debug.println("[Log] Iniciando Analise Sintatica para o arquivo: [" + arquivo + "]...");
-				//dando inicio a thread do Sintatico //XXX Marcador
-				new AnalisadorSintatico(tokens, arquivo).run();
+				Debug.println("[Log] Iniciando Analise Sintatica para o arquivo: [" + arquivo + "]");				
+				//dando inicio a thread do Sintatico
+				new AnalisadorSintatico(tokens, arquivo).start();
 			}
 			else
 				Debug.ErrPrintln("[*] O arquivo: [" + arquivo + "] nao gerou nenhum Token. Pulando analise sintatica.");
+			
 			bw.close();
 			tokens.clear();
 			tokensError.clear();
