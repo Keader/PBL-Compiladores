@@ -8,13 +8,13 @@ import java.util.Stack;
  * @author Alberto Junior
  * @author Bradley
  */
-public class AnalisadorSintatico extends Thread implements Dicionario {
+public class AnalisadorSintatico implements Dicionario, Runnable {
 	private List<Token> tokens;
 	private Stack<Integer> stack;
 	private String arquivo;
 
 	public AnalisadorSintatico(List<Token> tokens, String arquivo){
-		this.tokens = new ArrayList<Token>();
+		this.tokens = new ArrayList<>();
 		//criando uma copia da lista
 		this.tokens.addAll(tokens);
 		stack = new Stack<>();
@@ -41,8 +41,6 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 
 		//enquanto a pilha nao esta vazia
 		while (!stack.isEmpty()) {
-			Debug.println("[" + arquivo + "] " + stack);
-			stack.peek();
 			//Entrada acabou, verifica se o ultimo elemento da pilha eh EOF
 			if (posicao > maxQtdTokens) {
 				//verifica se o proximo eh o ultimo
@@ -51,7 +49,7 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 					Debug.messagePane("Analise Sintatica do arquivo [" + arquivo + "] concluida.", "Sucesso", Debug.PADRAO);
 					break;
 				}
-				else 
+				else
 					Debug.messagePane("Entrada acabou mas na pilha nao tem o EOF", "Erro", Debug.ERRO);
 			}
 
@@ -64,12 +62,12 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 			}
 			//Se eh menor que o numero maximo que um token pode alcancar eh um terminal, da error direto
 			else if (stack.peek() < MAX_TOKEN_VALUE) {
-				Debug.messagePane("O terminal: " + stack.peek() + " nao eh igual ao token atual: " + tokenAtual, "Erro", Debug.ERRO);
 				Debug.ErrPrintln("O terminal: " + stack.peek() + " nao eh igual ao token atual: " + tokenAtual);
 				return;
 			}
 			else {
 				int producao = Dicionario.getIdProducao(stack.peek(), tokenAtual);
+
 				if (producao != -1)
 					gerarProducao(producao);
 				//Gerada producao invalida (-1)
@@ -82,7 +80,7 @@ public class AnalisadorSintatico extends Thread implements Dicionario {
 		//Os returns serao substituidos por tratamentos de erros em algum momento hu3
 		if (posicao <= maxQtdTokens) {
 			Debug.messagePane("Pilha acabou antes da entrada, posicao: " + posicao, "Erro", Debug.ERRO);
-			return;
+			return;  //Return sera substituido por alguma outra mensagem :v
 		}
 	}
 
