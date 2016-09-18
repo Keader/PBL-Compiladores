@@ -1,5 +1,5 @@
 funcao mergeSort(inteiro << >>vetor, inteiro posicaoInicio, inteiro posicaoFim)
-Inicio
+inicio
     var
     inicio
         inteiro i, j, k, metadeTamanho, <<10>>vetorTemp;
