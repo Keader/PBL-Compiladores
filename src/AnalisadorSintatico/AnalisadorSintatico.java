@@ -1,5 +1,8 @@
-package Util;
+package AnalisadorSintatico;
 
+import Util.Debug;
+import Util.Dicionario;
+import Util.Token;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
