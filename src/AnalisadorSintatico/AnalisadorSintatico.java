@@ -86,7 +86,18 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 				}
 			}
 		}
+        gerarSaidaSintatica();
 	}
+
+    //Metodo em progresso, tem q decidir antes como sera a saida de fato e.e
+    public synchronized void gerarSaidaSintatica(){
+
+        if(erros.isEmpty())
+            System.out.println("Sucesso");
+        else
+            for (ErroSintatico erro : erros)
+                System.out.println(erro);
+    }
 
 	public synchronized void gerarProducao(int valor){
 		switch(valor){
