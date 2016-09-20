@@ -15,6 +15,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 	private List<Token> tokens;
 	private Stack<Integer> stack;
 	private String arquivo;
+    private List<ErroSintatico> erros;
 
 	public AnalisadorSintatico(List<Token> tokens, String arquivo){
 		this.tokens = new ArrayList<>();
@@ -22,6 +23,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 		this.tokens.addAll(tokens);
 		stack = new Stack<>();
 		this.arquivo = arquivo;
+        erros = new ArrayList<>();
 	}
 
 	@Override
@@ -52,21 +54,24 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 					Debug.messagePane("Analise Sintatica do arquivo [" + arquivo + "] concluida.", "Sucesso", Debug.PADRAO);
 					break;
 				}
+                //Entrada acabou antes da pilha, o que fazer?
 				else
 					Debug.messagePane("Entrada acabou mas na pilha nao tem o EOF", "Erro", Debug.ERRO);
 			}
 
 			tokenAtual = tokens.get(posicao).getIdUnico();
 
-			//verifico se o token atual da match com a regra
+			//Verifica se no topo da pilha eh um terminal e se da match.
 			if (tokenAtual == stack.peek()) {
 				stack.pop();
 				posicao++;
 			}
-			//Se eh menor que o numero maximo que um token pode alcancar eh um terminal, da error direto
+			//Se eh um terminal e nao da match com o topo da pilha
 			else if (stack.peek() < MAX_TOKEN_VALUE) {
-				Debug.ErrPrintln("O terminal: " + stack.peek() + " nao eh igual ao token atual: " + tokenAtual);
-				return;
+                /*Ideia da sessao para terminais. Exibe o erro da pop na pilha, porem deve mover
+                ou nao mover a entrada?*/
+				erros.add(new ErroSintatico(tokenAtual, stack.peek()));
+                stack.pop();
 			}
 			else {
 				int producao = Dicionario.getIdProducao(stack.peek(), tokenAtual);
@@ -74,16 +79,12 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 				if (producao != -1)
 					gerarProducao(producao);
 				//Gerada producao invalida (-1)
+                //Para fazer isso, tem que os follow estar prontos.
 				else {
 					Debug.messagePane("A regra: " + stack.peek() + " com o token: " + tokenAtual + " nao gerou producao valida.", "Erro", Debug.ERRO);
 					return;
 				}
 			}
-		}
-		//Os returns serao substituidos por tratamentos de erros em algum momento hu3
-		if (posicao <= maxQtdTokens) {
-			Debug.messagePane("Pilha acabou antes da entrada, posicao: " + posicao, "Erro", Debug.ERRO);
-			return;  //Return sera substituido por alguma outra mensagem :v
 		}
 	}
 
