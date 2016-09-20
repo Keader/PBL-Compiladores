@@ -466,6 +466,7 @@ public interface Dicionario {
             case TK_PARENTESE_F:             return ")";
             case TK_CADEIA_DE_CARACTERES:    return "cadeia de caracteres";
             case TK_CARACTERE_L:             return "caractere (literal)";
+            case TK_EOF:                     return "fim de arquivo($)";
             default :                        return "";
         }
     }
