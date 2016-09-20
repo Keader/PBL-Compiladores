@@ -80,6 +80,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 					gerarProducao(producao);
 				//Gerada producao invalida (-1)
                 //Para fazer isso, tem que os follow estar prontos.
+                //A ideia eh, sair consumindo tokens ate encontrar um follow da regra que estah no topo da pilha
 				else {
 					Debug.messagePane("A regra: " + stack.peek() + " com o token: " + tokenAtual + " nao gerou producao valida.", "Erro", Debug.ERRO);
 					return;
