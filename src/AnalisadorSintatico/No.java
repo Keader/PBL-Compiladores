@@ -42,5 +42,21 @@ public class No {
         this.id = id;
     }
 
+    public boolean temFilhos(){
+        return !filhos.isEmpty();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj instanceof No) {
+            No other = (No) obj;
+            if (this.id == other.id) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 
 }
