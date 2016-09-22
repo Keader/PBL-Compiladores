@@ -1,7 +1,7 @@
 package AnalisadorSintatico;
 
 import Util.Dicionario;
-import static Util.Dicionario.conversorIdString;
+import static Util.Dicionario.*;
 
 /**
  *

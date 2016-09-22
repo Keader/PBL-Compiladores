@@ -2,7 +2,7 @@ package AnalisadorSintatico;
 
 import Util.Debug;
 import Util.Dicionario;
-import static Util.Dicionario.getIdProducao;
+import static Util.Dicionario.*;
 import Util.Token;
 import java.util.ArrayList;
 import java.util.List;
