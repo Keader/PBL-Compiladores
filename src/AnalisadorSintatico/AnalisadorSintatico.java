@@ -2,6 +2,7 @@ package AnalisadorSintatico;
 
 import Util.Debug;
 import Util.Dicionario;
+import static Util.Dicionario.getIdProducao;
 import Util.Token;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                 stack.pop();
 			}
 			else {
-				int producao = Dicionario.getIdProducao(stack.peek(), tokenAtual);
+				int producao = getIdProducao(stack.peek(), tokenAtual);
 
 				if (producao != -1)
 					gerarProducao(producao);

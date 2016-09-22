@@ -57,7 +57,7 @@ public class Debug {
 		if(exibir)
 			JOptionPane.showMessageDialog(null, mensagem, titulo, tipo);
 	}
-	
+
 	public synchronized static void setExibir(boolean exibir){
 		Debug.exibir = exibir;
 	}

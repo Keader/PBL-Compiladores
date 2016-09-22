@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import javax.swing.JOptionPane;
 
 /**
  * Esta interface representa um dicionario.
@@ -404,7 +405,7 @@ public interface Dicionario {
 			for(int i = 0; i < qtdRegras; i++){
 				auxLinha = leitor.readLine().split(";");
 				for(int x = 1; x < auxLinha.length; x++)
-					auxTabela[Dicionario.getRegraId(auxLinha[0])][x-1] = getRegraId(auxLinha[x]);
+					auxTabela[getRegraId(auxLinha[0])][x-1] = getRegraId(auxLinha[x]);
 			}
 
 			leitor.close();
@@ -412,10 +413,10 @@ public interface Dicionario {
 			return auxTabela;
 		}
     	catch (FileNotFoundException e) {
-    		Debug.ErrPrintln("Erro no arquivo da Tabela");
+    		Debug.messagePane(e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
     	catch (IOException e) {
-    		Debug.ErrPrintln("Erro no arquivo da Tabela");
+    		Debug.messagePane(e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
     	}
 
 	 	return null;
