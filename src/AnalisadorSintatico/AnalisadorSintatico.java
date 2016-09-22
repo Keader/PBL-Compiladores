@@ -102,7 +102,8 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 			}
 		}
         //gerarSaidaSintatica();
-        arvore.imprimirArvoe();
+        if(arquivo.equals("treeTest.txt"))
+            arvore.imprimirArvoe();
 	}
 
     //Metodo em progresso, tem q decidir antes como sera a saida de fato e.e

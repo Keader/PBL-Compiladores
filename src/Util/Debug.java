@@ -3,7 +3,7 @@ package Util;
 import javax.swing.JOptionPane;
 
 public class Debug {
-	private static boolean exibir = true;
+	private static boolean exibir = false;
 	public static int ERRO = 0;
 	public static int PADRAO = 1;
 	public static int AVISO = 2;
