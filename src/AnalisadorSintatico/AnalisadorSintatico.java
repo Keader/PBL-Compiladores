@@ -1,12 +1,14 @@
 package AnalisadorSintatico;
 
-import Util.Debug;
-import Util.Dicionario;
-import static Util.Dicionario.*;
-import Util.Token;
+import static Util.Dicionario.getIdProducao;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
+import Util.Debug;
+import Util.Dicionario;
+import Util.Token;
 
 /**
  * @author Alberto Junior
@@ -14,19 +16,19 @@ import java.util.Stack;
  */
 public class AnalisadorSintatico implements Dicionario, Runnable {
 	private List<Token> tokens;
-	private Stack<Integer> stack;
+	private Stack<Integer> pilha;
 	private String arquivo;
     private List<ErroSintatico> erros;
-    private ArvoreSintatica tree;
-
+    private ArvoreSintatica arvore;
+    
 	public AnalisadorSintatico(List<Token> tokens, String arquivo){
 		this.tokens = new ArrayList<>();
 		//criando uma copia da lista
 		this.tokens.addAll(tokens);
-		stack = new Stack<>();
 		this.arquivo = arquivo;
+		pilha = new Stack<>();
         erros = new ArrayList<>();
-        tree = new ArvoreSintatica();
+        arvore = new ArvoreSintatica();
 	}
 
 	@Override
@@ -44,23 +46,22 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 		int maxQtdTokens = tokens.size() - 1;
 		int tokenAtual = 0;
 
-		stack.push(TK_EOF);
-		stack.push(R_PROGRAMA);
+		pilha.push(TK_EOF);
+		pilha.push(R_PROGRAMA);
 
-		//enquanto a pilha nao esta vazia
-		while (!stack.isEmpty()) {
-
-            if(stack.peek() == VOLTA_PRO_PAI){
-                tree.voltaProPai();
-                stack.pop();
+		//repete enquanto a pilha nao estiver vazia
+		while (!pilha.isEmpty()) {
+            if(pilha.peek() == VOLTA_PRO_PAI){
+                arvore.voltaProPai();
+                pilha.pop();
                 continue;
             }
 
 			//Entrada acabou, verifica se o ultimo elemento da pilha eh EOF
 			if (posicao > maxQtdTokens) {
 				//verifica se o proximo eh o ultimo
-				if (stack.peek() == TK_EOF) {
-					stack.pop();
+				if (pilha.peek() == TK_EOF) {
+					pilha.pop();
 					Debug.messagePane("Analise Sintatica do arquivo [" + arquivo + "] concluida.", "Sucesso", Debug.PADRAO);
 					break;
 				}
@@ -72,30 +73,30 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 			tokenAtual = tokens.get(posicao).getIdUnico();
 
 			//Verifica se no topo da pilha eh um terminal e se da match.
-			if (tokenAtual == stack.peek()) {
-				stack.pop();
+			if (tokenAtual == pilha.peek()) {
+				pilha.pop();
 				posicao++;
 			}
 			//Se eh um terminal e nao da match com o topo da pilha
-			else if (stack.peek() < MAX_TOKEN_VALUE) {
+			else if (pilha.peek() < MAX_TOKEN_VALUE) {
                 /*Ideia da sessao para terminais. Exibe o erro da pop na pilha, porem deve mover
                 ou nao mover a entrada?*/
-				erros.add(new ErroSintatico(tokenAtual, stack.peek()));
-                stack.pop();
+				erros.add(new ErroSintatico(tokenAtual, pilha.peek()));
+                pilha.pop();
 			}
 			else {
-				int producao = getIdProducao(stack.peek(), tokenAtual);
+				int producao = getIdProducao(pilha.peek(), tokenAtual);
 
 				if (producao != -1)
                 {
 					gerarProducao(producao);
-                    tree.add(producao);
+                    arvore.add(producao);
                 }
 				//Gerada producao invalida (-1)
                 //Para fazer isso, tem que os follow estar prontos.
                 //A ideia eh, sair consumindo tokens ate encontrar um follow da regra que estah no topo da pilha
 				else {
-					Debug.messagePane("A regra: " + stack.peek() + " com o token: " + tokenAtual + " nao gerou producao valida.", "Erro", Debug.ERRO);
+					Debug.messagePane("A regra: " + pilha.peek() + " com o token: " + tokenAtual + " nao gerou producao valida.", "Erro", Debug.ERRO);
 					return;
 				}
 			}
@@ -116,679 +117,678 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 	public synchronized void gerarProducao(int valor){
 		switch(valor){
 			case R_PROGRAMA:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_INICIO_CONST_VAR_FUNC);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_INICIO_CONST_VAR_FUNC);
 				break;
 			case R_PROGRAMA_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_INICIO_VAR_FUNC);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_INICIO_VAR_FUNC);
 				break;
 			case R_PROGRAMA_C3:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_INICIO_FUNC);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_INICIO_FUNC);
 				break;
 			case R_INICIO_CONST_VAR_FUNC:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_CONST_VAR_DERIVADA);
-				stack.push(R_DEC_CONST);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_CONST_VAR_DERIVADA);
+				pilha.push(R_DEC_CONST);
 				break;
 			case R_DEC_CONST_VAR_DERIVADA_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_MAIN);
-				stack.push(R_DEC_FUNC);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_MAIN);
+				pilha.push(R_DEC_FUNC);
 				break;
 			case R_INICIO_VAR_FUNC:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_MAIN);
-				stack.push(R_DEC_FUNC);
-				stack.push(R_DEC_VAR);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_MAIN);
+				pilha.push(R_DEC_FUNC);
+				pilha.push(R_DEC_VAR);
 				break;
 			case R_INICIO_FUNC:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_MAIN);
-				stack.push(R_DEC_FUNC);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_MAIN);
+				pilha.push(R_DEC_FUNC);
 				break;
 			case R_DEC_CONST:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_FIM);
-				stack.push(R_DEC_CONST_CONTINUO);
-				stack.push(TK_INICIO);
-				stack.push(TK_CONST);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_FIM);
+				pilha.push(R_DEC_CONST_CONTINUO);
+				pilha.push(TK_INICIO);
+				pilha.push(TK_CONST);
 				break;
 			case R_DEC_CONST_CONTINUO:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_CONST_II);
-				stack.push(TK_PONTOVIRGULA);
-				stack.push(R_DEC_CONST_I);
-				stack.push(R_EXP_RELACIONAL_BOOL);
-				stack.push(TK_IGUAL);
-				stack.push(TK_ID);
-				stack.push(R_TIPO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_CONST_II);
+				pilha.push(TK_PONTOVIRGULA);
+				pilha.push(R_DEC_CONST_I);
+				pilha.push(R_EXP_RELACIONAL_BOOL);
+				pilha.push(TK_IGUAL);
+				pilha.push(TK_ID);
+				pilha.push(R_TIPO);
 				break;
 			case R_DEC_CONST_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_CONST_I);
-				stack.push(R_EXP_RELACIONAL_BOOL);
-				stack.push(TK_IGUAL);
-				stack.push(TK_ID);
-				stack.push(TK_VIRGULA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_CONST_I);
+				pilha.push(R_EXP_RELACIONAL_BOOL);
+				pilha.push(TK_IGUAL);
+				pilha.push(TK_ID);
+				pilha.push(TK_VIRGULA);
 				break;
 			case R_DEC_CONST_II:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_CONST_II);
-				stack.push(TK_PONTOVIRGULA);
-				stack.push(R_DEC_CONST_I);
-				stack.push(R_EXP_RELACIONAL_BOOL);
-				stack.push(TK_IGUAL);
-				stack.push(TK_ID);
-				stack.push(R_TIPO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_CONST_II);
+				pilha.push(TK_PONTOVIRGULA);
+				pilha.push(R_DEC_CONST_I);
+				pilha.push(R_EXP_RELACIONAL_BOOL);
+				pilha.push(TK_IGUAL);
+				pilha.push(TK_ID);
+				pilha.push(R_TIPO);
 				break;
 			case R_DEC_VAR:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_FIM);
-				stack.push(R_DEC_VAR_CONTINUO);
-				stack.push(TK_INICIO);
-				stack.push(TK_VAR);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_FIM);
+				pilha.push(R_DEC_VAR_CONTINUO);
+				pilha.push(TK_INICIO);
+				pilha.push(TK_VAR);
 				break;
 			case R_DEC_VAR_CONTINUO:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_VAR_II);
-				stack.push(TK_PONTOVIRGULA);
-				stack.push(R_DEC_VAR_I);
-				stack.push(TK_ID);
-				stack.push(R_ARRAY);
-				stack.push(R_TIPO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_VAR_II);
+				pilha.push(TK_PONTOVIRGULA);
+				pilha.push(R_DEC_VAR_I);
+				pilha.push(TK_ID);
+				pilha.push(R_ARRAY);
+				pilha.push(R_TIPO);
 				break;
 			case R_DEC_VAR_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_VAR_I);
-				stack.push(TK_ID);
-				stack.push(R_ARRAY);
-				stack.push(TK_VIRGULA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_VAR_I);
+				pilha.push(TK_ID);
+				pilha.push(R_ARRAY);
+				pilha.push(TK_VIRGULA);
 				break;
 			case R_DEC_VAR_II:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_VAR_II);
-				stack.push(TK_PONTOVIRGULA);
-				stack.push(R_DEC_VAR_I);
-				stack.push(TK_ID);
-				stack.push(R_ARRAY);
-				stack.push(R_TIPO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_VAR_II);
+				pilha.push(TK_PONTOVIRGULA);
+				pilha.push(R_DEC_VAR_I);
+				pilha.push(TK_ID);
+				pilha.push(R_ARRAY);
+				pilha.push(R_TIPO);
 				break;
 			case R_DEC_FUNC:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_FUNC);
-				stack.push(R_DEC_FUNC_I);
-				stack.push(TK_FUNCAO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_FUNC);
+				pilha.push(R_DEC_FUNC_I);
+				pilha.push(TK_FUNCAO);
 				break;
 			case R_DEC_FUNC_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_FIM);
-				stack.push(R_CORPO);
-				stack.push(TK_INICIO);
-				stack.push(TK_PARENTESE_F);
-				stack.push(R_PARAMETROS);
-				stack.push(TK_PARENTESE_A);
-				stack.push(TK_ID);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_FIM);
+				pilha.push(R_CORPO);
+				pilha.push(TK_INICIO);
+				pilha.push(TK_PARENTESE_F);
+				pilha.push(R_PARAMETROS);
+				pilha.push(TK_PARENTESE_A);
+				pilha.push(TK_ID);
 				break;
 			case R_DEC_FUNC_I_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_FIM);
-				stack.push(R_RETORNO_FUNC);
-				stack.push(R_CORPO);
-				stack.push(TK_INICIO);
-				stack.push(TK_PARENTESE_F);
-				stack.push(R_PARAMETROS);
-				stack.push(TK_PARENTESE_A);
-				stack.push(TK_ID);
-				stack.push(R_TIPO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_FIM);
+				pilha.push(R_RETORNO_FUNC);
+				pilha.push(R_CORPO);
+				pilha.push(TK_INICIO);
+				pilha.push(TK_PARENTESE_F);
+				pilha.push(R_PARAMETROS);
+				pilha.push(TK_PARENTESE_A);
+				pilha.push(TK_ID);
+				pilha.push(R_TIPO);
 				break;
 			case R_PARAMETROS:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_PARAMETROS_I);
-				stack.push(TK_ID);
-				stack.push(R_ARRAY_PARAM);
-				stack.push(R_TIPO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_PARAMETROS_I);
+				pilha.push(TK_ID);
+				pilha.push(R_ARRAY_PARAM);
+				pilha.push(R_TIPO);
 				break;
 			case R_PARAMETROS_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_PARAMETROS_I);
-				stack.push(TK_ID);
-				stack.push(R_ARRAY_PARAM);
-				stack.push(R_TIPO);
-				stack.push(TK_VIRGULA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_PARAMETROS_I);
+				pilha.push(TK_ID);
+				pilha.push(R_ARRAY_PARAM);
+				pilha.push(R_TIPO);
+				pilha.push(TK_VIRGULA);
 				break;
 			case R_DEC_MAIN:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_FIM);
-				stack.push(R_CORPO);
-				stack.push(TK_INICIO);
-				stack.push(TK_PROGRAMA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_FIM);
+				pilha.push(R_CORPO);
+				pilha.push(TK_INICIO);
+				pilha.push(TK_PROGRAMA);
 				break;
 			case R_EXP_RELACIONAL_BOOL:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_EXP_CONJUNTA_I);
-				stack.push(R_EXP_CONJUNTA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_EXP_CONJUNTA_I);
+				pilha.push(R_EXP_CONJUNTA);
 				break;
 			case R_EXP_CONJUNTA:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_EXP_RELACIONAL_I);
-				stack.push(R_EXP_RELACIONAL);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_EXP_RELACIONAL_I);
+				pilha.push(R_EXP_RELACIONAL);
 				break;
 			case R_EXP_CONJUNTA_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_EXP_CONJUNTA_I);
-				stack.push(R_EXP_CONJUNTA);
-				stack.push(TK_OU);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_EXP_CONJUNTA_I);
+				pilha.push(R_EXP_CONJUNTA);
+				pilha.push(TK_OU);
 				break;
 			case R_EXP_RELACIONAL:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_OPERAR_RELACIONALMENTE);
-				stack.push(R_EXP_SIMPLES);
-				stack.push(R_NOT_OPC);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_OPERAR_RELACIONALMENTE);
+				pilha.push(R_EXP_SIMPLES);
+				pilha.push(R_NOT_OPC);
 				break;
 			case R_EXP_RELACIONAL_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_EXP_RELACIONAL_I);
-				stack.push(R_EXP_RELACIONAL);
-				stack.push(TK_E);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_EXP_RELACIONAL_I);
+				pilha.push(R_EXP_RELACIONAL);
+				pilha.push(TK_E);
 				break;
 			case R_OPERAR_RELACIONALMENTE:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_EXP_SIMPLES);
-				stack.push(R_NOT_OPC);
-				stack.push(R_OP_RELACIONAL);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_EXP_SIMPLES);
+				pilha.push(R_NOT_OPC);
+				pilha.push(R_OP_RELACIONAL);
 				break;
 			case R_OP_RELACIONAL:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_MAIOR);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_MAIOR);
 				break;
 			case R_OP_RELACIONAL_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_MAIORIGUAL);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_MAIORIGUAL);
 				break;
 			case R_OP_RELACIONAL_C3:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_MENOR);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_MENOR);
 				break;
 			case R_OP_RELACIONAL_C4:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_MENORIGUAL);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_MENORIGUAL);
 				break;
 			case R_OP_RELACIONAL_C5:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_DIFERENTE);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_DIFERENTE);
 				break;
 			case R_NOT_OPC:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_NOT_OPC);
-				stack.push(TK_NAO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_NOT_OPC);
+				pilha.push(TK_NAO);
 				break;
 			case R_EXP_SIMPLES:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_TERMO_I);
-				stack.push(R_TERMO);
-				stack.push(R_OP_MAIS_MENOS);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_TERMO_I);
+				pilha.push(R_TERMO);
+				pilha.push(R_OP_MAIS_MENOS);
 				break;
 			case R_EXP_SIMPLES_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_TERMO_I);
-				stack.push(R_TERMO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_TERMO_I);
+				pilha.push(R_TERMO);
 				break;
 			case R_TERMO:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_FATOR_I);
-				stack.push(R_FATOR);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_FATOR_I);
+				pilha.push(R_FATOR);
 				break;
 			case R_TERMO_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_TERMO_I);
-				stack.push(R_TERMO);
-				stack.push(R_OP_MAIS_MENOS);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_TERMO_I);
+				pilha.push(R_TERMO);
+				pilha.push(R_OP_MAIS_MENOS);
 				break;
 			case R_FATOR:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_ID_FUNCAO_E_OUTROS);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_ID_FUNCAO_E_OUTROS);
 				break;
 			case R_FATOR_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_NUMERO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_NUMERO);
 				break;
 			case R_FATOR_C3:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_VERDADEIRO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_VERDADEIRO);
 				break;
 			case R_FATOR_C4:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_FALSO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_FALSO);
 				break;
 			case R_FATOR_C5:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_CADEIA_DE_CARACTERES);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_CADEIA_DE_CARACTERES);
 				break;
 			case R_FATOR_C6:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_CARACTERE_L);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_CARACTERE_L);
 				break;
 			case R_FATOR_C7:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_PARENTESE_F);
-				stack.push(R_EXP_RELACIONAL_BOOL);
-				stack.push(TK_PARENTESE_A);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_PARENTESE_F);
+				pilha.push(R_EXP_RELACIONAL_BOOL);
+				pilha.push(TK_PARENTESE_A);
 				break;
 			case R_FATOR_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_FATOR_I);
-				stack.push(R_FATOR);
-				stack.push(R_OP_MULTI_DIV);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_FATOR_I);
+				pilha.push(R_FATOR);
+				pilha.push(R_OP_MULTI_DIV);
 				break;
 			case R_OP_MAIS_MENOS:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_SOMA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_SOMA);
 				break;
 			case R_OP_MAIS_MENOS_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_SUBTRACAO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_SUBTRACAO);
 				break;
 			case R_OP_MULTI_DIV:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_MULTIPLICACAO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_MULTIPLICACAO);
 				break;
 			case R_OP_MULTI_DIV_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_DIVISAO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_DIVISAO);
 				break;
 			case R_ID_FUNCAO_E_OUTROS:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_ID);
-				stack.push(TK_MAIOR);
-				stack.push(TK_MAIOR);
-				stack.push(R_ARRAY_I);
-				stack.push(R_ARRAY_INDEXES);
-				stack.push(TK_MENOR);
-				stack.push(TK_MENOR);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_ID);
+				pilha.push(TK_MAIOR);
+				pilha.push(TK_MAIOR);
+				pilha.push(R_ARRAY_I);
+				pilha.push(R_ARRAY_INDEXES);
+				pilha.push(TK_MENOR);
+				pilha.push(TK_MENOR);
 				break;
 			case R_ID_FUNCAO_E_OUTROS_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_ID_FUNCAO_E_OUTROS_DERIVADO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_ID_FUNCAO_E_OUTROS_DERIVADO);
 				break;
 			case R_ID_FUNCAO_E_OUTROS_DERIVADO:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_POSSIBLE_FUNC);
-				stack.push(TK_ID);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_POSSIBLE_FUNC);
+				pilha.push(TK_ID);
 				break;
 			case R_POSSIBLE_FUNC:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_PARENTESE_F);
-				stack.push(R_PASSA_PARAM);
-				stack.push(TK_PARENTESE_A);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_PARENTESE_F);
+				pilha.push(R_PASSA_PARAM);
+				pilha.push(TK_PARENTESE_A);
 				break;
 			case R_RETORNO_FUNC:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_PONTOVIRGULA);
-				stack.push(TK_MAIOR);
-				stack.push(TK_IGUAL);
-				stack.push(R_EXP_RELACIONAL_BOOL);
-				stack.push(TK_MAIOR);
-				stack.push(TK_IGUAL);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_PONTOVIRGULA);
+				pilha.push(TK_MAIOR);
+				pilha.push(TK_IGUAL);
+				pilha.push(R_EXP_RELACIONAL_BOOL);
+				pilha.push(TK_MAIOR);
+				pilha.push(TK_IGUAL);
 				break;
 			case R_CORPO:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_CORPO);
-				stack.push(R_COMANDOS);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_CORPO);
+				pilha.push(R_COMANDOS);
 				break;
 			case R_COMANDOS:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_LEITURA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_LEITURA);
 				break;
 			case R_COMANDOS_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_ESCRITA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_ESCRITA);
 				break;
 			case R_COMANDOS_C3:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_SE);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_SE);
 				break;
 			case R_COMANDOS_C4:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_ENQUANTO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_ENQUANTO);
 				break;
 			case R_COMANDOS_C5:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_CHAMA_OU_ATRIBUI);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_CHAMA_OU_ATRIBUI);
 				break;
 			case R_COMANDOS_C6:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_DEC_VAR);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_DEC_VAR);
 				break;
 			case R_COMANDOS_C7:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_NOVO_ESCOPO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_NOVO_ESCOPO);
 				break;
 			case R_CHAMA_OU_ATRIBUI:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_WHOS_NEXT);
-				stack.push(TK_ID);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_WHOS_NEXT);
+				pilha.push(TK_ID);
 				break;
 			case R_CHAMA_OU_ATRIBUI_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_PONTOVIRGULA);
-				stack.push(R_EXP_RELACIONAL_BOOL);
-				stack.push(TK_IGUAL);
-				stack.push(TK_ID);
-				stack.push(TK_MAIOR);
-				stack.push(TK_MAIOR);
-				stack.push(R_ARRAY_I);
-				stack.push(R_ARRAY_INDEXES);
-				stack.push(TK_MENOR);
-				stack.push(TK_MENOR);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_PONTOVIRGULA);
+				pilha.push(R_EXP_RELACIONAL_BOOL);
+				pilha.push(TK_IGUAL);
+				pilha.push(TK_ID);
+				pilha.push(TK_MAIOR);
+				pilha.push(TK_MAIOR);
+				pilha.push(R_ARRAY_I);
+				pilha.push(R_ARRAY_INDEXES);
+				pilha.push(TK_MENOR);
+				pilha.push(TK_MENOR);
 				break;
 			case R_WHOS_NEXT:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_PONTOVIRGULA);
-				stack.push(R_EXP_RELACIONAL_BOOL);
-				stack.push(TK_IGUAL);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_PONTOVIRGULA);
+				pilha.push(R_EXP_RELACIONAL_BOOL);
+				pilha.push(TK_IGUAL);
 				break;
 			case R_WHOS_NEXT_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_PONTOVIRGULA);
-				stack.push(TK_PARENTESE_F);
-				stack.push(R_PASSA_PARAM);
-				stack.push(TK_PARENTESE_A);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_PONTOVIRGULA);
+				pilha.push(TK_PARENTESE_F);
+				pilha.push(R_PASSA_PARAM);
+				pilha.push(TK_PARENTESE_A);
 				break;
 			case R_NOVO_ESCOPO:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_FIM);
-				stack.push(R_CORPO);
-				stack.push(TK_INICIO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_FIM);
+				pilha.push(R_CORPO);
+				pilha.push(TK_INICIO);
 				break;
 			case R_ARRAY:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_MAIOR);
-				stack.push(TK_MAIOR);
-				stack.push(R_ARRAY_I);
-				stack.push(R_ARRAY_INDEXES);
-				stack.push(TK_MENOR);
-				stack.push(TK_MENOR);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_MAIOR);
+				pilha.push(TK_MAIOR);
+				pilha.push(R_ARRAY_I);
+				pilha.push(R_ARRAY_INDEXES);
+				pilha.push(TK_MENOR);
+				pilha.push(TK_MENOR);
 				break;
 			case R_ARRAY_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_ARRAY_I);
-				stack.push(R_ARRAY_INDEXES);
-				stack.push(TK_VIRGULA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_ARRAY_I);
+				pilha.push(R_ARRAY_INDEXES);
+				pilha.push(TK_VIRGULA);
 				break;
 			case R_ARRAY_INDEXES:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_EXP_SIMPLES);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_EXP_SIMPLES);
 				break;
 			case R_ARRAY_PARAM:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_MAIOR);
-				stack.push(TK_MAIOR);
-				stack.push(R_ARRAY_PARAM_I);
-				stack.push(R_ARRAY_INDEXES_OPT);
-				stack.push(TK_MENOR);
-				stack.push(TK_MENOR);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_MAIOR);
+				pilha.push(TK_MAIOR);
+				pilha.push(R_ARRAY_PARAM_I);
+				pilha.push(R_ARRAY_INDEXES_OPT);
+				pilha.push(TK_MENOR);
+				pilha.push(TK_MENOR);
 				break;
 			case R_ARRAY_PARAM_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_ARRAY_PARAM_I);
-				stack.push(R_ARRAY_INDEXES_OPT);
-				stack.push(TK_VIRGULA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_ARRAY_PARAM_I);
+				pilha.push(R_ARRAY_INDEXES_OPT);
+				pilha.push(TK_VIRGULA);
 				break;
 			case R_ARRAY_INDEXES_OPT:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_ARRAY_INDEXES);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_ARRAY_INDEXES);
 				break;
 			case R_DEC_LEITURA:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_PONTOVIRGULA);
-				stack.push(TK_PARENTESE_F);
-				stack.push(R_LEITURA_I);
-				stack.push(TK_ID);
-				stack.push(R_ARRAY);
-				stack.push(TK_PARENTESE_A);
-				stack.push(TK_LEIA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_PONTOVIRGULA);
+				pilha.push(TK_PARENTESE_F);
+				pilha.push(R_LEITURA_I);
+				pilha.push(TK_ID);
+				pilha.push(R_ARRAY);
+				pilha.push(TK_PARENTESE_A);
+				pilha.push(TK_LEIA);
 				break;
 			case R_LEITURA_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_LEITURA_I);
-				stack.push(TK_ID);
-				stack.push(R_ARRAY);
-				stack.push(TK_VIRGULA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_LEITURA_I);
+				pilha.push(TK_ID);
+				pilha.push(R_ARRAY);
+				pilha.push(TK_VIRGULA);
 				break;
 			case R_DEC_ESCRITA:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_PONTOVIRGULA);
-				stack.push(TK_PARENTESE_F);
-				stack.push(R_ESCREVIVEL_I);
-				stack.push(R_ESCREVIVEL);
-				stack.push(TK_PARENTESE_A);
-				stack.push(TK_ESCREVA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_PONTOVIRGULA);
+				pilha.push(TK_PARENTESE_F);
+				pilha.push(R_ESCREVIVEL_I);
+				pilha.push(R_ESCREVIVEL);
+				pilha.push(TK_PARENTESE_A);
+				pilha.push(TK_ESCREVA);
 				break;
 			case R_ESCREVIVEL_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_ESCREVIVEL_I);
-				stack.push(R_ESCREVIVEL);
-				stack.push(TK_VIRGULA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_ESCREVIVEL_I);
+				pilha.push(R_ESCREVIVEL);
+				pilha.push(TK_VIRGULA);
 				break;
 			case R_ESCREVIVEL:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_TERMO_I_E);
-				stack.push(R_TERMO_E);
-				stack.push(R_OP_MAIS_MENOS);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_TERMO_I_E);
+				pilha.push(R_TERMO_E);
+				pilha.push(R_OP_MAIS_MENOS);
 				break;
 			case R_ESCREVIVEL_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_TERMO_I_E);
-				stack.push(R_TERMO_E);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_TERMO_I_E);
+				pilha.push(R_TERMO_E);
 				break;
 			case R_TERMO_E:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_FATOR_I_E);
-				stack.push(R_FATOR_E);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_FATOR_I_E);
+				pilha.push(R_FATOR_E);
 				break;
 			case R_TERMO_I_E:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_TERMO_I_E);
-				stack.push(R_TERMO_E);
-				stack.push(R_OP_MAIS_MENOS);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_TERMO_I_E);
+				pilha.push(R_TERMO_E);
+				pilha.push(R_OP_MAIS_MENOS);
 				break;
 			case R_FATOR_E:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_ID);
-				stack.push(R_ARRAY);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_ID);
+				pilha.push(R_ARRAY);
 				break;
 			case R_FATOR_E_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_NUMERO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_NUMERO);
 				break;
 			case R_FATOR_E_C3:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_CADEIA_DE_CARACTERES);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_CADEIA_DE_CARACTERES);
 				break;
 			case R_FATOR_E_C4:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_CARACTERE_L);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_CARACTERE_L);
 				break;
 			case R_FATOR_E_C5:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_PARENTESE_F);
-				stack.push(R_ESCREVIVEL);
-				stack.push(TK_PARENTESE_A);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_PARENTESE_F);
+				pilha.push(R_ESCREVIVEL);
+				pilha.push(TK_PARENTESE_A);
 				break;
 			case R_FATOR_I_E:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_FATOR_I_E);
-				stack.push(R_FATOR_E);
-				stack.push(R_OP_MULTI_DIV);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_FATOR_I_E);
+				pilha.push(R_FATOR_E);
+				pilha.push(R_OP_MULTI_DIV);
 				break;
 			case R_DEC_SE:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_ELSE_OPC);
-				stack.push(TK_FIM);
-				stack.push(R_CORPO);
-				stack.push(TK_INICIO);
-				stack.push(TK_ENTAO);
-				stack.push(TK_PARENTESE_F);
-				stack.push(R_EXP_RELACIONAL_BOOL);
-				stack.push(TK_PARENTESE_A);
-				stack.push(TK_SE);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_ELSE_OPC);
+				pilha.push(TK_FIM);
+				pilha.push(R_CORPO);
+				pilha.push(TK_INICIO);
+				pilha.push(TK_ENTAO);
+				pilha.push(TK_PARENTESE_F);
+				pilha.push(R_EXP_RELACIONAL_BOOL);
+				pilha.push(TK_PARENTESE_A);
+				pilha.push(TK_SE);
 				break;
 			case R_ELSE_OPC:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_FIM);
-				stack.push(R_CORPO);
-				stack.push(TK_INICIO);
-				stack.push(TK_SENAO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_FIM);
+				pilha.push(R_CORPO);
+				pilha.push(TK_INICIO);
+				pilha.push(TK_SENAO);
 				break;
 			case R_DEC_ENQUANTO:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_FIM);
-				stack.push(R_CORPO);
-				stack.push(TK_INICIO);
-				stack.push(TK_FACA);
-				stack.push(TK_PARENTESE_F);
-				stack.push(R_EXP_RELACIONAL_BOOL);
-				stack.push(TK_PARENTESE_A);
-				stack.push(TK_ENQUANTO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_FIM);
+				pilha.push(R_CORPO);
+				pilha.push(TK_INICIO);
+				pilha.push(TK_FACA);
+				pilha.push(TK_PARENTESE_F);
+				pilha.push(R_EXP_RELACIONAL_BOOL);
+				pilha.push(TK_PARENTESE_A);
+				pilha.push(TK_ENQUANTO);
 				break;
 			case R_PASSA_PARAM:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_PASSA_PARAM_I);
-				stack.push(R_EXP_RELACIONAL_BOOL);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_PASSA_PARAM_I);
+				pilha.push(R_EXP_RELACIONAL_BOOL);
 				break;
 			case R_PASSA_PARAM_I:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(R_PASSA_PARAM_I);
-				stack.push(R_EXP_RELACIONAL_BOOL);
-				stack.push(TK_VIRGULA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(R_PASSA_PARAM_I);
+				pilha.push(R_EXP_RELACIONAL_BOOL);
+				pilha.push(TK_VIRGULA);
 				break;
 			case R_TIPO:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_INTEIRO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_INTEIRO);
 				break;
 			case R_TIPO_C2:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_REAL);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_REAL);
 				break;
 			case R_TIPO_C3:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_CADEIA);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_CADEIA);
 				break;
 			case R_TIPO_C4:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_BOOLEANO);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_BOOLEANO);
 				break;
 			case R_TIPO_C5:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
-				stack.push(TK_CARACTERE);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+				pilha.push(TK_CARACTERE);
 				break;
 			case R_EPSILON:
-				stack.pop();
-                stack.push(VOLTA_PRO_PAI);
+				pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
 				break;
 			default:
 				Debug.ErrPrintln("Entrou no Default de gerarProducao com o valor: " + valor);
 				break;
 		}
 	}
-
 }

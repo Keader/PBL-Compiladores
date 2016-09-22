@@ -378,7 +378,6 @@ public interface Dicionario {
 		}
 	}
 
-
     public static int getIdProducao(int regra, int token){
     	if(tabela == null)
     		montarTabela();
@@ -397,7 +396,7 @@ public interface Dicionario {
 			String [] auxLinha;
 
 			//consumindo uma linha
-			leitor.readLine().split(";");
+			leitor.readLine();
 
 			//preenche a tabela com -1
 			for(int i = 0; i < tamanhoTabela; i++)
@@ -414,10 +413,10 @@ public interface Dicionario {
 			return auxTabela;
 		}
     	catch (FileNotFoundException e) {
-    		Debug.messagePane(e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+    		Debug.messagePane(e.toString(), "Erro", JOptionPane.ERROR_MESSAGE);
 		}
     	catch (IOException e) {
-    		Debug.messagePane(e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+    		Debug.messagePane(e.toString(), "Erro", JOptionPane.ERROR_MESSAGE);
     	}
 
 	 	return null;
@@ -425,49 +424,49 @@ public interface Dicionario {
 
 	public static String conversorIdString(int token) {
 	    switch (token) {
-	        case TK_PROGRAMA:                return "programa";
-			case TK_CONST:                   return "const";
-			case TK_VAR:                     return "var";
-			case TK_FUNCAO:                  return "funcao";
-			case TK_INICIO:                  return "inicio";
-			case TK_FIM:                     return "fim";
-			case TK_SE:                      return "se";
-			case TK_ENTAO:                   return "entao";
-			case TK_SENAO:                   return "senao";
-			case TK_ENQUANTO:                return "enquanto";
-			case TK_FACA:                    return "faca";
-			case TK_LEIA:                    return "leia";
-			case TK_ESCREVA:                 return "escreva";
-			case TK_INTEIRO:                 return "inteiro";
-			case TK_REAL:                    return "real";
-			case TK_BOOLEANO:                return "booleano";
-			case TK_VERDADEIRO:              return "verdadeiro";
-			case TK_FALSO:                   return "falso";
-			case TK_CADEIA:                  return "cadeia";
-			case TK_CARACTERE:               return "caractere";
-			case TK_NAO:                     return "nao";
-			case TK_E:                       return "e";
-			case TK_OU:                      return "ou";
-			case TK_SOMA:                    return "+";
-			case TK_SUBTRACAO:               return "-";
-			case TK_MULTIPLICACAO:           return "*";
-			case TK_DIVISAO:                 return "/";
-			case TK_DIFERENTE:               return "<>";
-			case TK_IGUAL:                   return "=";
-			case TK_MENOR:                   return "<";
-			case TK_MENORIGUAL:              return "<=";
-			case TK_MAIOR:                   return ">";
-			case TK_MAIORIGUAL:              return ">=";
-			case TK_ID:                      return "identificador";
-			case TK_NUMERO:                  return "numero";
-			case TK_PONTOVIRGULA:            return ";";
-			case TK_VIRGULA:                 return ",";
-			case TK_PARENTESE_A:             return "(";
-			case TK_PARENTESE_F:             return ")";
-			case TK_CADEIA_DE_CARACTERES:    return "cadeia de caracteres";
-			case TK_CARACTERE_L:             return "caractere (literal)";
-			case TK_EOF:                     return "fim de arquivo($)";
-			default :                        return "";
+	        case TK_PROGRAMA				: return "programa";
+			case TK_CONST					: return "const";
+			case TK_VAR						: return "var";
+			case TK_FUNCAO					: return "funcao";
+			case TK_INICIO					: return "inicio";
+			case TK_FIM						: return "fim";
+			case TK_SE						: return "se";
+			case TK_ENTAO					: return "entao";
+			case TK_SENAO					: return "senao";
+			case TK_ENQUANTO				: return "enquanto";
+			case TK_FACA					: return "faca";
+			case TK_LEIA					: return "leia";
+			case TK_ESCREVA					: return "escreva";
+			case TK_INTEIRO					: return "inteiro";
+			case TK_REAL					: return "real";
+			case TK_BOOLEANO				: return "booleano";
+			case TK_VERDADEIRO				: return "verdadeiro";
+			case TK_FALSO					: return "falso";
+			case TK_CADEIA					: return "cadeia";
+			case TK_CARACTERE				: return "caractere";
+			case TK_NAO						: return "nao";
+			case TK_E						: return "e";
+			case TK_OU						: return "ou";
+			case TK_SOMA					: return "+";
+			case TK_SUBTRACAO				: return "-";
+			case TK_MULTIPLICACAO			: return "*";
+			case TK_DIVISAO					: return "/";
+			case TK_DIFERENTE				: return "<>";
+			case TK_IGUAL					: return "=";
+			case TK_MENOR					: return "<";
+			case TK_MENORIGUAL				: return "<=";
+			case TK_MAIOR					: return ">";
+			case TK_MAIORIGUAL				: return ">=";
+			case TK_ID						: return "identificador";
+			case TK_NUMERO					: return "numero";
+			case TK_PONTOVIRGULA			: return ";";
+			case TK_VIRGULA					: return ",";
+			case TK_PARENTESE_A             : return "(";
+			case TK_PARENTESE_F 			: return ")";
+			case TK_CADEIA_DE_CARACTERES 	: return "cadeia de caracteres";
+			case TK_CARACTERE_L 			: return "caractere (literal)";
+			case TK_EOF 					: return "fim de arquivo($)";
+			default 						: return "";
         }
 	}
 }

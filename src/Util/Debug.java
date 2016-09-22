@@ -7,7 +7,7 @@ public class Debug {
 	public static int ERRO = 0;
 	public static int PADRAO = 1;
 	public static int AVISO = 2;
-
+	
 	public synchronized static void print(Object string){
 		if(exibir)
 			System.out.print(string.toString());
@@ -60,6 +60,5 @@ public class Debug {
 
 	public synchronized static void setExibir(boolean exibir){
 		Debug.exibir = exibir;
-	}
-
+	}	
 }

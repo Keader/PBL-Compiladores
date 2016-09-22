@@ -1,6 +1,5 @@
-package Util;
+package AnalisadorLexico;
 
-import AnalisadorSintatico.AnalisadorSintatico;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,42 +7,44 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JOptionPane;
+
+import AnalisadorSintatico.AnalisadorSintatico;
+import Util.Debug;
+import Util.Dicionario;
+import Util.PairComentario;
+import Util.Token;
 
 /**
- * Classe responsavel por auxiliar o controle de tudo No fim das contas eh um
- * conroller.
- *
+ * Analisador Lexico.
+ * Funcao:
+ * Possui a funcao de separar todo o arquivo lido em TOKENS com lexemas e IDs que serao utilizados no Analisador Sintatico.
+ * @see AnalisadorSintatico
+ * @see Token
  */
-public class Jarvis implements Dicionario{
+public class AnalisadorLexico implements Dicionario{
 	private final List<Token> tokens;
 	private final List<Token> tokensError;
 	private int nLinha;
 
-	public Jarvis() {
+	public AnalisadorLexico() {
 		tokens = new LinkedList<>();
 		tokensError = new LinkedList<>();
 		nLinha = 1;
 	}
 
-	public void Executar() {
+	public void Executar(File [] arquivos) {
 		try {
-			File dir = new File(System.getProperty("user.dir"));
-
-			if (!dir.exists()) {
-				Debug.messagePane("Programa nao possui autorizacao para ler pastas do usuario", "Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			File listaDeArquivos[] = dir.listFiles();
+			File listaDeArquivos[] = arquivos;
 
 			//Percorre os arquivos na pasta
 			for (int i = 0; i < listaDeArquivos.length; i++) {
-				//Se for diretorio ou for arquivo de saida , passa pro proximo
-				if (listaDeArquivos[i].isDirectory() || verificaTipos(listaDeArquivos[i].getName()))
+				//Se for diretorio ou um tipo de arquivo ignorado, passa pro proximo
+				if (listaDeArquivos[i].isDirectory() || arquivosIgnorados(listaDeArquivos[i].getName()))
 					continue;
 
 				//verificando se o arquivo existe para comecar a analisar
@@ -63,7 +64,7 @@ public class Jarvis implements Dicionario{
 						//atuliza contador de linha
 						nLinha++;
 					}
-					//se nao fechou comentario
+					//se nao fechou comentario gera token de erro de comentario
 					if(iniciouComentario)
 						tokensError.add(new Token("{comentario","COMENTARIO_MAL_FORMADO", nLinha, true));
 
@@ -75,7 +76,7 @@ public class Jarvis implements Dicionario{
 			}
 		}
 		catch (FileNotFoundException ex) {
-			ex.printStackTrace();
+			Debug.messagePane("Arquivo não encontrado", "Erro", Debug.ERRO);
 		}
 		catch (NullPointerException | IOException ex) {
 			ex.printStackTrace();
@@ -83,15 +84,31 @@ public class Jarvis implements Dicionario{
 	}
 
 
-	private boolean verificaTipos(String arquivo) {
-		return
-				arquivo.startsWith("s_") || arquivo.endsWith(".jar")
-				|| arquivo.endsWith(".xlsx")
-				|| arquivo.endsWith(".classpath")
-				|| arquivo.endsWith(".project")
-				|| arquivo.endsWith(".md")
-				|| arquivo.endsWith(".gitignore")
-				|| arquivo.endsWith(".csv");
+	private boolean arquivosIgnorados(String arquivo) {
+		List<String> comeco = new ArrayList<String>();
+		List<String> fim = new ArrayList<String>();
+		//adicionando os arquivos que serão ignorados baseado no inicio
+		comeco.add("s_");
+		
+		//adicionando os arquivos que serão ignorados baseado no fim
+		fim.add(".jar");
+		fim.add(".xlsx");
+		fim.add(".classpath");
+		fim.add(".project");
+		fim.add(".md");
+		fim.add(".gitignore");
+		fim.add(".csv");
+		
+		for(String s : comeco){
+			if(arquivo.startsWith(s))
+				return true;
+		}
+		
+		for(String s : fim){
+			if(arquivo.endsWith(s))
+				return true;
+		}
+		return false;
 	}
 
 	private void verificaRegex(String entrada) {
@@ -281,14 +298,15 @@ public class Jarvis implements Dicionario{
 	}
 
 	/***
-	 * @param arquivo o nome do arquivo inicial
+	 * Escreve em um arquivo de texto os tokens obtidos na Analise Lexica
+	 * @param arquivo nome do arquivo que foi analisado
 	 */
 	private void gerarSaida(String arquivo){
 		try {
 			File n = new File("s_" + arquivo);
 			BufferedWriter bw = new BufferedWriter(new FileWriter(n));
-			for(int i = 0; i < tokens.size(); i++){
-				bw.write(tokens.get(i).toString());
+			for(Token t : tokens){
+				bw.write(t.toString());
 				bw.newLine();
 				bw.flush();
 			}
@@ -296,8 +314,8 @@ public class Jarvis implements Dicionario{
 			if(!tokensError.isEmpty()) {
 				bw.newLine();
 				bw.flush();
-				for(int i = 0; i < tokensError.size(); i++){
-					bw.write(tokensError.get(i).toString());
+				for(Token t : tokensError){
+					bw.write(t.toString());
 					bw.newLine();
 					bw.flush();
 				}
@@ -309,8 +327,8 @@ public class Jarvis implements Dicionario{
 				//dando inicio a thread do Sintatico
 				new AnalisadorSintatico(tokens, arquivo).run();
 			}
-			else
-				Debug.ErrPrintln("[*] O arquivo: [" + arquivo + "] nao gerou nenhum Token. Pulando analise sintatica.");
+			else 
+				Debug.messagePane("[*] O arquivo: [" + arquivo + "] nao gerou nenhum Token. Pulando analise sintatica.", "Aviso", Debug.AVISO);
 
 			bw.close();
 			tokens.clear();
