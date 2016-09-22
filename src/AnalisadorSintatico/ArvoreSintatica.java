@@ -19,7 +19,7 @@ public class ArvoreSintatica implements Dicionario {
         nElementos = 0;
     }
 
-     public synchronized void add(int valor){
+     public void add(int valor){
         if(raiz == null){
             raiz = new No(valor);
             raiz.setPai(null);
@@ -62,7 +62,7 @@ public class ArvoreSintatica implements Dicionario {
         return nElementos;
     }
 
-    public synchronized void voltaProPai(){
+    public void voltaProPai(){
         //Pai de atual so sera null se ele for a raiz
        if (atual.getPai() == null)
            atual = raiz;
@@ -70,11 +70,11 @@ public class ArvoreSintatica implements Dicionario {
            atual = atual.getPai();
     }
 
-    public synchronized void imprimirArvoe(){
+    public void imprimirArvoe(){
         imprimeNo(raiz);
     }
 
-     private synchronized void imprimeNo(No no){
+     private void imprimeNo(No no){
         if(no == null)
             return;
 

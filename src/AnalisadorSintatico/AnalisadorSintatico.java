@@ -62,6 +62,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 				//verifica se o proximo eh o ultimo
 				if (pilha.peek() == TK_EOF) {
 					pilha.pop();
+                    Debug.messagePane("Analise Sintatica do arquivo [" + arquivo + "] concluida.", "Sucesso", Debug.PADRAO);
 					break;
 				}
                 //Entrada acabou antes da pilha, o que fazer?
