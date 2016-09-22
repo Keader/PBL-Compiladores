@@ -1,12 +1,13 @@
 package AnalisadorSintatico;
 
 import Util.No;
-
+import Util.Dicionario;
+import static Util.Dicionario.*;
 /**
  *
  * @author Bradley
  */
-public class ArvoreSintatica {
+public class ArvoreSintatica implements Dicionario {
 
     private No raiz;
     private No atual;
@@ -18,7 +19,7 @@ public class ArvoreSintatica {
         nElementos = 0;
     }
 
-    public void add(int valor){
+     public synchronized void add(int valor){
         if(raiz == null){
             raiz = new No(valor);
             raiz.setPai(null);
@@ -29,7 +30,10 @@ public class ArvoreSintatica {
             No novo = new No(valor);
             atual.getFilhos().add(novo);
             novo.setPai(atual);
-            atual = novo;
+            //Tecnicamente o R_Epsilon eh um terminal, entao nao desce o atual da arvore ateh ele
+            //O mesmo vale para todos os terminais.
+            if (novo.getId() != R_EPSILON && novo.getId() > MAX_TOKEN_VALUE)
+                atual = novo;
             nElementos++;
         }
     }
@@ -58,11 +62,33 @@ public class ArvoreSintatica {
         return nElementos;
     }
 
-    public void voltaProPai(){
+    public synchronized void voltaProPai(){
         //Pai de atual so sera null se ele for a raiz
        if (atual.getPai() == null)
            atual = raiz;
        else
            atual = atual.getPai();
     }
+
+    public synchronized void imprimirArvoe(){
+        imprimeNo(raiz);
+    }
+
+     private synchronized void imprimeNo(No no){
+        if(no == null)
+            return;
+
+        //Terminais e R_Epsilon nao sao pais de ninguem.
+        if(no.getId() > MAX_TOKEN_VALUE && no.getId() != R_EPSILON)
+            System.out.println("Pai: "+conversorIdString(no.getId()));
+
+        //Imprime todos os filhos do No Atual.
+        for (No filho : no.getFilhos())
+            System.err.println(conversorIdString(filho.getId()));
+
+        //Manda imprimir os filhos dos filhos.
+        for (No filho: no.getFilhos())
+            imprimeNo(filho);
+    }
+
 }

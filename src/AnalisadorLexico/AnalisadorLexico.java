@@ -76,7 +76,7 @@ public class AnalisadorLexico implements Dicionario{
 			}
 		}
 		catch (FileNotFoundException ex) {
-			Debug.messagePane("Arquivo não encontrado", "Erro", Debug.ERRO);
+			Debug.messagePane("Arquivo nao encontrado", "Erro", Debug.ERRO);
 		}
 		catch (NullPointerException | IOException ex) {
 			ex.printStackTrace();
@@ -87,10 +87,10 @@ public class AnalisadorLexico implements Dicionario{
 	private boolean arquivosIgnorados(String arquivo) {
 		List<String> comeco = new ArrayList<String>();
 		List<String> fim = new ArrayList<String>();
-		//adicionando os arquivos que serão ignorados baseado no inicio
+		//adicionando os arquivos que serao ignorados baseado no inicio
 		comeco.add("s_");
-		
-		//adicionando os arquivos que serão ignorados baseado no fim
+
+		//adicionando os arquivos que serao ignorados baseado no fim
 		fim.add(".jar");
 		fim.add(".xlsx");
 		fim.add(".classpath");
@@ -98,12 +98,12 @@ public class AnalisadorLexico implements Dicionario{
 		fim.add(".md");
 		fim.add(".gitignore");
 		fim.add(".csv");
-		
+
 		for(String s : comeco){
 			if(arquivo.startsWith(s))
 				return true;
 		}
-		
+
 		for(String s : fim){
 			if(arquivo.endsWith(s))
 				return true;
@@ -327,7 +327,7 @@ public class AnalisadorLexico implements Dicionario{
 				//dando inicio a thread do Sintatico
 				new AnalisadorSintatico(tokens, arquivo).run();
 			}
-			else 
+			else
 				Debug.messagePane("[*] O arquivo: [" + arquivo + "] nao gerou nenhum Token. Pulando analise sintatica.", "Aviso", Debug.AVISO);
 
 			bw.close();

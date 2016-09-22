@@ -423,50 +423,345 @@ public interface Dicionario {
 	}
 
 	public static String conversorIdString(int token) {
-	    switch (token) {
-	        case TK_PROGRAMA				: return "programa";
-			case TK_CONST					: return "const";
-			case TK_VAR						: return "var";
-			case TK_FUNCAO					: return "funcao";
-			case TK_INICIO					: return "inicio";
-			case TK_FIM						: return "fim";
-			case TK_SE						: return "se";
-			case TK_ENTAO					: return "entao";
-			case TK_SENAO					: return "senao";
-			case TK_ENQUANTO				: return "enquanto";
-			case TK_FACA					: return "faca";
-			case TK_LEIA					: return "leia";
-			case TK_ESCREVA					: return "escreva";
-			case TK_INTEIRO					: return "inteiro";
-			case TK_REAL					: return "real";
-			case TK_BOOLEANO				: return "booleano";
-			case TK_VERDADEIRO				: return "verdadeiro";
-			case TK_FALSO					: return "falso";
-			case TK_CADEIA					: return "cadeia";
-			case TK_CARACTERE				: return "caractere";
-			case TK_NAO						: return "nao";
-			case TK_E						: return "e";
-			case TK_OU						: return "ou";
-			case TK_SOMA					: return "+";
-			case TK_SUBTRACAO				: return "-";
-			case TK_MULTIPLICACAO			: return "*";
-			case TK_DIVISAO					: return "/";
-			case TK_DIFERENTE				: return "<>";
-			case TK_IGUAL					: return "=";
-			case TK_MENOR					: return "<";
-			case TK_MENORIGUAL				: return "<=";
-			case TK_MAIOR					: return ">";
-			case TK_MAIORIGUAL				: return ">=";
-			case TK_ID						: return "identificador";
-			case TK_NUMERO					: return "numero";
-			case TK_PONTOVIRGULA			: return ";";
-			case TK_VIRGULA					: return ",";
-			case TK_PARENTESE_A             : return "(";
-			case TK_PARENTESE_F 			: return ")";
-			case TK_CADEIA_DE_CARACTERES 	: return "cadeia de caracteres";
-			case TK_CARACTERE_L 			: return "caractere (literal)";
-			case TK_EOF 					: return "fim de arquivo($)";
-			default 						: return "";
+        switch (token) {
+            case TK_PROGRAMA:
+                return "programa";
+            case TK_CONST:
+                return "const";
+            case TK_VAR:
+                return "var";
+            case TK_FUNCAO:
+                return "funcao";
+            case TK_INICIO:
+                return "inicio";
+            case TK_FIM:
+                return "fim";
+            case TK_SE:
+                return "se";
+            case TK_ENTAO:
+                return "entao";
+            case TK_SENAO:
+                return "senao";
+            case TK_ENQUANTO:
+                return "enquanto";
+            case TK_FACA:
+                return "faca";
+            case TK_LEIA:
+                return "leia";
+            case TK_ESCREVA:
+                return "escreva";
+            case TK_INTEIRO:
+                return "inteiro";
+            case TK_REAL:
+                return "real";
+            case TK_BOOLEANO:
+                return "booleano";
+            case TK_VERDADEIRO:
+                return "verdadeiro";
+            case TK_FALSO:
+                return "falso";
+            case TK_CADEIA:
+                return "cadeia";
+            case TK_CARACTERE:
+                return "caractere";
+            case TK_NAO:
+                return "nao";
+            case TK_E:
+                return "e";
+            case TK_OU:
+                return "ou";
+            case TK_SOMA:
+                return "+";
+            case TK_SUBTRACAO:
+                return "-";
+            case TK_MULTIPLICACAO:
+                return "*";
+            case TK_DIVISAO:
+                return "/";
+            case TK_DIFERENTE:
+                return "<>";
+            case TK_IGUAL:
+                return "=";
+            case TK_MENOR:
+                return "<";
+            case TK_MENORIGUAL:
+                return "<=";
+            case TK_MAIOR:
+                return ">";
+            case TK_MAIORIGUAL:
+                return ">=";
+            case TK_ID:
+                return "identificador";
+            case TK_NUMERO:
+                return "numero";
+            case TK_PONTOVIRGULA:
+                return ";";
+            case TK_VIRGULA:
+                return ",";
+            case TK_PARENTESE_A:
+                return "(";
+            case TK_PARENTESE_F:
+                return ")";
+            case TK_CADEIA_DE_CARACTERES:
+                return "cadeia de caracteres";
+            case TK_CARACTERE_L:
+                return "caractere (literal)";
+            case TK_EOF:
+                return "fim de arquivo($)";
+            case R_PROGRAMA:
+                return "R_PROGRAMA";
+            case R_PROGRAMA_C2:
+                return "R_PROGRAMA_C2";
+            case R_PROGRAMA_C3:
+                return "R_PROGRAMA_C3";
+            case R_INICIO_CONST_VAR_FUNC:
+                return "R_INICIO_CONST_VAR_FUNC";
+            case R_DEC_CONST_VAR_DERIVADA:
+                return "R_DEC_CONST_VAR_DERIVADA";
+            case R_DEC_CONST_VAR_DERIVADA_C2:
+                return "R_DEC_CONST_VAR_DERIVADA_C2";
+            case R_INICIO_VAR_FUNC:
+                return "R_INICIO_VAR_FUNC";
+            case R_INICIO_FUNC:
+                return "R_INICIO_FUNC";
+            case R_DEC_CONST:
+                return "R_DEC_CONST";
+            case R_DEC_CONST_CONTINUO:
+                return "R_DEC_CONST_CONTINUO";
+            case R_DEC_CONST_I:
+                return "R_DEC_CONST_I";
+            case R_DEC_CONST_I_C2:
+                return "R_DEC_CONST_I_C2";
+            case R_DEC_CONST_II:
+                return "R_DEC_CONST_II";
+            case R_DEC_CONST_II_C2:
+                return "R_DEC_CONST_II_C2";
+            case R_DEC_VAR:
+                return "R_DEC_VAR";
+            case R_DEC_VAR_CONTINUO:
+                return "R_DEC_VAR_CONTINUO";
+            case R_DEC_VAR_I:
+                return "R_DEC_VAR_I";
+            case R_DEC_VAR_I_C2:
+                return "R_DEC_VAR_I_C2";
+            case R_DEC_VAR_II:
+                return "R_DEC_VAR_II";
+            case R_DEC_VAR_II_C2:
+                return "R_DEC_VAR_II_C2";
+            case R_DEC_FUNC:
+                return "R_DEC_FUNC";
+            case R_DEC_FUNC_C2:
+                return "R_DEC_FUNC_C2";
+            case R_DEC_FUNC_I:
+                return "R_DEC_FUNC_I";
+            case R_DEC_FUNC_I_C2:
+                return "R_DEC_FUNC_I_C2";
+            case R_PARAMETROS:
+                return "R_PARAMETROS";
+            case R_PARAMETROS_C2:
+                return "R_PARAMETROS_C2";
+            case R_PARAMETROS_I:
+                return "R_PARAMETROS_I";
+            case R_PARAMETROS_I_C2:
+                return "R_PARAMETROS_I_C2";
+            case R_DEC_MAIN:
+                return "R_DEC_MAIN";
+            case R_EXP_RELACIONAL_BOOL:
+                return "R_EXP_RELACIONAL_BOOL";
+            case R_EXP_CONJUNTA:
+                return "R_EXP_CONJUNTA";
+            case R_EXP_CONJUNTA_I:
+                return "R_EXP_CONJUNTA_I";
+            case R_EXP_CONJUNTA_I_C2:
+                return "R_EXP_CONJUNTA_I_C2";
+            case R_EXP_RELACIONAL:
+                return "R_EXP_RELACIONAL";
+            case R_EXP_RELACIONAL_I:
+                return "R_EXP_RELACIONAL_I";
+            case R_EXP_RELACIONAL_I_C2:
+                return "R_EXP_RELACIONAL_I_C2";
+            case R_OPERAR_RELACIONALMENTE:
+                return "R_OPERAR_RELACIONALMENTE";
+            case R_OPERAR_RELACIONALMENTE_C2:
+                return "R_OPERAR_RELACIONALMENTE_C2";
+            case R_OP_RELACIONAL:
+                return "R_OP_RELACIONAL";
+            case R_OP_RELACIONAL_C2:
+                return "R_OP_RELACIONAL_C2";
+            case R_OP_RELACIONAL_C3:
+                return "R_OP_RELACIONAL_C3";
+            case R_OP_RELACIONAL_C4:
+                return "R_OP_RELACIONAL_C4";
+            case R_OP_RELACIONAL_C5:
+                return "R_OP_RELACIONAL_C5";
+            case R_NOT_OPC:
+                return "R_NOT_OPC";
+            case R_NOT_OPC_C2:
+                return "R_NOT_OPC_C2";
+            case R_EXP_SIMPLES:
+                return "R_EXP_SIMPLES";
+            case R_EXP_SIMPLES_C2:
+                return "R_EXP_SIMPLES_C2";
+            case R_TERMO:
+                return "R_TERMO";
+            case R_TERMO_I:
+                return "R_TERMO_I";
+            case R_TERMO_I_C2:
+                return "R_TERMO_I_C2";
+            case R_FATOR:
+                return "R_FATOR";
+            case R_FATOR_C2:
+                return "R_FATOR_C2";
+            case R_FATOR_C3:
+                return "R_FATOR_C3";
+            case R_FATOR_C4:
+                return "R_FATOR_C4";
+            case R_FATOR_C5:
+                return "R_FATOR_C5";
+            case R_FATOR_C6:
+                return "R_FATOR_C6";
+            case R_FATOR_C7:
+                return "R_FATOR_C7";
+            case R_FATOR_I:
+                return "R_FATOR_I";
+            case R_FATOR_I_C2:
+                return "R_FATOR_I_C2";
+            case R_OP_MAIS_MENOS:
+                return "R_OP_MAIS_MENOS";
+            case R_OP_MAIS_MENOS_C2:
+                return "R_OP_MAIS_MENOS_C2";
+            case R_OP_MULTI_DIV:
+                return "R_OP_MULTI_DIV";
+            case R_OP_MULTI_DIV_C2:
+                return "R_OP_MULTI_DIV_C2";
+            case R_ID_FUNCAO_E_OUTROS:
+                return "R_ID_FUNCAO_E_OUTROS";
+            case R_ID_FUNCAO_E_OUTROS_C2:
+                return "R_ID_FUNCAO_E_OUTROS_C2";
+            case R_ID_FUNCAO_E_OUTROS_DERIVADO:
+                return "R_ID_FUNCAO_E_OUTROS_DERIVADO";
+            case R_POSSIBLE_FUNC:
+                return "R_POSSIBLE_FUNC";
+            case R_POSSIBLE_FUNC_C2:
+                return "R_POSSIBLE_FUNC_C2";
+            case R_RETORNO_FUNC:
+                return "R_RETORNO_FUNC";
+            case R_CORPO:
+                return "R_CORPO";
+            case R_CORPO_C2:
+                return "R_CORPO_C2";
+            case R_COMANDOS:
+                return "R_COMANDOS";
+            case R_COMANDOS_C2:
+                return "R_COMANDOS_C2";
+            case R_COMANDOS_C3:
+                return "R_COMANDOS_C3";
+            case R_COMANDOS_C4:
+                return "R_COMANDOS_C4";
+            case R_COMANDOS_C5:
+                return "R_COMANDOS_C5";
+            case R_COMANDOS_C6:
+                return "R_COMANDOS_C6";
+            case R_COMANDOS_C7:
+                return "R_COMANDOS_C7";
+            case R_CHAMA_OU_ATRIBUI:
+                return "R_CHAMA_OU_ATRIBUI";
+            case R_CHAMA_OU_ATRIBUI_C2:
+                return "R_CHAMA_OU_ATRIBUI_C2";
+            case R_WHOS_NEXT:
+                return "R_WHOS_NEXT";
+            case R_WHOS_NEXT_C2:
+                return "R_WHOS_NEXT_C2";
+            case R_NOVO_ESCOPO:
+                return "R_NOVO_ESCOPO";
+            case R_ARRAY:
+                return "R_ARRAY";
+            case R_ARRAY_C2:
+                return "R_ARRAY_C2";
+            case R_ARRAY_I:
+                return "R_ARRAY_I";
+            case R_ARRAY_I_C2:
+                return "R_ARRAY_I_C2";
+            case R_ARRAY_INDEXES:
+                return "R_ARRAY_INDEXES";
+            case R_ARRAY_PARAM:
+                return "R_ARRAY_PARAM";
+            case R_ARRAY_PARAM_C2:
+                return "R_ARRAY_PARAM_C2";
+            case R_ARRAY_PARAM_I:
+                return "R_ARRAY_PARAM_I";
+            case R_ARRAY_PARAM_I_C2:
+                return "R_ARRAY_PARAM_I_C2";
+            case R_ARRAY_INDEXES_OPT:
+                return "R_ARRAY_INDEXES_OPT";
+            case R_ARRAY_INDEXES_OPT_C2:
+                return "R_ARRAY_INDEXES_OPT_C2";
+            case R_DEC_LEITURA:
+                return "R_DEC_LEITURA";
+            case R_LEITURA_I:
+                return "R_LEITURA_I";
+            case R_LEITURA_I_C2:
+                return "R_LEITURA_I_C2";
+            case R_DEC_ESCRITA:
+                return "R_DEC_ESCRITA";
+            case R_ESCREVIVEL_I:
+                return "R_ESCREVIVEL_I";
+            case R_ESCREVIVEL_I_C2:
+                return "R_ESCREVIVEL_I_C2";
+            case R_ESCREVIVEL:
+                return "R_ESCREVIVEL";
+            case R_ESCREVIVEL_C2:
+                return "R_ESCREVIVEL_C2";
+            case R_TERMO_E:
+                return "R_TERMO_E";
+            case R_TERMO_I_E:
+                return "R_TERMO_I_E";
+            case R_TERMO_I_E_C2:
+                return "R_TERMO_I_E_C2";
+            case R_FATOR_E:
+                return "R_FATOR_E";
+            case R_FATOR_E_C2:
+                return "R_FATOR_E_C2";
+            case R_FATOR_E_C3:
+                return "R_FATOR_E_C3";
+            case R_FATOR_E_C4:
+                return "R_FATOR_E_C4";
+            case R_FATOR_E_C5:
+                return "R_FATOR_E_C5";
+            case R_FATOR_I_E:
+                return "R_FATOR_I_E";
+            case R_FATOR_I_E_C2:
+                return "R_FATOR_I_E_C2";
+            case R_DEC_SE:
+                return "R_DEC_SE";
+            case R_ELSE_OPC:
+                return "R_ELSE_OPC";
+            case R_ELSE_OPC_C2:
+                return "R_ELSE_OPC_C2";
+            case R_DEC_ENQUANTO:
+                return "R_DEC_ENQUANTO";
+            case R_PASSA_PARAM:
+                return "R_PASSA_PARAM";
+            case R_PASSA_PARAM_C2:
+                return "R_PASSA_PARAM_C2";
+            case R_PASSA_PARAM_I:
+                return "R_PASSA_PARAM_I";
+            case R_PASSA_PARAM_I_C2:
+                return "R_PASSA_PARAM_I_C2";
+            case R_EPSILON:
+                return "R_EPSILON";
+            case R_TIPO:
+                return "R_TIPO";
+            case R_TIPO_C2:
+                return "R_TIPO_C2";
+            case R_TIPO_C3:
+                return "R_TIPO_C3";
+            case R_TIPO_C4:
+                return "R_TIPO_C4";
+            case R_TIPO_C5:
+                return "R_TIPO_C5";
+            default:
+                return "";
         }
 	}
 }

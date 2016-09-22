@@ -20,7 +20,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 	private String arquivo;
     private List<ErroSintatico> erros;
     private ArvoreSintatica arvore;
-    
+
 	public AnalisadorSintatico(List<Token> tokens, String arquivo){
 		this.tokens = new ArrayList<>();
 		//criando uma copia da lista
@@ -62,7 +62,6 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 				//verifica se o proximo eh o ultimo
 				if (pilha.peek() == TK_EOF) {
 					pilha.pop();
-					Debug.messagePane("Analise Sintatica do arquivo [" + arquivo + "] concluida.", "Sucesso", Debug.PADRAO);
 					break;
 				}
                 //Entrada acabou antes da pilha, o que fazer?
@@ -76,6 +75,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 			if (tokenAtual == pilha.peek()) {
 				pilha.pop();
 				posicao++;
+                arvore.add(tokenAtual);
 			}
 			//Se eh um terminal e nao da match com o topo da pilha
 			else if (pilha.peek() < MAX_TOKEN_VALUE) {
@@ -101,7 +101,8 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 				}
 			}
 		}
-        gerarSaidaSintatica();
+        //gerarSaidaSintatica();
+        arvore.imprimirArvoe();
 	}
 
     //Metodo em progresso, tem q decidir antes como sera a saida de fato e.e
@@ -784,7 +785,6 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 				break;
 			case R_EPSILON:
 				pilha.pop();
-                pilha.push(VOLTA_PRO_PAI);
 				break;
 			default:
 				Debug.ErrPrintln("Entrou no Default de gerarProducao com o valor: " + valor);
