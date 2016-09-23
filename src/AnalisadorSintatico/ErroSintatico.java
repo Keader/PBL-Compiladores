@@ -38,7 +38,7 @@ public class ErroSintatico implements Dicionario{
     @Override
     public String toString() {
         if(!esperado)
-            return "A entrada: " +conversorIdString(tokenObtido) + "nao era esperada neste contexto.";
+            return "A entrada: " + conversorIdString(tokenObtido) + "nao era esperada neste contexto.";
         return "Era esperado: " + conversorIdString(tokenEsperado) + " porem foi obtido: " + conversorIdString(tokenObtido);
     }
 

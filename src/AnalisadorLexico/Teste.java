@@ -21,6 +21,8 @@ public class Teste {
         if (10 == 10)
             System.out.println("10 eh igual a 10");
 
+        System.out.println("deu muito bug");
+
         System.out.println("10 eh igual a 10");
         System.out.println("10 eh igual a 10");
         System.out.println("10 eh igual a 10");
