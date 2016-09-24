@@ -8,7 +8,12 @@ import java.util.Stack;
 
 import Util.Debug;
 import Util.Dicionario;
+import Util.No;
 import Util.Token;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * @author Alberto Junior
@@ -80,41 +85,63 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 			}
 			//Se eh um terminal e nao da match com o topo da pilha
 			else if (pilha.peek() < MAX_TOKEN_VALUE) {
-                /*Ideia da sessao para terminais. Exibe o erro da pop na pilha, porem deve mover
-                ou nao mover a entrada?*/
 				erros.add(new ErroSintatico(tokenAtual, pilha.peek()));
                 pilha.pop();
 			}
 			else {
 				int producao = getIdProducao(pilha.peek(), tokenAtual);
 
-				if (producao != -1)
-                {
+				if (producao != -1) {
 					gerarProducao(producao);
                     arvore.add(producao);
                 }
-				//Gerada producao invalida (-1)
-                //Para fazer isso, tem que os follow estar prontos.
-                //A ideia eh, sair consumindo tokens ate encontrar um follow da regra que estah no topo da pilha
+                //Gerou producao -1
 				else {
-					Debug.messagePane("A regra: " + pilha.peek() + " com o token: " + tokenAtual + " nao gerou producao valida.", "Erro", Debug.ERRO);
-					return;
+                    //Desempilha tudo gerado por aquela producao
+                    List<Integer> desempilha = new ArrayList<>();
+                    for (No no : arvore.getAtual().getPai().getFilhos())
+                        desempilha.add(no.getId());
+
+                    while (desempilha.contains(pilha.peek()))
+                        pilha.pop();
+
+                    //Aqui precisa entrar o comando que pegara a lista de follows e syncs
+                    //Apos a lista pronta, buscar qual terminal gera algo com um daqueles follows
 				}
 			}
 		}
-        //gerarSaidaSintatica();
-        if(arquivo.equals("treeTest.txt"))
-            arvore.imprimirArvoe();
+        //Pilha acabou antes da entrada
+        if (posicao < maxQtdTokens){
+            while (posicao > maxQtdTokens)
+                erros.add(new ErroSintatico(tokens.get(posicao).getIdUnico()));
+        }
+
+        gerarSaidaSintatica();
 	}
 
-    //Metodo em progresso, tem q decidir antes como sera a saida de fato e.e
     public synchronized void gerarSaidaSintatica(){
+        try {
+            File pasta = new File("saida_sintatica");
+            pasta.mkdir();
+            File n = new File(pasta.getName()+"//SS_" + arquivo);
+            BufferedWriter bw = new BufferedWriter(new FileWriter(n));
+            if(erros.isEmpty()){
+                bw.write("Sucesso!");
+                bw.flush();
+            }
+            else{
+                bw.write("Erros Detectados");
+                for (ErroSintatico erro : erros){
+                    bw.write(erro.toString());
+                    bw.newLine();
+                    bw.flush();
+                }
+            }
 
-        if(erros.isEmpty())
-            System.out.println("Sucesso");
-        else
-            for (ErroSintatico erro : erros)
-                System.out.println(erro);
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 	public synchronized void gerarProducao(int valor){
