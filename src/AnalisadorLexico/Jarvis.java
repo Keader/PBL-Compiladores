@@ -1,7 +1,6 @@
 package AnalisadorLexico;
 
 import java.io.File;
-
 import Util.Debug;
 
 public class Jarvis {
