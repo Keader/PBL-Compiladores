@@ -1,11 +1,9 @@
 package AnalisadorSintatico;
 
 import static Util.Dicionario.getIdProducao;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import Util.Debug;
 import Util.Dicionario;
 import Util.No;
