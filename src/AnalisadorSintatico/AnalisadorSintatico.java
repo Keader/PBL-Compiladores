@@ -7,6 +7,7 @@ import java.util.Stack;
 import Util.Debug;
 import Util.Dicionario;
 import Util.No;
+import Util.SincronizadorSintatico;
 import Util.Token;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -54,6 +55,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 
 		//repete enquanto a pilha nao estiver vazia
 		while (!pilha.isEmpty()) {
+            //Caso o topo da pilha eh a volta da arvore pro "Pai"
             if(pilha.peek() == VOLTA_PRO_PAI){
                 arvore.voltaProPai();
                 pilha.pop();
@@ -95,16 +97,45 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                 }
                 //Gerou producao -1
 				else {
+                    /**************************IDEIA 1 - PEGAR O PAI DA PRODUCAO**************************/
                     //Desempilha tudo gerado por aquela producao
                     List<Integer> desempilha = new ArrayList<>();
+
                     for (No no : arvore.getAtual().getPai().getFilhos())
                         desempilha.add(no.getId());
 
                     while (desempilha.contains(pilha.peek()))
                         pilha.pop();
 
-                    //Aqui precisa entrar o comando que pegara a lista de follows e syncs
-                    //Apos a lista pronta, buscar qual terminal gera algo com um daqueles follows
+                    //Pega lista de syncs dela
+                    No atual = arvore.getAtual();
+                    //Seta o no atual da arvore, para o "pai" do antigo atual
+                    arvore.setAtual(atual.getPai());
+                    List<Integer> sync = SincronizadorSintatico.getFollows(atual.getPai().getId());
+
+                    while (posicao < maxQtdTokens){
+                        tokenAtual = tokens.get(posicao).getIdUnico();
+                        if (sync.contains(tokenAtual)){
+                            break;
+                        }
+                       posicao++;
+                    }
+                    
+                     /**************************FIM - IDEIA 1**************************/
+
+                     /**************************IDEIA 2 - PEGAR O TOPO DA PILHA**************************/
+                     //Nesta ideia, nao terah arvore
+                     List<Integer> sync2 = SincronizadorSintatico.getFollows(pilha.peek());
+
+                    while (posicao < maxQtdTokens){
+                        tokenAtual = tokens.get(posicao).getIdUnico();
+                        if (sync.contains(tokenAtual)){
+                            break;
+                        }
+                       posicao++;
+                    }
+
+                    /**************************FIM IDEIA 2**************************/
 				}
 			}
 		}
