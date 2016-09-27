@@ -72,10 +72,11 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 				}
                 //Entrada acabou antes da pilha, o que fazer?
 				else
-					Debug.messagePane("Entrada acabou mas na pilha nao tem o EOF", "Erro", Debug.ERRO);
+					tokenAtual = TK_EOF;
 			}
 
-			tokenAtual = tokens.get(posicao).getIdUnico();
+            if (posicao <= maxQtdTokens)
+                tokenAtual = tokens.get(posicao).getIdUnico();
 
 			//Verifica se no topo da pilha eh um terminal e se da match.
 			if (tokenAtual == pilha.peek()) {
@@ -113,21 +114,21 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                     arvore.setAtual(atual.getPai());
                     List<Integer> sync = SincronizadorSintatico.getFollows(atual.getPai().getId());
 
-                    while (posicao < maxQtdTokens){
+                    while (posicao <= maxQtdTokens){
                         tokenAtual = tokens.get(posicao).getIdUnico();
                         if (sync.contains(tokenAtual)){
                             break;
                         }
                        posicao++;
                     }
-                    
+
                      /**************************FIM - IDEIA 1**************************/
 
                      /**************************IDEIA 2 - PEGAR O TOPO DA PILHA**************************/
                      //Nesta ideia, nao terah arvore
                      List<Integer> sync2 = SincronizadorSintatico.getFollows(pilha.peek());
 
-                    while (posicao < maxQtdTokens){
+                    while (posicao <= maxQtdTokens){
                         tokenAtual = tokens.get(posicao).getIdUnico();
                         if (sync.contains(tokenAtual)){
                             break;
