@@ -46,6 +46,10 @@ public class ArvoreSintatica implements Dicionario {
         this.raiz = raiz;
     }
 
+    public boolean isRaiz(){
+        return atual == raiz;
+    }
+
     public No getAtual() {
         return atual;
     }
