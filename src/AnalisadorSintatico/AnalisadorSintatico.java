@@ -1,20 +1,21 @@
 package AnalisadorSintatico;
 
 import static Util.Dicionario.getIdProducao;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-import Util.Debug;
-import Util.Dicionario;
-import static Util.Dicionario.conversorIdString;
-import Util.No;
-import Util.SincronizadorSintaticoFirst;
-import Util.SincronizadorSintaticoFollow;
-import Util.Token;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+import Util.Debug;
+import Util.Dicionario;
+import Util.No;
+import Util.SincronizadorSintaticoFirst;
+import Util.SincronizadorSintaticoFollow;
+import Util.Token;
 
 /**
  * @author Alberto Junior

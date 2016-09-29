@@ -404,17 +404,19 @@ public class SincronizadorSintaticoFollow implements Dicionario{
 
 	private static List<Integer> r_op_relacional() {
 		if(op_relacional == null){
+			//TODO TENHO QUASE CERTEZA QUE O NOME DOS TOKENS ME CONFUNDIU, TESTA AI
 			op_relacional = new ArrayList<Integer>();
 			op_relacional.add(TK_NUMERO);
 			op_relacional.add(TK_BOOLEANO);
+			op_relacional.add(TK_CADEIA_DE_CARACTERES);
+			op_relacional.add(TK_CARACTERE_L);
+			op_relacional.add(TK_ID);
+			
 			op_relacional.add(TK_SUBTRACAO);
 			op_relacional.add(TK_MENOR);
-			op_relacional.add(TK_CADEIA);
 			op_relacional.add(TK_NAO);
 			op_relacional.add(TK_SOMA);
-			op_relacional.add(TK_CARACTERE);
 			op_relacional.add(TK_PARENTESE_F);
-			op_relacional.add(TK_ID);
 		}
 		return op_relacional;
 	}
@@ -422,15 +424,17 @@ public class SincronizadorSintaticoFollow implements Dicionario{
 	private static List<Integer> r_not_opc() {
 		if(not_opc == null){
 			not_opc = new ArrayList<Integer>();
+			//TODO TENHO QUASE CERTEZA QUE O NOME DOS TOKENS ME CONFUNDIU, TESTA AI
 			not_opc.add(TK_NUMERO);
 			not_opc.add(TK_BOOLEANO);
+			not_opc.add(TK_CARACTERE_L);
+			not_opc.add(TK_CADEIA_DE_CARACTERES);
+			not_opc.add(TK_ID);
+
 			not_opc.add(TK_SUBTRACAO);
 			not_opc.add(TK_MENOR);
-			not_opc.add(TK_CADEIA);
 			not_opc.add(TK_SOMA);
-			not_opc.add(TK_CARACTERE);
 			not_opc.add(TK_PARENTESE_F);
-			not_opc.add(TK_ID);
 		}
 		return not_opc;
 	}
@@ -536,13 +540,15 @@ public class SincronizadorSintaticoFollow implements Dicionario{
 	private static List<Integer> r_op_mais_menos() {
 		if(op_mais_menos == null){
 			op_mais_menos = new ArrayList<Integer>();
+			//TODO TENHO QUASE CERTEZA QUE O NOME DOS TOKENS ME CONFUNDIU, TESTA AI
 			op_mais_menos.add(TK_NUMERO);
 			op_mais_menos.add(TK_BOOLEANO);
-			op_mais_menos.add(TK_MENOR);
-			op_mais_menos.add(TK_CADEIA);
-			op_mais_menos.add(TK_CARACTERE);
-			op_mais_menos.add(TK_PARENTESE_F);
+			op_mais_menos.add(TK_CARACTERE_L);
+			op_mais_menos.add(TK_CADEIA_DE_CARACTERES);
 			op_mais_menos.add(TK_ID);
+
+			op_mais_menos.add(TK_MENOR);
+			op_mais_menos.add(TK_PARENTESE_F);
 		}
 		return op_mais_menos;
 	}
@@ -550,13 +556,15 @@ public class SincronizadorSintaticoFollow implements Dicionario{
 	private static List<Integer> r_op_multi_div() {
 		if(op_multi_div == null){
 			op_multi_div = new ArrayList<Integer>();
+			//TODO TENHO QUASE CERTEZA QUE O NOME DOS TOKENS ME CONFUNDIU, TESTA AI
 			op_multi_div.add(TK_NUMERO);
 			op_multi_div.add(TK_BOOLEANO);
-			op_multi_div.add(TK_MENOR);
-			op_multi_div.add(TK_CADEIA);
-			op_multi_div.add(TK_CARACTERE);
+			op_multi_div.add(TK_CARACTERE_L);
+			op_multi_div.add(TK_CADEIA_DE_CARACTERES);
 			op_multi_div.add(TK_ID);
-			op_multi_div.add(TK_PARENTESE_A);
+			
+			op_multi_div.add(TK_MENOR);
+			op_multi_div.add(TK_PARENTESE_F);
 		}
 		return op_multi_div;
 	}
