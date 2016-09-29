@@ -775,7 +775,6 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 			fator_e.add(TK_CARACTERE_L);
 			fator_e.add(TK_NUMERO);
 			fator_e.add(TK_PARENTESE_A);
-			fator_e.add(TK_EPSILON);
 		}
 		return fator_e;
 	}
@@ -785,7 +784,7 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 			fator_i_e = new ArrayList<Integer>();
 			fator_i_e.add(TK_MULTIPLICACAO);
 			fator_i_e.add(TK_DIVISAO);
-			fator_e.add(TK_EPSILON);
+			fator_i_e.add(TK_EPSILON);
 		}
 		return fator_i_e;
 	}
