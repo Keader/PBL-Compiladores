@@ -50,12 +50,20 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 		int posicao = 0;
 		int maxQtdTokens = tokens.size() - 1;
 		int tokenAtual = 0;
+        int contador = 0;
 
 		pilha.push(TK_EOF);
 		pilha.push(R_PROGRAMA);
 
 		//repete enquanto a pilha nao estiver vazia
 		while (!pilha.isEmpty()) {
+            contador++;
+            System.out.println(contador);
+
+            if(contador > 5000){
+                String lexema = tokens.get(posicao).getLexema();
+                System.out.println("pera");
+            }
             //Caso o topo da pilha eh a volta da arvore pro "Pai"
             if(pilha.peek() == VOLTA_PRO_PAI){
                 arvore.voltaProPai();
@@ -87,7 +95,11 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 			}
 			//Se eh um terminal e nao da match com o topo da pilha
 			else if (pilha.peek() < MAX_TOKEN_VALUE) {
-				erros.add(new ErroSintatico(tokenAtual, pilha.peek()));
+                if(posicao > maxQtdTokens)
+                    //Casos em que ele fica esperando o EOF e nao vem, evita IndexOutOfBoundsException
+                    erros.add(new ErroSintatico(pilha.peek(), "fim de arquivo($)", tokens.get(tokens.size()-1).getnLinha()));
+                else
+                    erros.add(new ErroSintatico(pilha.peek(), tokens.get(posicao).getLexema(), tokens.get(posicao).getnLinha()));
                 pilha.pop();
 			}
 			else {
@@ -99,7 +111,6 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                 }
                 //Gerou producao -1
 				else {
-
                     //Pega Lista de First da producao atual e a lista de Syncs
                     List<Integer> firsts = SincronizadorSintaticoFirst.getFirst(pilha.peek());
                     List<Integer> sync =  new ArrayList<>();
@@ -109,8 +120,10 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                     */
                     sync.addAll(SincronizadorSintaticoFollow.getFollows(pilha.peek()));
 
-                    while (posicao <= maxQtdTokens)
-                    {
+                    //Gera o Erro
+                    erros.add(new ErroSintatico(firsts, tokens.get(posicao).getLexema(), tokens.get(posicao).getnLinha()));
+
+                    while (posicao <= maxQtdTokens) {
                         if (firsts.contains(tokenAtual))
                             break;
 
@@ -127,8 +140,8 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 		}
         //Pilha acabou antes da entrada
         if (posicao < maxQtdTokens){
-            while (posicao > maxQtdTokens)
-                erros.add(new ErroSintatico(tokens.get(posicao).getIdUnico()));
+            for (int i = posicao; posicao > maxQtdTokens; i++)
+                erros.add(new ErroSintatico(tokens.get(i).getLexema(), tokens.get(i).getnLinha()));
         }
 
         gerarSaidaSintatica();
@@ -152,14 +165,12 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                 bw.write("Sucesso!");
                 bw.flush();
             }
-            else{
-                bw.write("Erros Detectados");
+            else
                 for (ErroSintatico erro : erros){
                     bw.write(erro.toString());
                     bw.newLine();
                     bw.flush();
                 }
-            }
 
             bw.close();
         } catch (IOException e) {
