@@ -26,6 +26,7 @@ import Util.Token;
  * @see Token
  */
 public class AnalisadorLexico implements Dicionario{
+	private final String pastaSaida = "saida_lexica";
 	private final List<Token> tokens;
 	private final List<Token> tokensError;
 	private int nLinha;
@@ -302,7 +303,9 @@ public class AnalisadorLexico implements Dicionario{
 	 */
 	private void gerarSaida(String arquivo){
 		try {
-			File n = new File("s_" + arquivo);
+			File pasta = new File(pastaSaida);
+	        pasta.mkdir();	            
+			File n = new File(pasta.getName() + "//s_" + arquivo);
 			BufferedWriter bw = new BufferedWriter(new FileWriter(n));
 			for(Token t : tokens){
 				bw.write(t.toString());
