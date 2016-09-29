@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Stack;
 import Util.Debug;
 import Util.Dicionario;
+import static Util.Dicionario.conversorIdString;
 import Util.No;
 import Util.SincronizadorSintaticoFirst;
 import Util.SincronizadorSintaticoFollow;
@@ -101,6 +102,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                     erros.add(new ErroSintatico(pilha.peek(), "fim de arquivo($)", tokens.get(tokens.size()-1).getnLinha()));
                 else
                     erros.add(new ErroSintatico(pilha.peek(), tokens.get(posicao).getLexema(), tokens.get(posicao).getnLinha()));
+                
                 pilha.pop();
 			}
 			else {
@@ -203,6 +205,13 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 				pilha.push(R_DEC_CONST_VAR_DERIVADA);
 				pilha.push(R_DEC_CONST);
 				break;
+            case R_DEC_CONST_VAR_DERIVADA:
+                pilha.pop();
+                pilha.push(VOLTA_PRO_PAI);
+                pilha.push(R_DEC_MAIN);
+                pilha.push(R_DEC_FUNC);
+                pilha.push(R_DEC_VAR);
+                break;
 			case R_DEC_CONST_VAR_DERIVADA_C2:
 				pilha.pop();
                 pilha.push(VOLTA_PRO_PAI);
