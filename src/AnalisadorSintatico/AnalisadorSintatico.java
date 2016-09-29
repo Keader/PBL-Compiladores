@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author Bradley
  */
 public class AnalisadorSintatico implements Dicionario, Runnable {
-	private final String pastaSaida = "saida_lexica";
+	private final String pastaSaida = "saida_sintatica";
 	private List<Token> tokens;
 	private Stack<Integer> pilha;
 	private String arquivo;
@@ -174,7 +174,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                 }
             }
             bw.close();
-        } 
+        }
         catch (IOException e) {
             e.printStackTrace();
         }
