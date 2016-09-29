@@ -510,6 +510,8 @@ public interface Dicionario {
                 return "caractere (literal)";
             case TK_EOF:
                 return "fim de arquivo($)";
+            case TK_EPSILON:
+                return "Epsilon";
             case R_PROGRAMA:
                 return "R_PROGRAMA";
             case R_PROGRAMA_C2:
