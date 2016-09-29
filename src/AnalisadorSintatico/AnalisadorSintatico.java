@@ -7,7 +7,8 @@ import java.util.Stack;
 import Util.Debug;
 import Util.Dicionario;
 import Util.No;
-import Util.SincronizadorSintatico;
+import Util.SincronizadorSintaticoFirst;
+import Util.SincronizadorSintaticoFollow;
 import Util.Token;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -70,7 +71,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                     Debug.messagePane("Analise Sintatica do arquivo [" + arquivo + "] concluida.", "Sucesso", Debug.PADRAO);
 					break;
 				}
-                //Entrada acabou antes da pilha, o que fazer?
+                //Entrada terminou antes da pilha, tokenAtual sera sempre EOF agora.
 				else
 					tokenAtual = TK_EOF;
 			}
@@ -98,45 +99,29 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                 }
                 //Gerou producao -1
 				else {
-                    /**************************IDEIA 1 - PEGAR O PAI DA PRODUCAO**************************/
-                    //Desempilha tudo gerado por aquela producao
-                    List<Integer> desempilha = new ArrayList<>();
 
-                    for (No no : arvore.getAtual().getPai().getFilhos())
-                        desempilha.add(no.getId());
+                    //Pega Lista de First da producao atual e a lista de Syncs
+                    List<Integer> firsts = SincronizadorSintaticoFirst.getFirst(pilha.peek());
+                    List<Integer> sync =  new ArrayList<>();
+                    gerarHerancaDeFollows(arvore.getAtual(), sync);
+                    /*Como na arvore, producoes invalidas nao se torna um noh, o noh atual nunca sera a producao que
+                    deu erro (producao atual). Entao eh preciso adicionar na lista de Sync, os follows dele mesmo.
+                    */
+                    sync.addAll(SincronizadorSintaticoFollow.getFollows(pilha.peek()));
 
-                    while (desempilha.contains(pilha.peek()))
-                        pilha.pop();
+                    while (posicao <= maxQtdTokens)
+                    {
+                        if (firsts.contains(tokenAtual))
+                            break;
 
-                    //Pega lista de syncs dela
-                    No atual = arvore.getAtual();
-                    //Seta o no atual da arvore, para o "pai" do antigo atual
-                    arvore.setAtual(atual.getPai());
-                    List<Integer> sync = SincronizadorSintatico.getFollows(atual.getPai().getId());
-
-                    while (posicao <= maxQtdTokens){
-                        tokenAtual = tokens.get(posicao).getIdUnico();
                         if (sync.contains(tokenAtual)){
+                            pilha.pop();
                             break;
                         }
-                       posicao++;
-                    }
 
-                     /**************************FIM - IDEIA 1**************************/
-
-                     /**************************IDEIA 2 - PEGAR O TOPO DA PILHA**************************/
-                     //Nesta ideia, nao terah arvore
-                     List<Integer> sync2 = SincronizadorSintatico.getFollows(pilha.peek());
-
-                    while (posicao <= maxQtdTokens){
+                        posicao++;
                         tokenAtual = tokens.get(posicao).getIdUnico();
-                        if (sync.contains(tokenAtual)){
-                            break;
-                        }
-                       posicao++;
                     }
-
-                    /**************************FIM IDEIA 2**************************/
 				}
 			}
 		}
@@ -148,6 +133,14 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 
         gerarSaidaSintatica();
 	}
+
+    private void gerarHerancaDeFollows(No atual, List<Integer> lista){
+        if(atual == null)
+            return;
+
+        lista.addAll(SincronizadorSintaticoFollow.getFollows(atual.getId()));
+        gerarHerancaDeFollows(atual.getPai(),lista);
+    }
 
     public synchronized void gerarSaidaSintatica(){
         try {
