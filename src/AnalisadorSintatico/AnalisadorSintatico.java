@@ -20,6 +20,7 @@ import java.io.IOException;
  * @author Bradley
  */
 public class AnalisadorSintatico implements Dicionario, Runnable {
+	private final String pastaSaida = "saida_lexica";
 	private List<Token> tokens;
 	private Stack<Integer> pilha;
 	private String arquivo;
@@ -157,23 +158,24 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 
     public synchronized void gerarSaidaSintatica(){
         try {
-            File pasta = new File("saida_sintatica");
+            File pasta = new File(pastaSaida);
             pasta.mkdir();
-            File n = new File(pasta.getName()+"//SS_" + arquivo);
+            File n = new File(pasta.getName() + "//SS_" + arquivo);
             BufferedWriter bw = new BufferedWriter(new FileWriter(n));
             if(erros.isEmpty()){
                 bw.write("Sucesso!");
                 bw.flush();
             }
-            else
+            else {
                 for (ErroSintatico erro : erros){
                     bw.write(erro.toString());
                     bw.newLine();
                     bw.flush();
                 }
-
+            }
             bw.close();
-        } catch (IOException e) {
+        } 
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
