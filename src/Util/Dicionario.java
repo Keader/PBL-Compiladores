@@ -14,7 +14,7 @@ public interface Dicionario {
 	//singleton da tabela
 	public static final int [][] tabela = montarTabela();
     static final int tamanhoTabela = 230;
-    static final String arquivoTabela = "arquivos/matriz_predicao.csv";
+    static final String arquivoTabela = "arquivos/Matriz_Compiladores_teste.csv";
 
 	//Palavras Reservadas
     public static final int TK_PROGRAMA             = 0;
