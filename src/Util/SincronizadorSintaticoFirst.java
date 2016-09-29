@@ -183,11 +183,10 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_programa() {
 		if(programa == null){
 			programa = new ArrayList<Integer>();
-			programa.add(TK_CONST);
-			programa.add(TK_FUNCAO);
 			programa.add(TK_PROGRAMA);
+			programa.add(TK_CONST);
 			programa.add(TK_VAR);
-			programa.add(TK_EPSILON);
+			programa.add(TK_FUNCAO);
 		}
 		return programa;
 	}
@@ -206,7 +205,6 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 			dec_const_var_derivada.add(TK_FUNCAO);
 			dec_const_var_derivada.add(TK_PROGRAMA);
 			dec_const_var_derivada.add(TK_VAR);
-			dec_const_var_derivada.add(TK_EPSILON);
 		}
 		return dec_const_var_derivada;
 	}
@@ -224,7 +222,6 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 			inicio_func = new ArrayList<Integer>();
 			inicio_func.add(TK_FUNCAO);
 			inicio_func.add(TK_PROGRAMA);
-			inicio_func.add(TK_EPSILON);
 		}
 		return inicio_func;
 	}
@@ -248,8 +245,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_dec_const_i() {
 		if(dec_const_i == null){
 			dec_const_i = new ArrayList<Integer>();
-			dec_const_i.add(TK_EPSILON);
 			dec_const_i.add(TK_VIRGULA);
+			dec_const_i.add(TK_EPSILON);
 		}
 		return dec_const_i;
 	}
@@ -257,8 +254,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_dec_const_ii() {
 		if(dec_const_ii == null){
 			dec_const_ii = new ArrayList<Integer>();
-			dec_const_ii.add(TK_EPSILON);
 			dec_const_ii.addAll(getFirst(R_TIPO));
+			dec_const_ii.add(TK_EPSILON);
 		}
 		return dec_const_ii;
 	}
@@ -282,8 +279,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_dec_var_i() {
 		if(dec_var_i == null){
 			dec_var_i = new ArrayList<Integer>();
-			dec_var_i.add(TK_EPSILON);
 			dec_var_i.add(TK_VIRGULA);
+			dec_var_i.add(TK_EPSILON);
 		}
 		return dec_var_i;
 	}
@@ -291,8 +288,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_dec_var_ii() {
 		if(dec_var_ii == null){
 			dec_var_ii = new ArrayList<Integer>();
-			dec_var_ii.add(TK_EPSILON);
 			dec_var_ii.addAll(getFirst(R_TIPO));
+			dec_var_ii.add(TK_EPSILON);
 		}
 		return dec_var_ii;
 	}
@@ -315,11 +312,20 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 		return dec_func_i;
 	}
 
+	private static List<Integer> r_parametros() {
+		if(parametros == null){
+			parametros = new ArrayList<Integer>();
+			parametros.addAll(getFirst(R_TIPO));
+			parametros.add(TK_EPSILON);
+		}
+		return parametros;
+	}
+	
 	private static List<Integer> r_parametros_i() {
 		if(parametros_i == null){
 			parametros_i = new ArrayList<Integer>();
-			parametros_i.add(TK_EPSILON);
 			parametros_i.add(TK_VIRGULA);
+			parametros_i.add(TK_EPSILON);
 		}
 		return parametros_i;
 	}
@@ -335,17 +341,17 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_exp_relacional_bool() {
 		if(exp_relacional_bool == null){
 			exp_relacional_bool = new ArrayList<Integer>();
-			exp_relacional_bool.add(TK_NUMERO);
-			exp_relacional_bool.add(TK_BOOLEANO);
-			exp_relacional_bool.add(TK_SUBTRACAO);
-			exp_relacional_bool.add(TK_EPSILON);
-			exp_relacional_bool.add(TK_MENOR);
-			exp_relacional_bool.add(TK_CADEIA);
+			exp_relacional_bool.add(TK_VERDADEIRO);
+			exp_relacional_bool.add(TK_FALSO);
 			exp_relacional_bool.add(TK_NAO);
 			exp_relacional_bool.add(TK_SOMA);
-			exp_relacional_bool.add(TK_CARACTERE);
-			exp_relacional_bool.add(TK_PARENTESE_A);
+			exp_relacional_bool.add(TK_SUBTRACAO);
+			exp_relacional_bool.add(TK_MENOR);
 			exp_relacional_bool.add(TK_ID);
+			exp_relacional_bool.add(TK_CADEIA_DE_CARACTERES);
+			exp_relacional_bool.add(TK_CARACTERE_L);
+			exp_relacional_bool.add(TK_NUMERO);
+			exp_relacional_bool.add(TK_PARENTESE_A);
 		}
 		return exp_relacional_bool;
 	}
@@ -353,17 +359,18 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_exp_conjunta() {
 		if(exp_conjunta == null){
 			exp_conjunta = new ArrayList<Integer>();
-			exp_conjunta.add(TK_NUMERO);
-			exp_conjunta.add(TK_BOOLEANO);
-			exp_conjunta.add(TK_SUBTRACAO);
-			exp_conjunta.add(TK_EPSILON);
-			exp_conjunta.add(TK_MENOR);
-			exp_conjunta.add(TK_CADEIA);
+			exp_conjunta.add(TK_VERDADEIRO);
+			exp_conjunta.add(TK_FALSO);
 			exp_conjunta.add(TK_NAO);
+			exp_conjunta.add(TK_E);
 			exp_conjunta.add(TK_SOMA);
-			exp_conjunta.add(TK_CARACTERE);
-			exp_conjunta.add(TK_PARENTESE_A);
+			exp_conjunta.add(TK_SUBTRACAO);
+			exp_conjunta.add(TK_MENOR);
 			exp_conjunta.add(TK_ID);
+			exp_conjunta.add(TK_CADEIA_DE_CARACTERES);
+			exp_conjunta.add(TK_CARACTERE_L);
+			exp_conjunta.add(TK_NUMERO);			
+			exp_conjunta.add(TK_PARENTESE_A);
 		}
 		return exp_conjunta;
 	}
@@ -380,17 +387,17 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_exp_relacional() {
 		if(exp_relacional == null){
 			exp_relacional = new ArrayList<Integer>();
-			exp_relacional.add(TK_NUMERO);
-			exp_relacional.add(TK_BOOLEANO);
-			exp_relacional.add(TK_SUBTRACAO);
-			exp_relacional.add(TK_EPSILON);
-			exp_relacional.add(TK_MENOR);
-			exp_relacional.add(TK_CADEIA);
+			exp_relacional.add(TK_VERDADEIRO);
+			exp_relacional.add(TK_FALSO);
 			exp_relacional.add(TK_NAO);
 			exp_relacional.add(TK_SOMA);
-			exp_relacional.add(TK_CARACTERE);
-			exp_relacional.add(TK_PARENTESE_A);
+			exp_relacional.add(TK_SUBTRACAO);
+			exp_relacional.add(TK_MENOR);
 			exp_relacional.add(TK_ID);
+			exp_relacional.add(TK_CADEIA_DE_CARACTERES);
+			exp_relacional.add(TK_CARACTERE_L);
+			exp_relacional.add(TK_NUMERO);
+			exp_relacional.add(TK_PARENTESE_A);
 		}
 		return exp_relacional;
 	}
@@ -398,8 +405,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_exp_relacional_i() {
 		if(exp_relacional_i == null){
 			exp_relacional_i = new ArrayList<Integer>();
-			exp_relacional_i.add(TK_EPSILON);
 			exp_relacional_i.add(TK_E);
+			exp_relacional_i.add(TK_EPSILON);
 		}
 		return exp_relacional_i;
 	}
@@ -407,12 +414,12 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_operar_relacionalmente() {
 		if(operar_relacionalmente == null){
 			operar_relacionalmente = new ArrayList<Integer>();
-			operar_relacionalmente.add(TK_MAIORIGUAL);
 			operar_relacionalmente.add(TK_DIFERENTE);
-			operar_relacionalmente.add(TK_EPSILON);
 			operar_relacionalmente.add(TK_MENOR);
-			operar_relacionalmente.add(TK_MAIOR);
 			operar_relacionalmente.add(TK_MENORIGUAL);
+			operar_relacionalmente.add(TK_MAIOR);
+			operar_relacionalmente.add(TK_MAIORIGUAL);
+			operar_relacionalmente.add(TK_EPSILON);
 		}
 		return operar_relacionalmente;
 	}
@@ -420,11 +427,11 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_op_relacional() {
 		if(op_relacional == null){
 			op_relacional = new ArrayList<Integer>();
-			op_relacional.add(TK_MAIORIGUAL);
 			op_relacional.add(TK_DIFERENTE);
 			op_relacional.add(TK_MENOR);
-			op_relacional.add(TK_MAIOR);
 			op_relacional.add(TK_MENORIGUAL);
+			op_relacional.add(TK_MAIOR);
+			op_relacional.add(TK_MAIORIGUAL);
 		}
 		return op_relacional;
 	}
@@ -432,8 +439,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_not_opc() {
 		if(not_opc == null){
 			not_opc = new ArrayList<Integer>();
-			not_opc.add(TK_EPSILON);
 			not_opc.add(TK_NAO);
+			not_opc.add(TK_EPSILON);
 		}
 		return not_opc;
 	}
@@ -441,15 +448,16 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_exp_simples() {
 		if(exp_simples == null){
 			exp_simples = new ArrayList<Integer>();
-			exp_simples.add(TK_NUMERO);
-			exp_simples.add(TK_BOOLEANO);
+			exp_simples.add(TK_VERDADEIRO);
+			exp_simples.add(TK_FALSO);
+			exp_simples.add(TK_SOMA);
 			exp_simples.add(TK_SUBTRACAO);
 			exp_simples.add(TK_MENOR);
-			exp_simples.add(TK_CADEIA);
-			exp_simples.add(TK_SOMA);
-			exp_simples.add(TK_CARACTERE);
-			exp_simples.add(TK_PARENTESE_A);
 			exp_simples.add(TK_ID);
+			exp_simples.add(TK_CADEIA_DE_CARACTERES);
+			exp_simples.add(TK_CARACTERE_L);
+			exp_simples.add(TK_NUMERO);
+			exp_simples.add(TK_PARENTESE_A);
 		}
 		return exp_simples;
 	}
@@ -457,13 +465,14 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_termo() {
 		if(termo == null){
 			termo = new ArrayList<Integer>();
-			termo.add(TK_NUMERO);
-			termo.add(TK_BOOLEANO);
+			termo.add(TK_VERDADEIRO);
+			termo.add(TK_FALSO);
 			termo.add(TK_MENOR);
-			termo.add(TK_CADEIA);
-			termo.add(TK_CARACTERE);
-			termo.add(TK_PARENTESE_A);
 			termo.add(TK_ID);
+			termo.add(TK_CADEIA_DE_CARACTERES);
+			termo.add(TK_CARACTERE_L);
+			termo.add(TK_NUMERO);			
+			termo.add(TK_PARENTESE_A);
 		}
 		return termo;
 	}
@@ -471,9 +480,9 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_termo_i() {
 		if(termo_i == null){
 			termo_i = new ArrayList<Integer>();
+			termo_i.add(TK_SOMA);
 			termo_i.add(TK_SUBTRACAO);
 			termo_i.add(TK_EPSILON);
-			termo_i.add(TK_SOMA);
 		}
 		return termo_i;
 	}
@@ -481,13 +490,14 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_fator() {
 		if(fator == null){
 			fator = new ArrayList<Integer>();
-			fator.add(TK_NUMERO);
-			fator.add(TK_BOOLEANO);
+			fator.add(TK_VERDADEIRO);
+			fator.add(TK_FALSO);
 			fator.add(TK_MENOR);
-			fator.add(TK_CADEIA);
-			fator.add(TK_CARACTERE);
-			fator.add(TK_PARENTESE_A);
 			fator.add(TK_ID);
+			fator.add(TK_CADEIA_DE_CARACTERES);
+			fator.add(TK_CARACTERE_L);
+			fator.add(TK_NUMERO);			
+			fator.add(TK_PARENTESE_A);
 		}
 		return fator;
 	}
@@ -495,9 +505,11 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_fator_i() {
 		if(fator_i == null){
 			fator_i = new ArrayList<Integer>();
+			fator_i.add(TK_VERDADEIRO);
+			fator_i.add(TK_FALSO);
 			fator_i.add(TK_DIVISAO);
-			fator_i.add(TK_EPSILON);
 			fator_i.add(TK_MULTIPLICACAO);
+			fator_i.add(TK_EPSILON);
 		}
 		return fator_i;
 	}
@@ -520,14 +532,6 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 		return op_multi_div;
 	}
 
-	private static List<Integer> r_id_funcao_e_outros_derivado() {
-		if(id_funcao_e_outros_derivado == null){
-			id_funcao_e_outros_derivado = new ArrayList<Integer>();
-			id_funcao_e_outros_derivado.add(TK_ID);
-		}
-		return id_funcao_e_outros_derivado;
-	}
-
 	private static List<Integer> r_id_funcao_e_outros() {
 		if(id_funcao_e_outros == null){
 			id_funcao_e_outros = new ArrayList<Integer>();
@@ -537,11 +541,19 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 		return id_funcao_e_outros;
 	}
 
+	private static List<Integer> r_id_funcao_e_outros_derivado() {
+		if(id_funcao_e_outros_derivado == null){
+			id_funcao_e_outros_derivado = new ArrayList<Integer>();
+			id_funcao_e_outros_derivado.add(TK_ID);
+		}
+		return id_funcao_e_outros_derivado;
+	}
+
 	private static List<Integer> r_possible_func() {
 		if(possible_func == null){
 			possible_func = new ArrayList<Integer>();
-			possible_func.add(TK_EPSILON);
 			possible_func.add(TK_PARENTESE_A);
+			possible_func.add(TK_EPSILON);
 		}
 		return possible_func;
 	}
@@ -557,15 +569,15 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_corpo() {
 		if(corpo == null){
 			corpo = new ArrayList<Integer>();
-			corpo.add(TK_LEIA);
-			corpo.add(TK_INICIO);
-			corpo.add(TK_EPSILON);
 			corpo.add(TK_VAR);
-			corpo.add(TK_MENOR);
-			corpo.add(TK_ESCREVA);
+			corpo.add(TK_INICIO);
 			corpo.add(TK_SE);
 			corpo.add(TK_ENQUANTO);
+			corpo.add(TK_LEIA);
+			corpo.add(TK_ESCREVA);
+			corpo.add(TK_MENOR);
 			corpo.add(TK_ID);
+			corpo.add(TK_EPSILON);
 		}
 		return corpo;
 	}
@@ -573,13 +585,13 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_comandos() {
 		if(comandos == null){
 			comandos = new ArrayList<Integer>();
-			comandos.add(TK_LEIA);
-			comandos.add(TK_INICIO);
 			comandos.add(TK_VAR);
-			comandos.add(TK_MENOR);
-			comandos.add(TK_ESCREVA);
+			comandos.add(TK_INICIO);
 			comandos.add(TK_SE);
 			comandos.add(TK_ENQUANTO);
+			comandos.add(TK_LEIA);
+			comandos.add(TK_ESCREVA);
+			comandos.add(TK_MENOR);
 			comandos.add(TK_ID);
 		}
 		return comandos;
@@ -614,8 +626,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_array() {
 		if(array == null){
 			array = new ArrayList<Integer>();
-			array.add(TK_EPSILON);
 			array.add(TK_MENOR);
+			array.add(TK_EPSILON);
 		}
 		return array;
 	}
@@ -623,8 +635,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_array_i() {
 		if(array_i == null){
 			array_i = new ArrayList<Integer>();
-			array_i.add(TK_EPSILON);
 			array_i.add(TK_VIRGULA);
+			array_i.add(TK_EPSILON);
 		}
 		return array_i;
 	}
@@ -632,15 +644,16 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_array_indexes() {
 		if(array_indexes == null) {
 			array_indexes = new ArrayList<Integer>();
-			array_indexes.add(TK_NUMERO);
-			array_indexes.add(TK_BOOLEANO);
+			array_indexes.add(TK_VERDADEIRO);
+			array_indexes.add(TK_FALSO);
+			array_indexes.add(TK_SOMA);
 			array_indexes.add(TK_SUBTRACAO);
 			array_indexes.add(TK_MENOR);
-			array_indexes.add(TK_CADEIA);
-			array_indexes.add(TK_SOMA);
-			array_indexes.add(TK_CARACTERE);
-			array_indexes.add(TK_PARENTESE_A);
 			array_indexes.add(TK_ID);
+			array_indexes.add(TK_CADEIA_DE_CARACTERES);
+			array_indexes.add(TK_CARACTERE_L);
+			array_indexes.add(TK_NUMERO);
+			array_indexes.add(TK_PARENTESE_A);
 		}
 		return array_indexes;
 	}
@@ -648,8 +661,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_array_param() {
 		if(array_param == null){
 			array_param = new ArrayList<Integer>();
-			array_param.add(TK_EPSILON);
 			array_param.add(TK_MENOR);
+			array_param.add(TK_EPSILON);
 		}
 		return array_param;
 	}
@@ -666,16 +679,17 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_array_indexes_opt() {
 		if(array_indexes_opt == null){
 			array_indexes_opt = new ArrayList<Integer>();
-			array_indexes_opt.add(TK_NUMERO);
-			array_indexes_opt.add(TK_BOOLEANO);
-			array_indexes_opt.add(TK_SUBTRACAO);
-			array_indexes_opt.add(TK_EPSILON);
-			array_indexes_opt.add(TK_MENOR);
-			array_indexes_opt.add(TK_CADEIA);
+			array_indexes_opt.add(TK_VERDADEIRO);
+			array_indexes_opt.add(TK_FALSO);
 			array_indexes_opt.add(TK_SOMA);
-			array_indexes_opt.add(TK_CARACTERE);
-			array_indexes_opt.add(TK_PARENTESE_A);
+			array_indexes_opt.add(TK_SUBTRACAO);
+			array_indexes_opt.add(TK_MENOR);
 			array_indexes_opt.add(TK_ID);
+			array_indexes_opt.add(TK_CADEIA_DE_CARACTERES);
+			array_indexes_opt.add(TK_CARACTERE_L);
+			array_indexes_opt.add(TK_NUMERO);			
+			array_indexes_opt.add(TK_PARENTESE_A);
+			array_indexes_opt.add(TK_EPSILON);
 		}
 		return array_indexes_opt;
 	}
@@ -708,8 +722,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_escrevivel_i() {
 		if(escrevivel_i == null){
 			escrevivel_i = new ArrayList<Integer>();
-			escrevivel_i.add(TK_EPSILON);
 			escrevivel_i.add(TK_VIRGULA);
+			escrevivel_i.add(TK_EPSILON);
 		}
 		return escrevivel_i;
 	}
@@ -717,14 +731,13 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_escrevivel() {
 		if(escrevivel == null){
 			escrevivel = new ArrayList<Integer>();
-			escrevivel.add(TK_NUMERO);
-			escrevivel.add(TK_SUBTRACAO);
-			escrevivel.add(TK_EPSILON);
-			escrevivel.add(TK_MENOR);
-			escrevivel.add(TK_CADEIA);
 			escrevivel.add(TK_SOMA);
-			escrevivel.add(TK_CARACTERE);
+			escrevivel.add(TK_SUBTRACAO);
+			escrevivel.add(TK_MENOR);
 			escrevivel.add(TK_ID);
+			escrevivel.add(TK_CADEIA_DE_CARACTERES);
+			escrevivel.add(TK_CARACTERE_L);
+			escrevivel.add(TK_NUMERO);
 			escrevivel.add(TK_PARENTESE_A);
 		}
 		return escrevivel;
@@ -733,12 +746,11 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_termo_e() {
 		if(termo_e == null){
 			termo_e = new ArrayList<Integer>();
-			termo_e.add(TK_NUMERO);
-			termo_e.add(TK_EPSILON);
 			termo_e.add(TK_MENOR);
-			termo_e.add(TK_CADEIA);
-			termo_e.add(TK_CARACTERE);
 			termo_e.add(TK_ID);
+			termo_e.add(TK_CADEIA_DE_CARACTERES);
+			termo_e.add(TK_CARACTERE_L);
+			termo_e.add(TK_NUMERO);
 			termo_e.add(TK_PARENTESE_A);
 		}
 		return termo_e;
@@ -747,9 +759,9 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_termo_i_e() {
 		if(termo_i_e == null){
 			termo_i_e = new ArrayList<Integer>();
+			termo_i_e.add(TK_SOMA);
 			termo_i_e.add(TK_SUBTRACAO);
 			termo_i_e.add(TK_EPSILON);
-			termo_i_e.add(TK_SOMA);
 		}
 		return termo_i_e;
 	}
@@ -757,13 +769,13 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_fator_e() {
 		if(fator_e == null){
 			fator_e = new ArrayList<Integer>();
-			fator_e.add(TK_NUMERO);
-			fator_e.add(TK_EPSILON);
 			fator_e.add(TK_MENOR);
-			fator_e.add(TK_CADEIA);
-			fator_e.add(TK_CARACTERE);
 			fator_e.add(TK_ID);
+			fator_e.add(TK_CADEIA_DE_CARACTERES);
+			fator_e.add(TK_CARACTERE_L);
+			fator_e.add(TK_NUMERO);
 			fator_e.add(TK_PARENTESE_A);
+			fator_e.add(TK_EPSILON);
 		}
 		return fator_e;
 	}
@@ -771,10 +783,9 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_fator_i_e() {
 		if(fator_i_e == null){
 			fator_i_e = new ArrayList<Integer>();
-			fator_i_e.add(TK_SUBTRACAO);
-			fator_i_e.add(TK_PARENTESE_A);
-			fator_i_e.add(TK_VIRGULA);
-			fator_i_e.add(TK_SOMA);
+			fator_i_e.add(TK_MULTIPLICACAO);
+			fator_i_e.add(TK_DIVISAO);
+			fator_e.add(TK_EPSILON);
 		}
 		return fator_i_e;
 	}
@@ -790,8 +801,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_else_opc() {
 		if(else_opc == null){
 			else_opc = new ArrayList<Integer>();
-			else_opc.add(TK_EPSILON);
 			else_opc.add(TK_SENAO);
+			else_opc.add(TK_EPSILON);
 		}
 		return else_opc;
 	}
@@ -807,17 +818,17 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_passa_param() {
 		if(passa_param == null){
 			passa_param = new ArrayList<Integer>();
-			passa_param.add(TK_NUMERO);
-			passa_param.add(TK_BOOLEANO);
-			passa_param.add(TK_SUBTRACAO);
-			passa_param.add(TK_EPSILON);
-			passa_param.add(TK_MENOR);
-			passa_param.add(TK_CADEIA);
+			passa_param.add(TK_VERDADEIRO);
+			passa_param.add(TK_FALSO);
 			passa_param.add(TK_NAO);
 			passa_param.add(TK_SOMA);
-			passa_param.add(TK_CARACTERE);
-			passa_param.add(TK_PARENTESE_A);
+			passa_param.add(TK_SUBTRACAO);
+			passa_param.add(TK_MENOR);
 			passa_param.add(TK_ID);
+			passa_param.add(TK_CADEIA_DE_CARACTERES);
+			passa_param.add(TK_CARACTERE_L);			
+			passa_param.add(TK_NUMERO);
+			passa_param.add(TK_PARENTESE_A);
 		}
 		return passa_param;
 	}
@@ -825,8 +836,8 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 	private static List<Integer> r_passa_param_i() {
 		if(passa_param_i == null){
 			passa_param_i = new ArrayList<Integer>();
-			passa_param_i.add(TK_EPSILON);
 			passa_param_i.add(TK_VIRGULA);
+			passa_param_i.add(TK_EPSILON);
 		}
 		return passa_param_i;
 	}
@@ -837,17 +848,9 @@ public class SincronizadorSintaticoFirst implements Dicionario{
 			tipo.add(TK_INTEIRO);
 			tipo.add(TK_BOOLEANO);
 			tipo.add(TK_CARACTERE);
+			tipo.add(TK_REAL);
 			tipo.add(TK_CADEIA);
 		}
 		return tipo;
-	}
-
-	private static List<Integer> r_parametros() {
-		if(parametros == null){
-			parametros = new ArrayList<Integer>();
-			parametros.add(TK_EPSILON);
-			parametros.addAll(getFirst(R_TIPO));
-		}
-		return parametros;
 	}
 }
