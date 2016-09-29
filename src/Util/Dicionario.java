@@ -66,9 +66,11 @@ public interface Dicionario {
     public static final int TK_PARENTESE_F          = 40;
 	//EOF ($)
 	public static final int TK_EOF                  = 41;
-	public static final int MAX_TOKEN_VALUE         = 42;
+
 	//TODO favor ver isso aqui
-	public static final int TK_EPSILON         		= 43;
+	public static final int TK_EPSILON         		= 42;
+
+    public static final int MAX_TOKEN_VALUE         = 43;
 
     //Espaco Livre do 43-99 para possiveis modificacoes nos items acima.
     //**************************************************************************

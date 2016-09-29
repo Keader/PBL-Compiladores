@@ -66,15 +66,15 @@ public class ErroSintatico implements Dicionario{
         if (tokensEsperados != null){
             String acumulador = "";
             for (Integer atual: tokensEsperados)
-                acumulador += "'" +conversorIdString(atual)+"', ";
+                acumulador += "'" +conversorIdString(atual)+"' ";
 
             return linha + " -> Era esperado alguma das entradas a seguir: " + acumulador + ". Mas foi obtido: " + tokenObtido;
         }
 
         if(!esperado)
-            return linha + " -> A entrada: " + tokenObtido + " nao era esperada neste contexto.";
+            return linha + " -> A entrada: '" + tokenObtido + "' nao era esperada neste contexto.";
 
-        return linha + " -> Era esperada a entrada: " + conversorIdString(tokenEsperado) + ". Mas foi obtido: " + tokenObtido;
+        return linha + " -> Era esperada a entrada: '" + conversorIdString(tokenEsperado) + "'. Mas foi obtido: " + tokenObtido;
     }
 
 }

@@ -53,20 +53,12 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 		int posicao = 0;
 		int maxQtdTokens = tokens.size() - 1;
 		int tokenAtual = 0;
-        int contador = 0;
 
 		pilha.push(TK_EOF);
 		pilha.push(R_PROGRAMA);
 
 		//repete enquanto a pilha nao estiver vazia
 		while (!pilha.isEmpty()) {
-            contador++;
-            System.out.println(contador);
-
-            if(contador > 5000){
-                String lexema = tokens.get(posicao).getLexema();
-                System.out.println("pera");
-            }
             //Caso o topo da pilha eh a volta da arvore pro "Pai"
             if(pilha.peek() == VOLTA_PRO_PAI){
                 arvore.voltaProPai();
@@ -103,7 +95,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                     erros.add(new ErroSintatico(pilha.peek(), "fim de arquivo($)", tokens.get(tokens.size()-1).getnLinha()));
                 else
                     erros.add(new ErroSintatico(pilha.peek(), tokens.get(posicao).getLexema(), tokens.get(posicao).getnLinha()));
-                
+
                 pilha.pop();
 			}
 			else {
