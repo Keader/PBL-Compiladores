@@ -1,5 +1,6 @@
 package AnalisadorSintatico;
 
+import Util.Debug;
 import Util.No;
 import Util.Dicionario;
 import static Util.Dicionario.*;
@@ -76,29 +77,66 @@ public class ArvoreSintatica implements Dicionario {
         }
     }
 
+    /**
+     * @deprecated Aconselhavel nao utilizar, era para debug no sintatico
+     */
     public void imprimirArvoe() {
         imprimeNo(raiz);
     }
 
     private void imprimeNo(No no) {
-        if (no == null) {
+        if (no == null)
             return;
-        }
 
         //Terminais e R_Epsilon nao sao pais de ninguem.
-        if (no.getId() > MAX_TOKEN_VALUE && no.getId() != R_EPSILON) {
+        if (no.getId() > MAX_TOKEN_VALUE && no.getId() != R_EPSILON)
             System.out.println("Pai: " + conversorIdString(no.getId()));
-        }
 
         //Imprime todos os filhos do No Atual.
-        for (No filho : no.getFilhos()) {
+        for (No filho : no.getFilhos())
             System.err.println(conversorIdString(filho.getId()));
-        }
 
         //Manda imprimir os filhos dos filhos.
-        for (No filho : no.getFilhos()) {
+        for (No filho : no.getFilhos())
             imprimeNo(filho);
-        }
     }
 
+    /*
+    Ta bugado, causando:
+    Exception in thread "main" java.util.ConcurrentModificationException
+    Problema do futuro, se precisar remover mesmo
+
+    public  void limparEpsilons(){
+        limparEpsilons(raiz);
+    }
+
+    private  void limparEpsilons(No no){
+        if (no == null)
+            return;
+
+        if (no.getId() == R_EPSILON)
+            removerNoEpsilon(no);
+        else{
+            for (No filho : no.getFilhos())
+                limparEpsilons(filho);
+        }
+
+    }
+
+    private void removerNoEpsilon(No remover){
+        if (remover == null)
+            return;
+
+        No pai = remover.getPai();
+
+        if (pai == null)
+            return;
+
+        if (!pai.getFilhos().remove(remover))
+            Debug.ErrPrintln("Na Arvore Sintatica, nao foi possivel remover o epsilon.");
+
+        if (remover.temFilhos())
+            Debug.ErrPrintln("Na Arvore Sintatica, Epsilon possuia filhos.");
+    }
+*/
 }
