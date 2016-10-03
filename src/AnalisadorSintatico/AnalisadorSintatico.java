@@ -205,9 +205,9 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
       				vaiVirValor = false;
       				
       				if(!tabela.contains(identificador)){
-        				simbolo = new Simbolo(tipoAtual, valor);
+        				simbolo = new Simbolo(identificador, tipoAtual, valor);
         				tabela.put(identificador, simbolo);
-        				System.out.println(identificador + " : " + simbolo);
+        				System.out.println(simbolo);
         			}
       				else {
       					System.out.println("ESTE ID JA ESTA EM USO");
@@ -241,13 +241,15 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
     		}
     		//se achar um fim termina um escopo
     		else if (t.getIdUnico() == TK_FIM){
+    			//pegando a tabela do ultimo escopo
+    			Hashtable<String, Simbolo> auxT = tabelas.size() > 0 ? tabelas.get(tabelas.size() -1) : tabelas.get(0);
+
     			//se a tabela não existe nas tabelas adiciona
        			if(!tabelas.contains(tabela))
     				tabelas.add(tabela);
-				tabela = tabelas.get(tabelas.size() - 2);
+				tabela = auxT;
     		}
     	}
-    	
     	System.out.println(tabelas.size());
     }
 
