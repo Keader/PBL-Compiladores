@@ -13,7 +13,7 @@ public class No {
     private List<No> filhos;
     private int id;
 
-    public No(int id){
+    public No(int id) {
         this.id = id;
         filhos = new ArrayList<>();
     }
@@ -42,7 +42,7 @@ public class No {
         this.id = id;
     }
 
-    public boolean temFilhos(){
+    public boolean temFilhos() {
         return !filhos.isEmpty();
     }
 

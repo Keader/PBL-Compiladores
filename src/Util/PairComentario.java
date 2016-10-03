@@ -1,32 +1,33 @@
 package Util;
 
 public class PairComentario {
-	private String linha;
-	private boolean iniciouComentario;
 
-	public PairComentario (String linha, boolean terminou){
-		this.iniciouComentario = terminou;
-		this.linha = linha;
-	}
+    private String linha;
+    private boolean iniciouComentario;
 
-	public PairComentario (boolean terminou){
-		this.iniciouComentario = terminou;
-		linha = "";
-	}
+    public PairComentario(String linha, boolean terminou) {
+        this.iniciouComentario = terminou;
+        this.linha = linha;
+    }
 
-	public String getLinha(){
-		return linha;
-	}
+    public PairComentario(boolean terminou) {
+        this.iniciouComentario = terminou;
+        linha = "";
+    }
 
-	public boolean isIniciouComentario(){
-		return iniciouComentario;
-	}
+    public String getLinha() {
+        return linha;
+    }
 
-	public void setLinha(String linha){
-		this.linha = linha;
-	}
+    public boolean isIniciouComentario() {
+        return iniciouComentario;
+    }
 
-	public void setIniciouComentario(boolean iniciouComentario){
-		this.iniciouComentario = iniciouComentario;
-	}
+    public void setLinha(String linha) {
+        this.linha = linha;
+    }
+
+    public void setIniciouComentario(boolean iniciouComentario) {
+        this.iniciouComentario = iniciouComentario;
+    }
 }
