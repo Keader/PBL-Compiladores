@@ -209,7 +209,11 @@ public interface Dicionario {
     public static final int R_TIPO_C3                            = 223;
     public static final int R_TIPO_C4                            = 224;
     public static final int R_TIPO_C5                            = 225;
-    public static final int VOLTA_PRO_PAI                           = 226;
+    public static final int VOLTA_PRO_PAI                        = 226;
+
+    //Semantico
+
+     public static final int ESCOPO_GLOBAL                       = 0;
 
     //Enums
     public enum PadraoRegex {
