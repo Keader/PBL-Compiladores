@@ -468,10 +468,8 @@ public class SincronizadorSintaticoFollow implements Dicionario {
 
     private static List<Integer> r_op_relacional() {
         if (op_relacional == null) {
-            //TODO TENHO QUASE CERTEZA QUE O NOME DOS TOKENS ME CONFUNDIU, TESTA AI
             op_relacional = new ArrayList<Integer>();
             op_relacional.add(TK_NUMERO);
-            //TODO JOEL NAO TEM VERDADEIRO E FALSO, ELE TEM BOOLEANO
             op_relacional.add(TK_BOOLEANO);
             op_relacional.add(TK_VERDADEIRO);
             op_relacional.add(TK_FALSO);
@@ -492,9 +490,7 @@ public class SincronizadorSintaticoFollow implements Dicionario {
     private static List<Integer> r_not_opc() {
         if (not_opc == null) {
             not_opc = new ArrayList<Integer>();
-            //TODO TENHO QUASE CERTEZA QUE O NOME DOS TOKENS ME CONFUNDIU, TESTA AI
             not_opc.add(TK_NUMERO);
-            //TODO JOEL NAO TEM VERDADEIRO E FALSO, ELE TEM BOOLEANO
             not_opc.add(TK_BOOLEANO);
             not_opc.add(TK_VERDADEIRO);
             not_opc.add(TK_FALSO);
@@ -612,9 +608,7 @@ public class SincronizadorSintaticoFollow implements Dicionario {
     private static List<Integer> r_op_mais_menos() {
         if (op_mais_menos == null) {
             op_mais_menos = new ArrayList<Integer>();
-            //TODO TENHO QUASE CERTEZA QUE O NOME DOS TOKENS ME CONFUNDIU, TESTA AI
             op_mais_menos.add(TK_NUMERO);
-            //TODO JOEL NAO TEM VERDADEIRO E FALSO, ELE TEM BOOLEANO
             op_mais_menos.add(TK_BOOLEANO);
             op_mais_menos.add(TK_VERDADEIRO);
             op_mais_menos.add(TK_FALSO);
@@ -632,9 +626,7 @@ public class SincronizadorSintaticoFollow implements Dicionario {
     private static List<Integer> r_op_multi_div() {
         if (op_multi_div == null) {
             op_multi_div = new ArrayList<Integer>();
-            //TODO TENHO QUASE CERTEZA QUE O NOME DOS TOKENS ME CONFUNDIU, TESTA AI
             op_multi_div.add(TK_NUMERO);
-            //TODO JOEL NAO TEM VERDADEIRO E FALSO, ELE TEM BOOLEANO
             op_multi_div.add(TK_BOOLEANO);
             op_multi_div.add(TK_VERDADEIRO);
             op_multi_div.add(TK_FALSO);

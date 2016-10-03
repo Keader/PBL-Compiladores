@@ -7,12 +7,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Stack;
 
 import Util.Debug;
 import Util.Dicionario;
 import Util.No;
+import Util.Simbolo;
 import Util.SincronizadorSintaticoFirst;
 import Util.SincronizadorSintaticoFollow;
 import Util.Token;
@@ -44,7 +46,8 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
     public void run() {
         try {
             iniciarAnalise();
-        } catch (Throwable e) {
+        } 
+        catch (Throwable e) {
             e.printStackTrace();
         }
     }
@@ -162,6 +165,8 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
             if (erros.isEmpty()) {
                 bw.write("Sucesso!");
                 bw.flush();
+                
+                montarTabela();
             } else {
                 for (ErroSintatico erro : erros) {
                     bw.write(erro.toString());
@@ -173,6 +178,77 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    private synchronized void montarTabela(){
+    	int tipoAtual = 0;
+    	String identificador = "";
+    	String valor = "";
+    	boolean comecouTipo = false, vaiVirId = false, vaiVirValor = false;
+    	List<Hashtable<String, Simbolo>> tabelas = new ArrayList<Hashtable<String, Simbolo>>();
+    	Hashtable<String, Simbolo> tabela = new Hashtable<>();
+    	
+    	Simbolo simbolo;
+    	//percorre a lista de TOKENS
+    	for(Token t : tokens){
+    		//se já começou um tipo (EX.: INTEIRO a, b, c, d;
+    		if(comecouTipo){
+    			//pegando o ID
+      			if(vaiVirId){
+    				identificador = t.getLexema();
+    				vaiVirId = false;
+    				continue;
+    			}
+      			//pegando o valor
+      			else if(vaiVirValor) {
+      				valor = t.getLexema();
+      				vaiVirValor = false;
+      				
+      				if(!tabela.contains(identificador)){
+        				simbolo = new Simbolo(tipoAtual, valor);
+        				tabela.put(identificador, simbolo);
+        				System.out.println(identificador + " : " + simbolo);
+        			}
+      				else {
+      					System.out.println("ESTE ID JA ESTA EM USO");
+      				}
+      				continue;
+      			}
+      			
+    			//se achar um ponto e virgula deixou de achar o tipo
+    			if(t.getIdUnico() == TK_PONTOVIRGULA) {
+    				comecouTipo = false;
+    				identificador = "";
+    				valor = "";
+    			}
+    			else if (t.getIdUnico() == TK_VIRGULA)
+    				vaiVirId = true;
+    			else if(t.getIdUnico() == TK_IGUAL)
+    				vaiVirValor = true;
+    		}
+    		else if(t.getIdUnico() == TK_INTEIRO || t.getIdUnico() == TK_REAL || t.getIdUnico() == TK_CADEIA || t.getIdUnico() == TK_CARACTERE || t.getIdUnico() == TK_VERDADEIRO || t.getIdUnico() == TK_FALSO) {
+    			comecouTipo = true;
+    			vaiVirId = true;
+    			tipoAtual = t.getIdUnico();
+    		}
+    		//se começar um novo escopo
+    		else if (t.getIdUnico() == TK_INICIO){
+    			//se a tabela não existe nas tabelas adiciona
+    			if(!tabelas.contains(tabela))
+    				tabelas.add(tabela);
+				//criando uma nova tabela de simbolos do escopo
+				tabela = new Hashtable<>();
+    		}
+    		//se achar um fim termina um escopo
+    		else if (t.getIdUnico() == TK_FIM){
+    			//se a tabela não existe nas tabelas adiciona
+       			if(!tabelas.contains(tabela))
+    				tabelas.add(tabela);
+				tabela = tabelas.get(tabelas.size() - 2);
+    		}
+    	}
+    	
+    	System.out.println(tabelas.size());
     }
 
     public synchronized void gerarProducao(int valor) {
