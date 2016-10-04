@@ -17,15 +17,6 @@ public class Simbolo implements Dicionario{
 		this.id = id;
 		this.tipo = tipo;
 		this.valor = valor;
-        escopo = ESCOPO_GLOBAL;
-        dimensoes = new ArrayList<>();
-	}
-
-    public Simbolo(String id, int tipo, String valor, int escopo){
-		this.id = id;
-		this.tipo = tipo;
-		this.valor = valor;
-        this.escopo = escopo;
         dimensoes = new ArrayList<>();
 	}
 
@@ -52,10 +43,6 @@ public class Simbolo implements Dicionario{
 	public void setId(String id) {
 		this.id= id;
 	}
-
-    public int getEscopo() {
-        return escopo;
-    }
 
     public List<Integer> getDimensoes() {
         return dimensoes;

@@ -167,7 +167,8 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                 bw.flush();
 
                 montarTabela();
-            } else {
+            }
+            else {
                 for (ErroSintatico erro : erros) {
                     bw.write(erro.toString());
                     bw.newLine();
@@ -184,16 +185,16 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
     	int tipoAtual = 0;
     	String identificador = "";
     	String valor = "";
-    	boolean comecouTipo = false, vaiVirId = false, vaiVirValor = false;
-    	List<Hashtable<String, Simbolo>> tabelas = new ArrayList<Hashtable<String, Simbolo>>();
+    	boolean comecouTipo = false, vaiVirId = false, vaiVirValor = false, vaiVirFuncao = false;
+    	List<Hashtable<String, Simbolo>> tabelas = new ArrayList<>();
     	Hashtable<String, Simbolo> tabela = new Hashtable<>();
 
     	Simbolo simbolo;
-    	//percorre a lista de TOKENS
+    	//Percorre a lista de tokens.
     	for(Token t : tokens){
-    		//se ja comecou um tipo (EX.: INTEIRO a, b, c, d;
+    		//se ja comecou um tipo (EX.: inteiro a, b, c, d;
     		if(comecouTipo){
-    			//pegando o ID
+    			//pegando o id
       			if(vaiVirId){
     				identificador = t.getLexema();
     				vaiVirId = false;
@@ -233,7 +234,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
     		}
     		//se comecar um novo escopo
     		else if (t.getIdUnico() == TK_INICIO){
-    			//se a tabela nao existe nas tabelas adiciona
+    		    //se a tabela nao existe nas tabelas adiciona
     			if(!tabelas.contains(tabela))
     				tabelas.add(tabela);
 				//criando uma nova tabela de simbolos do escopo
@@ -244,7 +245,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
     			//pegando a tabela do ultimo escopo
     			Hashtable<String, Simbolo> auxT = !tabelas.isEmpty() ? tabelas.get(tabelas.size() -1) : tabelas.get(0);
 
-    			//se a tabela nao existe nas tabelas adiciona
+    		    //se a tabela nao existe nas tabelas adiciona
        			if(!tabelas.contains(tabela))
     				tabelas.add(tabela);
 				tabela = auxT;
