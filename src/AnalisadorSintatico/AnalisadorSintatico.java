@@ -46,7 +46,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
     public void run() {
         try {
             iniciarAnalise();
-        } 
+        }
         catch (Throwable e) {
             e.printStackTrace();
         }
@@ -165,7 +165,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
             if (erros.isEmpty()) {
                 bw.write("Sucesso!");
                 bw.flush();
-                
+
                 montarTabela();
             } else {
                 for (ErroSintatico erro : erros) {
@@ -179,7 +179,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
             e.printStackTrace();
         }
     }
-    
+
     private synchronized void montarTabela(){
     	int tipoAtual = 0;
     	String identificador = "";
@@ -187,11 +187,11 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
     	boolean comecouTipo = false, vaiVirId = false, vaiVirValor = false;
     	List<Hashtable<String, Simbolo>> tabelas = new ArrayList<Hashtable<String, Simbolo>>();
     	Hashtable<String, Simbolo> tabela = new Hashtable<>();
-    	
+
     	Simbolo simbolo;
     	//percorre a lista de TOKENS
     	for(Token t : tokens){
-    		//se já começou um tipo (EX.: INTEIRO a, b, c, d;
+    		//se ja comecou um tipo (EX.: INTEIRO a, b, c, d;
     		if(comecouTipo){
     			//pegando o ID
       			if(vaiVirId){
@@ -203,18 +203,18 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
       			else if(vaiVirValor) {
       				valor = t.getLexema();
       				vaiVirValor = false;
-      				
+
       				if(!tabela.contains(identificador)){
         				simbolo = new Simbolo(identificador, tipoAtual, valor);
         				tabela.put(identificador, simbolo);
         				System.out.println(simbolo);
         			}
       				else {
-      					System.out.println("ESTE ID JA ESTA EM USO");
+      					System.out.println("O identificador: "+identificador+" ja esta em uso.");
       				}
       				continue;
       			}
-      			
+
     			//se achar um ponto e virgula deixou de achar o tipo
     			if(t.getIdUnico() == TK_PONTOVIRGULA) {
     				comecouTipo = false;
@@ -231,9 +231,9 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
     			vaiVirId = true;
     			tipoAtual = t.getIdUnico();
     		}
-    		//se começar um novo escopo
+    		//se comecar um novo escopo
     		else if (t.getIdUnico() == TK_INICIO){
-    			//se a tabela não existe nas tabelas adiciona
+    			//se a tabela nao existe nas tabelas adiciona
     			if(!tabelas.contains(tabela))
     				tabelas.add(tabela);
 				//criando uma nova tabela de simbolos do escopo
@@ -242,9 +242,9 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
     		//se achar um fim termina um escopo
     		else if (t.getIdUnico() == TK_FIM){
     			//pegando a tabela do ultimo escopo
-    			Hashtable<String, Simbolo> auxT = tabelas.size() > 0 ? tabelas.get(tabelas.size() -1) : tabelas.get(0);
+    			Hashtable<String, Simbolo> auxT = !tabelas.isEmpty() ? tabelas.get(tabelas.size() -1) : tabelas.get(0);
 
-    			//se a tabela não existe nas tabelas adiciona
+    			//se a tabela nao existe nas tabelas adiciona
        			if(!tabelas.contains(tabela))
     				tabelas.add(tabela);
 				tabela = auxT;
