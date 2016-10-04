@@ -8,16 +8,21 @@ public class Simbolo implements Dicionario{
 	private String id;
 	private int tipo;
 	private String valor;
-    private int escopo;
-    private List<Integer> dimensoes;
+    private int dimensoes;
     private boolean ehFuncao;
-
+    private boolean ehConstante;
+    private boolean ehMatriz;
+    private List<Simbolo> parametros;
 
 	public Simbolo(String id, int tipo, String valor){
 		this.id = id;
 		this.tipo = tipo;
 		this.valor = valor;
-        dimensoes = new ArrayList<>();
+        dimensoes = 0;
+        ehFuncao = false;
+        ehConstante = false;
+        ehMatriz = false;
+        parametros = new ArrayList<>();
 	}
 
 	public int getTipo() {
@@ -44,8 +49,12 @@ public class Simbolo implements Dicionario{
 		this.id= id;
 	}
 
-    public List<Integer> getDimensoes() {
+    public int getDimensoes() {
         return dimensoes;
+    }
+
+    public void setDimensoes(int dimensoes) {
+        this.dimensoes = dimensoes;
     }
 
     public boolean ehFuncao() {
@@ -56,7 +65,30 @@ public class Simbolo implements Dicionario{
         this.ehFuncao = ehFuncao;
     }
 
+    public boolean isEhConstante() {
+        return ehConstante;
+    }
+
+    public void setEhConstante(boolean ehConstante) {
+        this.ehConstante = ehConstante;
+    }
+
+    public boolean ehMatriz() {
+        return ehMatriz;
+    }
+
+    public void setEhMatriz(boolean ehMatriz) {
+        this.ehMatriz = ehMatriz;
+    }
+
+    public List<Simbolo> getParametros() {
+        return parametros;
+    }
+    
 	public String toString(){
+        if (ehMatriz){
+            return  "["+ conversorIdString(tipo) +"]  [D:" +dimensoes+"] " + id + " = " + valor;
+        }
 		return "["+ conversorIdString(tipo) +"] " + id + " = " + valor;
 	}
 

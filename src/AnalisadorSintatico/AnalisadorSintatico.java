@@ -1,5 +1,6 @@
 package AnalisadorSintatico;
 
+import AnalisadorSemantico.TabelaDeSimbolos;
 import static Util.Dicionario.getIdProducao;
 
 import java.io.BufferedWriter;
@@ -182,6 +183,9 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
     }
 
     private synchronized void montarTabela(){
+        TabelaDeSimbolos tabela = new TabelaDeSimbolos(tokens);
+        tabela.montarTabela();
+        /*
     	int tipoAtual = 0;
     	String identificador = "";
     	String valor = "";
@@ -251,7 +255,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
 				tabela = auxT;
     		}
     	}
-    	System.out.println(tabelas.size());
+    	System.out.println(tabelas.size());*/
     }
 
     public synchronized void gerarProducao(int valor) {
