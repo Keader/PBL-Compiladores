@@ -125,6 +125,7 @@ public class TabelaDeSimbolos implements Dicionario{
             }
 
             else if (t.getIdUnico() == TK_FUNCAO){
+                valor = "";
                 cont++;
                 t = tokens.get(cont);
 
@@ -150,12 +151,14 @@ public class TabelaDeSimbolos implements Dicionario{
                     tipoParametros.add(t.getIdUnico());
                     cont++;
 
+                    t = tokens.get(cont);
+
                     //Pega o identificador do parametro
                     String acumulador ="";
                     while (!checaTerminadoresParametros()){
-                        t = tokens.get(cont);
                         acumulador+= t.getLexema();
                         cont++;
+                        t = tokens.get(cont);
                     }
                     idParametros.add(acumulador);
                     acumulador = "";
@@ -180,8 +183,11 @@ public class TabelaDeSimbolos implements Dicionario{
                  //o token agora eh inicio
                  criaNovoEscopo();
 
-                cont++;
-                t = tokens.get(cont);
+                 //Pelo que eu havia discutido com Seara, sempre que receber parametros em uma funcao
+                 //As variaveis vindas do parametro devem estar no escopo da funcao.
+                 for (Simbolo sim : simbolo.getParametros())
+                     criaSimbolo(sim.getId(), sim.getTipo(), sim.getValor());
+
                 //Continua a analise normal de agora em diante
             }
 
