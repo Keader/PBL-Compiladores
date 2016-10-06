@@ -25,6 +25,8 @@ public class TabelaDeSimbolos implements Dicionario{
     private int dimensoes;
     private List<Integer> tipoParametros;
     private List<String> idParametros;
+    private Hashtable<String, Simbolo> tabelaGlobal;
+    private boolean funcoesAlcancadas;
 
     public TabelaDeSimbolos(List<Token> lTokens){
         tokens = new ArrayList<>();
@@ -38,6 +40,8 @@ public class TabelaDeSimbolos implements Dicionario{
         dimensoes = 0;
         tipoParametros = new ArrayList<>();
         idParametros = new ArrayList<>();
+        tabelaGlobal = null;
+        funcoesAlcancadas = false;
     }
 
     public synchronized void montarTabela(){
@@ -46,6 +50,9 @@ public class TabelaDeSimbolos implements Dicionario{
             t = tokens.get(cont);
 
             if (t.getIdUnico() == TK_CONST) {
+                //Se as funcoes nao foram alcansadas ainda, significa que existe escopo global
+                if (!funcoesAlcancadas)
+                    tabelaGlobal = tabela;
 
                 //Pula o const e o inicio
                 cont += 2;
@@ -78,6 +85,10 @@ public class TabelaDeSimbolos implements Dicionario{
                 }
             }
             else if (t.getIdUnico() == TK_VAR){
+                //Se as funcoes nao foram alcansadas ainda, significa que existe escopo global
+                if (!funcoesAlcancadas)
+                    tabelaGlobal = tabela;
+
                 //Pula o var e o inicio
                 cont += 2;
                 t = tokens.get(cont);
@@ -114,18 +125,36 @@ public class TabelaDeSimbolos implements Dicionario{
             }
 
             else if (t.getIdUnico() == TK_PROGRAMA){
+                //Quando funcoes sao alcancadas, seta a flag pra true, para criacao do contexto global
+                if (!funcoesAlcancadas){
+                    funcoesAlcancadas = true;
+
+                    //Acredito que os tipos de funcoes devem sempre ficar num escopo global, entao tecnicamente...
+                    //Sempre havera um escopo global, pelo menos com as funcoes
+                    if (tabelaGlobal == null)
+                        tabelaGlobal = tabela;
+                }
+
                 cont++;
                 t = tokens.get(cont);
 
-                if (t.getIdUnico() == TK_INICIO){
+                if (t.getIdUnico() == TK_INICIO)
                     criaNovoEscopo();
-                    cont++;
-                    t = tokens.get(cont);
-                }
             }
 
             else if (t.getIdUnico() == TK_FUNCAO){
+                //Quando funcoes sao alcancadas, seta a flag pra true, para criacao do contexto global
+                if (!funcoesAlcancadas){
+                    funcoesAlcancadas = true;
+
+                    //Acredito que os tipos de funcoes devem sempre ficar num escopo global, entao tecnicamente...
+                    //Sempre havera um escopo global, pelo menos com as funcoes
+                    if (tabelaGlobal == null)
+                        tabelaGlobal = tabela;
+                }
+
                 valor = "";
+                tipoAtual = 0;
                 cont++;
                 t = tokens.get(cont);
 
@@ -166,8 +195,8 @@ public class TabelaDeSimbolos implements Dicionario{
                         cont++;
                 }
 
-                //Cria o simbolo da funcao
-                Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor);
+                //Cria o simbolo da funcao, adicionando na tabela global !
+                Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor,tabelaGlobal);
                 simbolo.setEhFuncao(true);
                 //Adiciona a lista de parametros
                 for (int i =0; i<idParametros.size();i++){
@@ -192,6 +221,8 @@ public class TabelaDeSimbolos implements Dicionario{
             }
 
         }
+        //Salva o ultimo escopo (salva o escopo da main)
+        salvaEscopo();
     }
 
     private Simbolo criaSimbolo(String id, int tipo, String valor){
@@ -199,6 +230,19 @@ public class TabelaDeSimbolos implements Dicionario{
 
         if(!tabela.contains(id)){
             tabela.put(id,simbolo);
+             System.out.println(simbolo);
+        }
+        else
+            System.err.println("O Token de identificador: "+id+" ja foi definido");
+
+        return simbolo;
+    }
+
+    private Simbolo criaSimbolo(String id, int tipo, String valor, Hashtable<String, Simbolo> tabelaE){
+        Simbolo simbolo = new Simbolo(id, tipo, valor);
+
+        if(!tabelaE.contains(id)){
+            tabelaE.put(id,simbolo);
              System.out.println(simbolo);
         }
         else
@@ -295,6 +339,16 @@ public class TabelaDeSimbolos implements Dicionario{
             System.err.println("A tabela do escopo " +(tabelas.size()-1)+" ja existe");
         //criando uma nova tabela de simbolos do escopo
         tabela = new Hashtable<>();
+        System.out.println("Escopo: "+tabelas.size());
+    }
+
+    private void salvaEscopo(){
+        if (!tabelas.contains(tabela))
+            tabelas.add(tabela);
+        else
+            System.err.println("A tabela do escopo " +(tabelas.size()-1)+" ja existe");
+        //criando uma nova tabela de simbolos do escopo
+        tabela = null;
         System.out.println("Escopo: "+tabelas.size());
     }
 
