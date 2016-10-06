@@ -139,7 +139,7 @@ public class TabelaDeSimbolos implements Dicionario{
                 t = tokens.get(cont);
 
                 if (t.getIdUnico() == TK_INICIO)
-                    criaNovoEscopo();
+                    criaNovoEscopo(true);
             }
 
             else if (t.getIdUnico() == TK_FUNCAO){
@@ -210,7 +210,7 @@ public class TabelaDeSimbolos implements Dicionario{
                 t = tokens.get(cont);
 
                  //o token agora eh inicio
-                 criaNovoEscopo();
+                 criaNovoEscopo(true);
 
                  //Pelo que eu havia discutido com Seara, sempre que receber parametros em uma funcao
                  //As variaveis vindas do parametro devem estar no escopo da funcao.
@@ -222,7 +222,7 @@ public class TabelaDeSimbolos implements Dicionario{
 
         }
         //Salva o ultimo escopo (salva o escopo da main)
-        salvaEscopo();
+        criaNovoEscopo(false);
     }
 
     private Simbolo criaSimbolo(String id, int tipo, String valor){
@@ -332,23 +332,22 @@ public class TabelaDeSimbolos implements Dicionario{
         return t.getIdUnico() == TK_VIRGULA || t.getIdUnico() == TK_PARENTESE_F;
     }
 
-    private void criaNovoEscopo() {
+    /**
+     * Metodo adiciona o escopo atual na tabela de escopos, e cria um novo.
+     * @param novaTabela define se eh necessario criar um novo, ou apenas salvar o escopo atual.
+     */
+    private void criaNovoEscopo(boolean novaTabela) {
         if (!tabelas.contains(tabela))
             tabelas.add(tabela);
         else
             System.err.println("A tabela do escopo " +(tabelas.size()-1)+" ja existe");
-        //criando uma nova tabela de simbolos do escopo
-        tabela = new Hashtable<>();
-        System.out.println("Escopo: "+tabelas.size());
-    }
 
-    private void salvaEscopo(){
-        if (!tabelas.contains(tabela))
-            tabelas.add(tabela);
+        //Criando nova tabela de simbolos
+        if (novaTabela)
+            tabela = new Hashtable<>();
         else
-            System.err.println("A tabela do escopo " +(tabelas.size()-1)+" ja existe");
-        //criando uma nova tabela de simbolos do escopo
-        tabela = null;
+            tabela = null;
+
         System.out.println("Escopo: "+tabelas.size());
     }
 
