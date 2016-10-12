@@ -127,9 +127,106 @@ public class AnalisadorSemantico implements Dicionario{
                 }
             }
 
+            else if (t.getIdUnico() == TK_PROGRAMA){
+                //Quando funcoes sao alcancadas, seta a flag pra true, para criacao do contexto global
+                if (!funcoesAlcancadas){
+                    funcoesAlcancadas = true;
+
+                    //Acredito que os tipos de funcoes devem sempre ficar num escopo global, entao tecnicamente...
+                    //Sempre havera um escopo global, pelo menos com as funcoes
+                    if (tabelaGlobal == null)
+                        tabelaGlobal = tabela;
+                }
+
+                cont++;
+                t = tokens.get(cont);
+
+                if (t.getIdUnico() == TK_INICIO)
+                    criaNovoEscopo(true);
+            }
+
+            else if (t.getIdUnico() == TK_FUNCAO){
+                //Quando funcoes sao alcancadas, seta a flag pra true, para criacao do contexto global
+                if (!funcoesAlcancadas){
+                    funcoesAlcancadas = true;
+
+                    //Acredito que os tipos de funcoes devem sempre ficar num escopo global, entao tecnicamente...
+                    //Sempre havera um escopo global, pelo menos com as funcoes
+                    if (tabelaGlobal == null)
+                        tabelaGlobal = tabela;
+                }
+
+                valor = "";
+                tipoAtual = 0;
+                cont++;
+                t = tokens.get(cont);
+
+                //Se a funcao tem um retorno (tipo de retorno)
+                if (ehTipo()){
+                    tipoAtual = t.getIdUnico();
+                    cont++;
+                    t = tokens.get(cont);
+                }
+
+                //Pega identificador
+                identificador = t.getLexema();
+                cont++;
+                t = tokens.get(cont);
+
+                //Pula o abre parentese
+                cont++;
+                t = tokens.get(cont);
+
+                while (t.getIdUnico() != TK_PARENTESE_F){
+                    //Pega o tipo do parametro
+                    t = tokens.get(cont);
+                    tipoParametros.add(t.getIdUnico());
+                    cont++;
+
+                    t = tokens.get(cont);
+
+                    //Pega o identificador do parametro
+                    String acumulador ="";
+                    while (!checaTerminadoresParametros()){
+                        acumulador+= t.getLexema();
+                        cont++;
+                        t = tokens.get(cont);
+                    }
+                    idParametros.add(acumulador);
+                    acumulador = "";
+                    if (t.getIdUnico() == TK_VIRGULA)
+                        cont++;
+                }
+
+                //Cria o simbolo da funcao, adicionando na tabela global !
+                Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor,tabelaGlobal);
+                simbolo.setEhFuncao(true);
+                //Adiciona a lista de parametros
+                for (int i =0; i<idParametros.size();i++){
+                    String id = idParametros.get(i);
+                    int tipo = tipoParametros.get(i);
+                    Simbolo s = new Simbolo(id, tipo, valor);
+                    simbolo.getParametros().add(s);
+                }
+                //Saindo do fecha parentese
+                cont++;
+                t = tokens.get(cont);
+
+                 //o token agora eh inicio
+                 criaNovoEscopo(true);
+
+                 //Pelo que eu havia discutido com Seara, sempre que receber parametros em uma funcao
+                 //As variaveis vindas do parametro devem estar no escopo da funcao.
+                 for (Simbolo sim : simbolo.getParametros())
+                     criaSimbolo(sim.getId(), sim.getTipo(), sim.getValor());
+
+                //Continua a analise normal de agora em diante
+            }
+
+
         }
         //Salva o ultimo escopo (salva o escopo da main)
-        //criaNovoEscopo(false);
+        criaNovoEscopo(false);
     }
 
     private Simbolo criaSimbolo(String id, int tipo, String valor){
@@ -259,110 +356,6 @@ public class AnalisadorSemantico implements Dicionario{
     }
 
     public void iniciarAnalise(){
-
-        for (cont = 0; cont < tokens.size(); cont++) {
-            t = tokens.get(cont);
-
-            if (t.getIdUnico() == TK_PROGRAMA) {
-                //Quando funcoes sao alcancadas, seta a flag pra true, para criacao do contexto global
-                if (!funcoesAlcancadas) {
-                    funcoesAlcancadas = true;
-
-                    //Acredito que os tipos de funcoes devem sempre ficar num escopo global, entao tecnicamente...
-                    //Sempre havera um escopo global, pelo menos com as funcoes
-                    if (tabelaGlobal == null)
-                        tabelaGlobal = tabela;
-
-                }
-
-                cont++;
-                t = tokens.get(cont);
-
-                if (t.getIdUnico() == TK_INICIO)
-                    criaNovoEscopo(true);
-
-            }
-            else if (t.getIdUnico() == TK_FUNCAO) {
-                //Quando funcoes sao alcancadas, seta a flag pra true, para criacao do contexto global
-                if (!funcoesAlcancadas) {
-                    funcoesAlcancadas = true;
-
-                    //Acredito que os tipos de funcoes devem sempre ficar num escopo global, entao tecnicamente...
-                    //Sempre havera um escopo global, pelo menos com as funcoes
-                    if (tabelaGlobal == null)
-                        tabelaGlobal = tabela;
-
-                }
-
-                valor = "";
-                tipoAtual = 0;
-                cont++;
-                t = tokens.get(cont);
-
-                //Se a funcao tem um retorno (tipo de retorno)
-                if (ehTipo()) {
-                    tipoAtual = t.getIdUnico();
-                    cont++;
-                    t = tokens.get(cont);
-                }
-
-                //Pega identificador
-                identificador = t.getLexema();
-                cont++;
-                t = tokens.get(cont);
-
-                //Pula o abre parentese
-                cont++;
-                t = tokens.get(cont);
-
-                while (t.getIdUnico() != TK_PARENTESE_F) {
-                    //Pega o tipo do parametro
-                    t = tokens.get(cont);
-                    tipoParametros.add(t.getIdUnico());
-                    cont++;
-
-                    t = tokens.get(cont);
-
-                    //Pega o identificador do parametro
-                    String acumulador = "";
-                    while (!checaTerminadoresParametros()) {
-                        acumulador += t.getLexema();
-                        cont++;
-                        t = tokens.get(cont);
-                    }
-                    idParametros.add(acumulador);
-                    acumulador = "";
-                    if (t.getIdUnico() == TK_VIRGULA)
-                        cont++;
-
-                }
-
-                //Cria o simbolo da funcao, adicionando na tabela global !
-                Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor, tabelaGlobal);
-                simbolo.setEhFuncao(true);
-                //Adiciona a lista de parametros
-                for (int i = 0; i < idParametros.size(); i++) {
-                    String id = idParametros.get(i);
-                    int tipo = tipoParametros.get(i);
-                    Simbolo s = new Simbolo(id, tipo, valor);
-                    simbolo.getParametros().add(s);
-                }
-                //Saindo do fecha parentese
-                cont++;
-                t = tokens.get(cont);
-
-                //o token agora eh inicio
-                criaNovoEscopo(true);
-
-                //Pelo que eu havia discutido com Seara, sempre que receber parametros em uma funcao
-                //As variaveis vindas do parametro devem estar no escopo da funcao.
-                for (Simbolo sim : simbolo.getParametros())
-                    criaSimbolo(sim.getId(), sim.getTipo(), sim.getValor());
-                
-
-                //Continua a analise normal de agora em diante
-            }
-        }
 
     }
 
