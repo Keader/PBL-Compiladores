@@ -1,6 +1,6 @@
 package AnalisadorSintatico;
 
-import AnalisadorSemantico.TabelaDeSimbolos;
+import AnalisadorSemantico.AnalisadorSemantico;
 import static Util.Dicionario.getIdProducao;
 
 import java.io.BufferedWriter;
@@ -167,7 +167,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                 bw.write("Sucesso!");
                 bw.flush();
 
-                montarTabela();
+                iniciarAnaliseSemantica();
             }
             else {
                 for (ErroSintatico erro : erros) {
@@ -182,80 +182,9 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
         }
     }
 
-    private synchronized void montarTabela(){
-        TabelaDeSimbolos tabela = new TabelaDeSimbolos(tokens);
-        tabela.montarTabela();
-        /*
-    	int tipoAtual = 0;
-    	String identificador = "";
-    	String valor = "";
-    	boolean comecouTipo = false, vaiVirId = false, vaiVirValor = false, vaiVirFuncao = false;
-    	List<Hashtable<String, Simbolo>> tabelas = new ArrayList<>();
-    	Hashtable<String, Simbolo> tabela = new Hashtable<>();
-
-    	Simbolo simbolo;
-    	//Percorre a lista de tokens.
-    	for(Token t : tokens){
-    		//se ja comecou um tipo (EX.: inteiro a, b, c, d;
-    		if(comecouTipo){
-    			//pegando o id
-      			if(vaiVirId){
-    				identificador = t.getLexema();
-    				vaiVirId = false;
-    				continue;
-    			}
-      			//pegando o valor
-      			else if(vaiVirValor) {
-      				valor = t.getLexema();
-      				vaiVirValor = false;
-
-      				if(!tabela.contains(identificador)){
-        				simbolo = new Simbolo(identificador, tipoAtual, valor);
-        				tabela.put(identificador, simbolo);
-        				System.out.println(simbolo);
-        			}
-      				else {
-      					System.out.println("O identificador: "+identificador+" ja esta em uso.");
-      				}
-      				continue;
-      			}
-
-    			//se achar um ponto e virgula deixou de achar o tipo
-    			if(t.getIdUnico() == TK_PONTOVIRGULA) {
-    				comecouTipo = false;
-    				identificador = "";
-    				valor = "";
-    			}
-    			else if (t.getIdUnico() == TK_VIRGULA)
-    				vaiVirId = true;
-    			else if(t.getIdUnico() == TK_IGUAL)
-    				vaiVirValor = true;
-    		}
-    		else if(t.getIdUnico() == TK_INTEIRO || t.getIdUnico() == TK_REAL || t.getIdUnico() == TK_CADEIA || t.getIdUnico() == TK_CARACTERE || t.getIdUnico() == TK_VERDADEIRO || t.getIdUnico() == TK_FALSO) {
-    			comecouTipo = true;
-    			vaiVirId = true;
-    			tipoAtual = t.getIdUnico();
-    		}
-    		//se comecar um novo escopo
-    		else if (t.getIdUnico() == TK_INICIO){
-    		    //se a tabela nao existe nas tabelas adiciona
-    			if(!tabelas.contains(tabela))
-    				tabelas.add(tabela);
-				//criando uma nova tabela de simbolos do escopo
-				tabela = new Hashtable<>();
-    		}
-    		//se achar um fim termina um escopo
-    		else if (t.getIdUnico() == TK_FIM){
-    			//pegando a tabela do ultimo escopo
-    			Hashtable<String, Simbolo> auxT = !tabelas.isEmpty() ? tabelas.get(tabelas.size() -1) : tabelas.get(0);
-
-    		    //se a tabela nao existe nas tabelas adiciona
-       			if(!tabelas.contains(tabela))
-    				tabelas.add(tabela);
-				tabela = auxT;
-    		}
-    	}
-    	System.out.println(tabelas.size());*/
+    private synchronized void iniciarAnaliseSemantica(){
+        AnalisadorSemantico analisador = new AnalisadorSemantico(tokens);
+        analisador.iniciarAnalise();
     }
 
     public synchronized void gerarProducao(int valor) {

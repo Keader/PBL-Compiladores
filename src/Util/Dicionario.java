@@ -212,8 +212,17 @@ public interface Dicionario {
     public static final int VOLTA_PRO_PAI                        = 226;
 
     //Semantico
-
-     public static final int ESCOPO_GLOBAL                       = 0;
+     public static final int ESCOPO_GLOBAL                       =  0;
+     public static final int VAR_NAO_DECL                        =  1;
+     public static final int FUNC_NAO_DECL                       =  2;
+     public static final int ATRIBUICAO_INVALIDA                 =  3;
+     public static final int OPC_INVALIDA                        =  4;
+     public static final int VAR_JA_DECL                         =  5;
+     public static final int DIFF_DIMENSOES                      =  6;
+     public static final int RETORNO_INVALIDO                    =  7;
+     public static final int TIPOS_INCOMPATIVEIS                 =  8;
+     public static final int QNT_PARAM_INVALIDOS                 =  9;
+     public static final int TIPOS_PARAM_INVALIDOS               = 10;
 
     //Enums
     public enum PadraoRegex {
