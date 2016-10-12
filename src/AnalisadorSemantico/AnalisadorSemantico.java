@@ -90,7 +90,7 @@ public class AnalisadorSemantico implements Dicionario{
                     }
                 }
             }
-            
+
             else if (t.getIdUnico() == TK_VAR){
                 //Se as funcoes nao foram alcansadas ainda, significa que existe escopo global
                 if (!funcoesAlcancadas)
@@ -230,7 +230,9 @@ public class AnalisadorSemantico implements Dicionario{
             }
         }
         //Salva o ultimo escopo (salva o escopo da main)
-        criaNovoEscopo(false);
+        //Condicao para quando so existe o escopo main :)
+        if (tabelas.size() > 1)
+            criaNovoEscopo(false);
     }
 
     private Simbolo criaSimbolo(String id, int tipo, String valor){
