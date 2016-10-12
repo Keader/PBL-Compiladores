@@ -212,6 +212,7 @@ public interface Dicionario {
     public static final int VOLTA_PRO_PAI                        = 226;
 
     //Semantico
+     public static final int TIPO_VAZIO                          = -1;
      public static final int ESCOPO_GLOBAL                       =  0;
      public static final int VAR_NAO_DECL                        =  1;
      public static final int FUNC_NAO_DECL                       =  2;
@@ -223,6 +224,8 @@ public interface Dicionario {
      public static final int TIPOS_INCOMPATIVEIS                 =  8;
      public static final int QNT_PARAM_INVALIDOS                 =  9;
      public static final int TIPOS_PARAM_INVALIDOS               = 10;
+     public static final int VAR_NAO_INICIALIZADA                = 11;
+
 
     //Enums
     public enum PadraoRegex {
@@ -908,6 +911,8 @@ public interface Dicionario {
                 return "R_TIPO_C4";
             case R_TIPO_C5:
                 return "R_TIPO_C5";
+            case TIPO_VAZIO:
+                return " ";
             default:
                 return "";
         }

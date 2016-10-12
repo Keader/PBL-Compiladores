@@ -84,7 +84,7 @@ public class Simbolo implements Dicionario{
     public List<Simbolo> getParametros() {
         return parametros;
     }
-    
+
 	public String toString(){
         if (ehMatriz){
             return  "["+ conversorIdString(tipo) +"]  [D:" +dimensoes+"] " + id + " = " + valor;
