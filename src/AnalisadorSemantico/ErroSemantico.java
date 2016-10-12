@@ -62,7 +62,9 @@ public class ErroSemantico implements Dicionario{
             case QNT_PARAM_INVALIDOS:
                 return "Quantidade de parametros invalidos na linha: "+linha+" na funcao: "+error;
             case TIPOS_PARAM_INVALIDOS:
-                return "Tipos de parametros invalidos na funcao: "+error+" na linha: "+error;
+                return "Tipos de parametros invalidos na funcao: "+error+" na linha: "+linha;
+            case VAR_NAO_INICIALIZADA:
+                return "A variavel: "+error+" usada na linha: "+linha+" nao foi inicializada";
             default:
                 return "Unknown";
         }
