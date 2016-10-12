@@ -56,6 +56,8 @@ public class AnalisadorSemantico implements Dicionario{
                 //Se as funcoes nao foram alcansadas ainda, significa que existe escopo global
                 if (!funcoesAlcancadas)
                     tabelaGlobal = tabela;
+                else
+                    continue;
 
                 //Pula o const e o inicio
                 cont += 2;
@@ -84,13 +86,17 @@ public class AnalisadorSemantico implements Dicionario{
                     else if (t.getIdUnico() == TK_PONTOVIRGULA) {
                         tipoAtual = 0;
                         cont++;
+                        t = tokens.get(cont);
                     }
                 }
             }
+            
             else if (t.getIdUnico() == TK_VAR){
                 //Se as funcoes nao foram alcansadas ainda, significa que existe escopo global
                 if (!funcoesAlcancadas)
                     tabelaGlobal = tabela;
+                else
+                    continue;
 
                 //Pula o var e o inicio
                 cont += 2;
@@ -222,8 +228,6 @@ public class AnalisadorSemantico implements Dicionario{
 
                 //Continua a analise normal de agora em diante
             }
-
-
         }
         //Salva o ultimo escopo (salva o escopo da main)
         criaNovoEscopo(false);
@@ -309,7 +313,7 @@ public class AnalisadorSemantico implements Dicionario{
         cont++;
 
         //atualiza o tokenAtual para a virgula ou ponto e virgula.
-         t = tokens.get(cont);
+        t = tokens.get(cont);
 
         Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor);
 
