@@ -28,6 +28,8 @@ public class AnalisadorSemantico implements Dicionario{
     private Hashtable<String, Simbolo> tabelaGlobal;
     private boolean funcoesAlcancadas;
     private List<ErroSemantico> erros;
+    private boolean retorno;
+    private String funcaoAtual;
 
     public AnalisadorSemantico(List<Token> lTokens){
         tokens = new ArrayList<>();
@@ -45,6 +47,8 @@ public class AnalisadorSemantico implements Dicionario{
         tabelaGlobal = null;
         funcoesAlcancadas = false;
         montarTabela();
+        retorno = false;
+        funcaoAtual = "";
     }
 
     private synchronized void montarTabela(){
@@ -92,7 +96,7 @@ public class AnalisadorSemantico implements Dicionario{
             }
 
             else if (t.getIdUnico() == TK_VAR){
-                //Se as funcoes nao foram alcansadas ainda, significa que existe escopo global
+                //Se as funcoes nao foram alcancadas ainda, significa que existe escopo global
                 if (!funcoesAlcancadas)
                     tabelaGlobal = tabela;
                 else
@@ -247,7 +251,7 @@ public class AnalisadorSemantico implements Dicionario{
         for (cont = 0; cont < tokens.size(); cont++) {
 
             t = tokens.get(cont);
-
+             //Identifica variaveis dentro de funcoes
              if (t.getIdUnico() == TK_VAR){
                 //Se nao veio funcoes, significa que eh variavel global, essas ja foram adicionadas na tabela.
                 if (!funcoesAlcancadas){
@@ -291,11 +295,16 @@ public class AnalisadorSemantico implements Dicionario{
                     }
                 }
             }
-
+            //Atualiza a tabela para o escopo atual e pula os parametros
             else if (t.getIdUnico() == TK_FUNCAO || t.getIdUnico() == TK_PROGRAMA){
                 funcoesAlcancadas = true;
+                boolean idAlcancado = false;
                 //Ignora tipo e parametros (ja foram adicionados)
                 while (t.getIdUnico() != TK_INICIO){
+                    if (t.getIdUnico() == TK_ID && !idAlcancado){
+                        idAlcancado = true;
+                        funcaoAtual = t.getLexema();
+                    }
                     cont++;
                     t = tokens.get(cont);
                 }
@@ -304,10 +313,10 @@ public class AnalisadorSemantico implements Dicionario{
             }
 
             //Analise de Corpo
-            else{
+            else {
                 identificador = "";
 
-                //Comeca com Identificador
+                //Comeca com identificador, logo eh chamada de funcao ou atribuicao.
                 if (t.getIdUnico() == TK_ID){
                     identificador = t.getLexema();
                     //Pula o identificador
@@ -327,8 +336,64 @@ public class AnalisadorSemantico implements Dicionario{
                         t = tokens.get(cont);
                     }
 
-                    else if (t.getIdUnico() == TK_IGUAL)
-                        System.out.println("Faz nada ainda");
+                    //Eh uma atribuicao
+                    else if (t.getIdUnico() == TK_IGUAL){
+                        System.out.println("Nao faz nada ainda");
+                    }
+                }
+
+                //Se comeca com Igual, eh retorno
+                else if (t.getIdUnico() == TK_IGUAL){
+                    //Pula o igual e o maior
+                    cont+=2;
+                    t = tokens.get(cont);
+
+                    int contadorDimensoes = 0;
+                    //Lidar com matrizes
+                    if (t.getIdUnico() == TK_MENOR){
+                        //Pula os 2 menores
+                        cont+=2;
+                        t = tokens.get(cont);
+
+                        while(t.getIdUnico() != TK_MAIOR){
+                            if (t.getIdUnico() != TK_VIRGULA)
+                                contadorDimensoes++;
+
+                            cont++;
+                            t = tokens.get(cont);
+                        }
+                        //Pula os 2 maior
+                        cont+=2;
+                        t = tokens.get(cont);
+                    }
+
+                    Simbolo variavel = tabela.get(t.getLexema());
+                    //Teoricamente, tabelado nunca sera null.
+                    Simbolo tabelado = tabelaGlobal.get(funcaoAtual);
+
+                    //Cuida de tipos padroes, caracteres, inteiros, etc.
+                    if (ehLiteral(t.getIdUnico()))
+                        variavel = new Simbolo(t.getLexema(), converteTipo(t), t.getLexema());
+
+                    //Variavel/Const nao existe no escopo local
+                    if (variavel == null) {
+                        //Verifica no escopo global
+                        variavel = tabelaGlobal.get(t.getLexema());
+                        if (variavel == null) {
+                            erros.add(new ErroSemantico(t.getLexema(), VAR_NAO_DECL, t.getnLinha()));
+                            return;
+                        }
+                    }
+
+                    if (variavel.ehMatriz())
+                        if (variavel.getDimensoes() != contadorDimensoes)
+                            erros.add(new ErroSemantico(t.getLexema(), DIFF_DIMENSOES, t.getnLinha()));
+
+                    if (variavel.getTipo() != tabelado.getTipo())
+                        erros.add(new ErroSemantico(t.getLexema(), RETORNO_INVALIDO, t.getnLinha()));
+
+                    cont+=2;
+                    t = tokens.get(cont);
                 }
             }
         }
