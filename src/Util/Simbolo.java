@@ -65,7 +65,7 @@ public class Simbolo implements Dicionario{
         this.ehFuncao = ehFuncao;
     }
 
-    public boolean isEhConstante() {
+    public boolean ehConstante() {
         return ehConstante;
     }
 

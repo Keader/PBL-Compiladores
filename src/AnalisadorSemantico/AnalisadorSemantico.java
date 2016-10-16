@@ -30,6 +30,7 @@ public class AnalisadorSemantico implements Dicionario{
     private List<ErroSemantico> erros;
     private boolean retorno;
     private String funcaoAtual;
+    private int contadorDeDimensoes;
 
     public AnalisadorSemantico(List<Token> lTokens){
         tokens = new ArrayList<>();
@@ -49,6 +50,7 @@ public class AnalisadorSemantico implements Dicionario{
         montarTabela();
         retorno = false;
         funcaoAtual = "";
+        contadorDeDimensoes = 0;
     }
 
     private synchronized void montarTabela(){
@@ -209,7 +211,7 @@ public class AnalisadorSemantico implements Dicionario{
                 }
 
                 //Cria o simbolo da funcao, adicionando na tabela global !
-                Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor,tabelaGlobal);
+                Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor,tabelaGlobal, t.getnLinha());
                 simbolo.setEhFuncao(true);
                 //Adiciona a lista de parametros
                 for (int i =0; i<idParametros.size();i++) {
@@ -232,7 +234,7 @@ public class AnalisadorSemantico implements Dicionario{
                  //Pelo que eu havia discutido com Seara, sempre que receber parametros em uma funcao
                  //As variaveis vindas do parametro devem estar no escopo da funcao.
                  for (Simbolo sim : simbolo.getParametros())
-                     criaSimbolo(sim.getId(), sim.getTipo(), sim.getValor());
+                     criaSimbolo(sim.getId(), sim.getTipo(), sim.getValor(), t.getnLinha());
 
                 //Continua a analise normal de agora em diante
             }
@@ -348,23 +350,9 @@ public class AnalisadorSemantico implements Dicionario{
                     cont+=2;
                     t = tokens.get(cont);
 
-                    int contadorDimensoes = 0;
                     //Lidar com matrizes
                     if (t.getIdUnico() == TK_MENOR){
-                        //Pula os 2 menores
-                        cont+=2;
-                        t = tokens.get(cont);
-
-                        while(t.getIdUnico() != TK_MAIOR){
-                            if (t.getIdUnico() != TK_VIRGULA)
-                                contadorDimensoes++;
-
-                            cont++;
-                            t = tokens.get(cont);
-                        }
-                        //Pula os 2 maior
-                        cont+=2;
-                        t = tokens.get(cont);
+                        verificaTamanhoMatriz();
                     }
 
                     Simbolo variavel = tabela.get(t.getLexema());
@@ -385,15 +373,53 @@ public class AnalisadorSemantico implements Dicionario{
                         }
                     }
 
-                    if (variavel.ehMatriz())
-                        if (variavel.getDimensoes() != contadorDimensoes)
-                            erros.add(new ErroSemantico(t.getLexema(), DIFF_DIMENSOES, t.getnLinha()));
+                    if (variavel.ehMatriz() && variavel.getDimensoes() != contadorDeDimensoes)
+                        erros.add(new ErroSemantico(t.getLexema(), DIFF_DIMENSOES, t.getnLinha()));
 
                     if (variavel.getTipo() != tabelado.getTipo())
                         erros.add(new ErroSemantico(t.getLexema(), RETORNO_INVALIDO, t.getnLinha()));
 
                     cont+=2;
                     t = tokens.get(cont);
+                }
+
+                else if (t.getIdUnico() == TK_LEIA){
+                    //Pula o leia e o abre parentese
+                    cont+=2;
+                    t = tokens.get(cont);
+                    while (t.getIdUnico() != TK_PARENTESE_F) {
+
+                        if (t.getIdUnico() == TK_VIRGULA){
+                            cont++;
+                            t = tokens.get(cont);
+                            continue;
+                        }
+
+                        //Lidar com matrizes
+                        if (t.getIdUnico() == TK_MENOR)
+                            verificaTamanhoMatriz();
+
+                        Simbolo variavel = tabela.get(t.getLexema());
+
+                        //Variavel/Const nao existe no escopo local
+                        if (variavel == null) {
+                            //Verifica no escopo global
+                            variavel = tabelaGlobal.get(t.getLexema());
+                            if (variavel == null) {
+                                erros.add(new ErroSemantico(t.getLexema(), VAR_NAO_DECL, t.getnLinha()));
+                                return;
+                            }
+                        }
+
+                        if (variavel.ehMatriz() && variavel.getDimensoes() != contadorDeDimensoes)
+                            erros.add(new ErroSemantico(t.getLexema(), DIFF_DIMENSOES, t.getnLinha()));
+
+                        else if (variavel.ehConstante())
+                            erros.add(new ErroSemantico (t.getLexema(), ATRIBUICAO_INVALIDA, t.getnLinha()));
+
+                        cont++;
+                        t = tokens.get(cont);
+                    }
                 }
             }
         }
@@ -402,6 +428,25 @@ public class AnalisadorSemantico implements Dicionario{
         else
             for(ErroSemantico erro: erros)
                 System.out.println(erro);
+    }
+
+    private void verificaTamanhoMatriz(){
+        contadorDeDimensoes = 0;
+        //Pula os 2 menores
+        cont += 2;
+        t = tokens.get(cont);
+
+        while (t.getIdUnico() != TK_MAIOR) {
+            if (t.getIdUnico() != TK_VIRGULA)
+                contadorDeDimensoes++;
+
+            cont++;
+            t = tokens.get(cont);
+        }
+        //Pula os 2 maior
+        cont += 2;
+        t = tokens.get(cont);
+
     }
 
     private void verificaFuncao(String identificador) {
@@ -486,28 +531,44 @@ public class AnalisadorSemantico implements Dicionario{
 
     }
 
-    private Simbolo criaSimbolo(String id, int tipo, String valor){
+    private Simbolo criaSimbolo(String id, int tipo, String valor, int linha){
         Simbolo simbolo = new Simbolo(id, tipo, valor);
 
-        if(!tabela.contains(id)){
-            tabela.put(id,simbolo);
-             System.out.println(simbolo);
+        if (tabelaGlobal.containsKey(id)){
+            Simbolo sim = tabelaGlobal.get(id);
+            if (sim.ehFuncao()){
+                erros.add(new ErroSemantico(simbolo.getId(), VAR_JA_DECL, linha));
+                return simbolo;
+            }
+        }
+
+        if(!tabela.containsKey(id)){
+                tabela.put(id, simbolo);
+                System.out.println(simbolo);
         }
         else
-            System.err.println("O Token de identificador: "+id+" ja foi definido");
+            erros.add(new ErroSemantico(simbolo.getId(), VAR_JA_DECL, linha));
 
         return simbolo;
     }
 
-    private Simbolo criaSimbolo(String id, int tipo, String valor, Hashtable<String, Simbolo> tabelaE){
+    private Simbolo criaSimbolo(String id, int tipo, String valor, Hashtable<String, Simbolo> tabelaE, int linha){
         Simbolo simbolo = new Simbolo(id, tipo, valor);
 
-        if(!tabelaE.contains(id)){
+         if (tabelaGlobal.containsKey(id)){
+            Simbolo sim = tabelaGlobal.get(id);
+            if (sim.ehFuncao()){
+                erros.add(new ErroSemantico(simbolo.getId(), VAR_JA_DECL, linha));
+                return simbolo;
+            }
+        }
+
+        if(!tabelaE.containsKey(id)){
             tabelaE.put(id,simbolo);
              System.out.println(simbolo);
         }
         else
-            System.err.println("O Token de identificador: "+id+" ja foi definido");
+            erros.add(new ErroSemantico(simbolo.getId(), VAR_JA_DECL, linha));
 
         return simbolo;
     }
@@ -531,7 +592,7 @@ public class AnalisadorSemantico implements Dicionario{
             t = tokens.get(cont);
         }
 
-        Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor);
+        Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor, t.getnLinha());
         simbolo.setEhConstante(true);
     }
 
@@ -568,7 +629,7 @@ public class AnalisadorSemantico implements Dicionario{
         //atualiza o tokenAtual para a virgula ou ponto e virgula.
         t = tokens.get(cont);
 
-        Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor);
+        Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor, t.getnLinha());
 
         if (dimensoes > 0){
             simbolo.setEhMatriz(true);

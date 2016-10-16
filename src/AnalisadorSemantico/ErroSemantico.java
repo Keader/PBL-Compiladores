@@ -52,7 +52,7 @@ public class ErroSemantico implements Dicionario{
             case OPC_INVALIDA:
                 return "Foi detectado uma operacao invalida na linha: "+linha;
             case VAR_JA_DECL:
-                return "A variavel: "+error+" declarada na linha: "+linha+" ja havia sido declarada";
+                return "A variavel/funcao/constante: "+error+" declarada na linha: "+linha+" ja havia sido declarada";
             case DIFF_DIMENSOES:
                 return "Quantidade de dimensoes usadas no Array/Matriz: "+error+" invalido(s), na linha: "+linha;
             case RETORNO_INVALIDO:
