@@ -208,7 +208,7 @@ public class AnalisadorSemantico implements Dicionario{
                 Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor,tabelaGlobal);
                 simbolo.setEhFuncao(true);
                 //Adiciona a lista de parametros
-                for (int i =0; i<idParametros.size();i++){
+                for (int i =0; i<idParametros.size();i++) {
                     String id = idParametros.get(i);
                     int tipo = tipoParametros.get(i);
                     Simbolo s = new Simbolo(id, tipo, valor);
@@ -216,6 +216,8 @@ public class AnalisadorSemantico implements Dicionario{
                     if (id.contains("<<"))
                         s.setEhMatriz(true);
                 }
+                idParametros.clear();
+                tipoParametros.clear();
                 //Saindo do fecha parentese
                 cont++;
                 t = tokens.get(cont);
@@ -318,7 +320,7 @@ public class AnalisadorSemantico implements Dicionario{
                     if (t.getIdUnico() == TK_PARENTESE_A) {
                         //Saindo da verificaFuncao, sempre o Token estara em fecha parentese.
                         //E neste caso, sempre apos o fecha parentese vira um ponto e virgula.
-                        verificaFuncao();
+                        verificaFuncao(identificador);
 
                         //Pula ponto e virgula
                         cont++;
@@ -337,13 +339,10 @@ public class AnalisadorSemantico implements Dicionario{
                 System.out.println(erro);
     }
 
-    private void verificaFuncao() {
+    private void verificaFuncao(String identificador) {
         //Se a funcao existe
         if (tabelaGlobal.containsKey(identificador)) {
             Simbolo simbolo = tabelaGlobal.get(identificador);
-            int contParametro;
-            String id = "";
-            int tipo;
             List<Simbolo> parametros = new ArrayList<>();
 
             //Checa parametros
@@ -352,6 +351,10 @@ public class AnalisadorSemantico implements Dicionario{
                 t = tokens.get(cont);
 
                 Simbolo variavel = tabela.get(t.getLexema());
+
+                //Cuida de tipos padroes, caracteres, inteiros, etc.
+                if (ehLiteral(t.getIdUnico()))
+                    variavel = new Simbolo(t.getLexema(), converteTipo(t), t.getLexema());
 
                 //Variavel/Const nao existe no escopo local
                 if (variavel == null) {
@@ -368,37 +371,27 @@ public class AnalisadorSemantico implements Dicionario{
                     }
                 }
 
-                /*
-                Precisa fazer a parte de atribuicao antes de descomentar isso
-                //Variavel nao inicializada
-                if (variavel.getValor().equals("")){
-                    erros.add(new ErroSemantico(variavel.getId(), VAR_NAO_INICIALIZADA, t.getnLinha()));
-                    while (t.getIdUnico() != TK_PARENTESE_F) {
-                            cont++;
-                            t = tokens.get(cont);
-                        }
-                        return;
+                //Lida com funcoes dentro de funcoes
+                if (variavel.ehFuncao()){
+                    String funcao = variavel.getId();
+                    //A funcao VerificaFuncao sempre comeca a analisar como o "token atual" sendo (
+                    //Entao avancando a entrada...
+                    cont++;
+                    t = tokens.get(cont);
+                    verificaFuncao(funcao);
                 }
-                */
 
-                //Pega o tipo
-                tipo = variavel.getTipo();
-                //Pega o identificador
+                //Move a entrada consumindo coisas relacionada a variavel
                 while (!checaTerminadoresParametros()) {
-                    id += t.getLexema();
                     cont++;
                     t = tokens.get(cont);
                 }
-                //Cria o simbolo e verifica se eh matriz
-                Simbolo s = new Simbolo(id, tipo, "");
-                parametros.add(s);
-                if (id.contains("<<"))
-                    s.setEhMatriz(true);
+                parametros.add(variavel);
 
             }
             //Checa quantidade de parametros
             if (parametros.size() != simbolo.getParametros().size()){
-                erros.add(new ErroSemantico(id, QNT_PARAM_INVALIDOS, t.getnLinha()));
+                erros.add(new ErroSemantico(simbolo.getId(), QNT_PARAM_INVALIDOS, t.getnLinha()));
                 //Ignora todos os parametros
                 while (t.getIdUnico() != TK_PARENTESE_F){
                     cont++;
@@ -414,12 +407,12 @@ public class AnalisadorSemantico implements Dicionario{
 
                 //Se um for matriz e o outro nao
                 if (tabelado.ehMatriz() && !parametro.ehMatriz() || parametro.ehMatriz() && !tabelado.ehMatriz())
-                    erros.add(new ErroSemantico(id, TIPOS_PARAM_INVALIDOS, t.getnLinha()));
+                    erros.add(new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha()));
 
 
                 //Se tiverem tipos diferentes
                 if (tabelado.getTipo() != parametro.getTipo())
-                    erros.add(new ErroSemantico(id, TIPOS_PARAM_INVALIDOS, t.getnLinha()));
+                    erros.add(new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha()));
 
             }
         } //Funcao nao declarada
@@ -522,6 +515,10 @@ public class AnalisadorSemantico implements Dicionario{
 
     private boolean ehTipo(){
         return t.getIdUnico() == TK_INTEIRO || t.getIdUnico() == TK_REAL || t.getIdUnico() == TK_CADEIA || t.getIdUnico() == TK_CARACTERE || t.getIdUnico() == TK_BOOLEANO;
+    }
+
+    private boolean ehLiteral(int tipo){
+        return tipo == TK_CADEIA_DE_CARACTERES || tipo == TK_CARACTERE_L || tipo == TK_NUMERO || tipo == TK_VERDADEIRO || tipo == TK_FALSO;
     }
 
     private boolean checaTerminadores(){

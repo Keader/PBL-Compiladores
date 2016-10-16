@@ -102,13 +102,15 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                 }
 
                 pilha.pop();
-            } else {
+            }
+            else {
                 int producao = getIdProducao(pilha.peek(), tokenAtual);
 
                 if (producao != -1) {
                     gerarProducao(producao);
                     arvore.add(producao);
-                } //Gerou producao -1
+                }
+                //Gerou producao -1
                 else {
                     //Pega Lista de First da producao atual e a lista de Syncs
                     List<Integer> firsts = SincronizadorSintaticoFirst.getFirst(pilha.peek());
@@ -122,10 +124,13 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
                     //Gera o Erro
                     erros.add(new ErroSintatico(firsts, tokens.get(posicao).getLexema(), tokens.get(posicao).getnLinha()));
 
-                    while (posicao <= maxQtdTokens) {
-                        if (firsts.contains(tokenAtual)) {
+                    //Certos erros entrara em loop infinito aqui
+                    //Mas a correcao de erro sintatico esta ruim de toda forma... nao irei perder tempo
+                    //Tentado corrigir isso :)
+                    //Corrigido o IndexOfBoundException aqui, descobri que tinha erro sem querer lol
+                    while (posicao < maxQtdTokens) {
+                        if (firsts.contains(tokenAtual))
                             break;
-                        }
 
                         if (sync.contains(tokenAtual)) {
                             pilha.pop();

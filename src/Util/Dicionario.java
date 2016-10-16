@@ -917,4 +917,25 @@ public interface Dicionario {
                 return "";
         }
     }
+
+    public static int converteTipo(Token token){
+
+        if (token.getIdUnico() == TK_NUMERO){
+            if (token.getTipo() == 0)
+                return TK_INTEIRO;
+            else if (token.getTipo() == 1)
+                return TK_REAL;
+        }
+
+        else if (token.getIdUnico() == TK_CARACTERE_L)
+            return TK_CARACTERE;
+
+        else if (token.getIdUnico() == TK_CADEIA_DE_CARACTERES)
+            return TK_CADEIA;
+
+        else if (token.getIdUnico() == TK_VERDADEIRO || token.getIdUnico() == TK_FALSO)
+            return TK_BOOLEANO;
+
+        return -1;
+    }
 }
