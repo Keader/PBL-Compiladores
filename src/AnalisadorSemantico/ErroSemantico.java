@@ -1,6 +1,7 @@
 package AnalisadorSemantico;
 
 import Util.Dicionario;
+import java.util.Objects;
 
 /**
  *
@@ -41,6 +42,32 @@ public class ErroSemantico implements Dicionario{
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ErroSemantico other = (ErroSemantico) obj;
+        if (this.tipo != other.tipo) {
+            return false;
+        }
+        if (this.linha != other.linha) {
+            return false;
+        }
+        if (!Objects.equals(this.error, other.error)) {
+            return false;
+        }
+        return true;
+    }
+
+
+
+    @Override
     public String toString(){
         switch (tipo){
             case VAR_NAO_DECL:
@@ -58,7 +85,7 @@ public class ErroSemantico implements Dicionario{
             case RETORNO_INVALIDO:
                 return "Retorno: "+error+" invalido na linha: "+linha;
             case TIPOS_INCOMPATIVEIS:
-                return "Tipos incompativeis detectado na linha: "+linha+" provado por: "+error;
+                return "Tipos incompativeis detectado na linha: "+linha+" provocado por: "+error;
             case QNT_PARAM_INVALIDOS:
                 return "Quantidade de parametros invalidos na linha: "+linha+" na funcao: "+error;
             case TIPOS_PARAM_INVALIDOS:

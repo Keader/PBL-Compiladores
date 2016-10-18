@@ -321,6 +321,7 @@ public class AnalisadorSemantico implements Dicionario{
                 //Comeca com identificador, logo eh chamada de funcao ou atribuicao.
                 if (t.getIdUnico() == TK_ID){
                     identificador = t.getLexema();
+                    int tipo = 0;
                     //Pula o identificador
                     cont++;
                     t = tokens.get(cont);
@@ -340,7 +341,14 @@ public class AnalisadorSemantico implements Dicionario{
 
                     //Eh uma atribuicao
                     else if (t.getIdUnico() == TK_IGUAL){
-                        System.out.println("Nao faz nada ainda");
+                        //Se funcoes nao foram alcadas, esta pegando as atribuicoes de const... entao pula
+                        if (!funcoesAlcancadas)
+                            continue;
+
+                        while (t.getIdUnico() != TK_PONTOVIRGULA){
+                            //TODO
+                        }
+
                     }
                 }
 
@@ -460,6 +468,10 @@ public class AnalisadorSemantico implements Dicionario{
                 cont++;
                 t = tokens.get(cont);
 
+                //Quando uma funcao nao tem parametros, acontece de PARENTESE_F ser a 1ª coisa que ele ler.
+                if (t.getIdUnico() == TK_PARENTESE_F)
+                    continue;
+
                 Simbolo variavel = tabela.get(t.getLexema());
 
                 //Cuida de tipos padroes, caracteres, inteiros, etc.
@@ -497,7 +509,6 @@ public class AnalisadorSemantico implements Dicionario{
                     t = tokens.get(cont);
                 }
                 parametros.add(variavel);
-
             }
             //Checa quantidade de parametros
             if (parametros.size() != simbolo.getParametros().size()){
@@ -526,8 +537,14 @@ public class AnalisadorSemantico implements Dicionario{
 
             }
         } //Funcao nao declarada
-        else
+        else{
             erros.add(new ErroSemantico(identificador, FUNC_NAO_DECL, t.getnLinha()));
+            //Ignora todos os parametros q ela pode ter
+            while (t.getIdUnico() != TK_PARENTESE_F){
+                cont++;
+                t = tokens.get(cont);
+            }
+        }
 
     }
 
@@ -611,8 +628,43 @@ public class AnalisadorSemantico implements Dicionario{
 
             while (t.getIdUnico() != TK_MAIOR){
                 //Ignora a virgula, para nao contar nas dimensoes
-                if (t.getIdUnico() != TK_VIRGULA)
+                if (t.getIdUnico() != TK_VIRGULA){
                     dimensoes++;
+                    //FALTA VERIFICAR QUANDO EH EXPRESSOES.
+
+
+                    //Eh uma variavel ou uma funcao
+                    if (t.getIdUnico() == TK_ID){
+                        String id = t.getLexema();
+
+                        //Pega o proximo elemento
+                        cont++;
+                        t = tokens.get(cont);
+
+                        if (t.getIdUnico() == TK_PARENTESE_A)
+                            verificaFuncao(id);
+
+                        Simbolo variavel = tabela.get(id);
+
+                        //Variavel/Const nao existe no escopo local
+                        if (variavel == null) {
+                            //Verifica no escopo global
+                            variavel = tabelaGlobal.get(id);
+                            if (variavel == null){
+                                ErroSemantico error = new ErroSemantico(id, VAR_NAO_DECL, t.getnLinha());
+                                if (!erros.contains(error))
+                                    erros.add(error);
+                            }
+                        }
+
+                        if (variavel != null && variavel.ehFuncao() && variavel.getTipo() != TK_INTEIRO)
+                            erros.add(new ErroSemantico(variavel.getId(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
+
+                        else if (variavel != null && variavel.getTipo() != TK_INTEIRO)
+                            erros.add(new ErroSemantico(t.getLexema(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
+                    }
+
+                }
 
                 cont++;
                 t = tokens.get(cont);
@@ -663,10 +715,7 @@ public class AnalisadorSemantico implements Dicionario{
      * @param novaTabela define se eh necessario criar um novo, ou apenas salvar o escopo atual.
      */
     private void criaNovoEscopo(boolean novaTabela) {
-        if (!tabelas.contains(tabela))
-            tabelas.add(tabela);
-        else
-            System.err.println("A tabela do escopo " +(tabelas.size()-1)+" ja existe");
+        tabelas.add(tabela);
 
         //Criando nova tabela de simbolos
         if (novaTabela)
