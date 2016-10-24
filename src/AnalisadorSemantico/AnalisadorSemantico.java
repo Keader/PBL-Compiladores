@@ -16,7 +16,7 @@ public class AnalisadorSemantico implements Dicionario{
 
     private int tipoAtual;
     private String identificador;
-    private String valor;
+    private List<Token> valor;
     private List<Token> tokens;
     private List<Hashtable<String, Simbolo>> tabelas;
     private Hashtable<String, Simbolo> tabela;
@@ -39,7 +39,7 @@ public class AnalisadorSemantico implements Dicionario{
         tabela = new Hashtable<>();
         cont = 0;
         identificador = "";
-        valor = "";
+        valor = new ArrayList<>();
         tipoAtual = 0;
         dimensoes = 0;
         tipoParametros = new ArrayList<>();
@@ -168,7 +168,7 @@ public class AnalisadorSemantico implements Dicionario{
                         tabelaGlobal = tabela;
                 }
 
-                valor = "";
+                valor = new ArrayList<>();
                 tipoAtual = TIPO_VAZIO;
                 cont++;
                 t = tokens.get(cont);
@@ -369,7 +369,7 @@ public class AnalisadorSemantico implements Dicionario{
 
                     //Cuida de tipos padroes, caracteres, inteiros, etc.
                     if (ehLiteral(t.getIdUnico()))
-                        variavel = new Simbolo(t.getLexema(), converteTipo(t), t.getLexema());
+                        variavel = new Simbolo(t.getLexema(), converteTipo(t), t);
 
                     //Variavel/Const nao existe no escopo local
                     if (variavel == null) {
@@ -476,7 +476,8 @@ public class AnalisadorSemantico implements Dicionario{
 
                 //Cuida de tipos padroes, caracteres, inteiros, etc.
                 if (ehLiteral(t.getIdUnico()))
-                    variavel = new Simbolo(t.getLexema(), converteTipo(t), t.getLexema());
+                    variavel = new Simbolo(t.getLexema(), converteTipo(t), t);
+
 
                 //Variavel/Const nao existe no escopo local
                 if (variavel == null) {
@@ -548,7 +549,7 @@ public class AnalisadorSemantico implements Dicionario{
 
     }
 
-    private Simbolo criaSimbolo(String id, int tipo, String valor, int linha){
+    private Simbolo criaSimbolo(String id, int tipo, List<Token> valor, int linha){
         Simbolo simbolo = new Simbolo(id, tipo, valor);
 
         if (tabelaGlobal.containsKey(id)){
@@ -569,7 +570,7 @@ public class AnalisadorSemantico implements Dicionario{
         return simbolo;
     }
 
-    private Simbolo criaSimbolo(String id, int tipo, String valor, Hashtable<String, Simbolo> tabelaE, int linha){
+    private Simbolo criaSimbolo(String id, int tipo, List<Token> valor, Hashtable<String, Simbolo> tabelaE, int linha){
         Simbolo simbolo = new Simbolo(id, tipo, valor);
 
          if (tabelaGlobal.containsKey(id)){
@@ -591,7 +592,7 @@ public class AnalisadorSemantico implements Dicionario{
     }
 
     private void percorreCriandoSimboloConst() {
-        valor = "";
+        valor = new ArrayList<>();
         identificador = "";
         //Pega o identificador
         t = tokens.get(cont);
@@ -604,7 +605,7 @@ public class AnalisadorSemantico implements Dicionario{
 
         //Percorre o valor ate achar virgula ou ponto e virgula
         while (checaTerminadores()) {
-            valor += t.getLexema();
+            valor.add(t);
             cont++;
             t = tokens.get(cont);
         }
@@ -616,7 +617,7 @@ public class AnalisadorSemantico implements Dicionario{
     private void percorreCriandoSimboloVar(){
         identificador = "";
         //Apenas garantindo que sempre nao tera valor
-        valor = "";
+        valor = new ArrayList<>();
 
         t = tokens.get(cont);
 
