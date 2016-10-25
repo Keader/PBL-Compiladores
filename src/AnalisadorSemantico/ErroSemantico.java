@@ -53,9 +53,6 @@ public class ErroSemantico implements Dicionario{
             return false;
         }
         final ErroSemantico other = (ErroSemantico) obj;
-        if (this.tipo != other.tipo) {
-            return false;
-        }
         if (this.linha != other.linha) {
             return false;
         }
@@ -65,25 +62,23 @@ public class ErroSemantico implements Dicionario{
         return true;
     }
 
-
-
     @Override
     public String toString(){
         switch (tipo){
             case VAR_NAO_DECL:
-                return "A variavel: "+error+" utilizada na linha: "+linha+" nao foi declarada";
+                return "A variavel: "+error+", utilizada na linha: "+linha+" nao foi declarada";
             case FUNC_NAO_DECL:
-                return "A funcao: "+error+" utilizada na linha: "+linha+" nao foi declarada";
+                return "A funcao: "+error+", utilizada na linha: "+linha+" nao foi declarada";
             case ATRIBUICAO_INVALIDA:
                 return "Foi detectada uma atribuicao invalida na linha: "+linha;
             case OPC_INVALIDA:
                 return "Foi detectado uma operacao invalida na linha: "+linha;
             case VAR_JA_DECL:
-                return "A variavel/funcao/constante: "+error+" declarada na linha: "+linha+" ja havia sido declarada";
+                return "A variavel/funcao/constante: "+error+", declarada na linha: "+linha+" ja havia sido declarada";
             case DIFF_DIMENSOES:
                 return "Quantidade de dimensoes usadas no Array/Matriz: "+error+" invalido(s), na linha: "+linha;
             case RETORNO_INVALIDO:
-                return "Retorno: "+error+" invalido na linha: "+linha;
+                return "Retorno: "+error+", invalido na linha: "+linha;
             case TIPOS_INCOMPATIVEIS:
                 return "Tipos incompativeis detectado na linha: "+linha+" provocado por: "+error;
             case QNT_PARAM_INVALIDOS:
@@ -92,6 +87,8 @@ public class ErroSemantico implements Dicionario{
                 return "Tipos de parametros invalidos na funcao: "+error+" na linha: "+linha;
             case VAR_NAO_INICIALIZADA:
                 return "A variavel: "+error+" usada na linha: "+linha+" nao foi inicializada";
+            case FUNC_EM_CONST:
+                return "Na declaracao da constante: "+error+", foi feita uma chamada de funcao, linha: "+linha;
             default:
                 return "Unknown";
         }

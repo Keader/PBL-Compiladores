@@ -30,7 +30,6 @@ public class AnalisadorSemantico implements Dicionario{
     private List<ErroSemantico> erros;
     private boolean retorno;
     private String funcaoAtual;
-    private int contadorDeDimensoes;
 
     public AnalisadorSemantico(List<Token> lTokens){
         tokens = new ArrayList<>();
@@ -50,7 +49,6 @@ public class AnalisadorSemantico implements Dicionario{
         montarTabela();
         retorno = false;
         funcaoAtual = "";
-        contadorDeDimensoes = 0;
     }
 
     private synchronized void montarTabela(){
@@ -311,7 +309,8 @@ public class AnalisadorSemantico implements Dicionario{
                     t = tokens.get(cont);
                 }
                 escopoAtual++;
-                tabela = tabelas.get(escopoAtual);
+                if (escopoAtual > tabelas.size())
+                    tabela = tabelas.get(escopoAtual);
             }
 
             //Analise de Corpo
@@ -320,6 +319,15 @@ public class AnalisadorSemantico implements Dicionario{
 
                 //Comeca com identificador, logo eh chamada de funcao ou atribuicao.
                 if (t.getIdUnico() == TK_ID){
+
+                    //Evita re-analisar constantes e variaveis.
+                    if (!funcoesAlcancadas) {
+                        while (t.getIdUnico() != TK_FIM) {
+                            cont++;
+                            t = tokens.get(cont);
+                        }
+                        continue;
+                    }
                     identificador = t.getLexema();
                     int tipo = 0;
                     //Pula o identificador
@@ -360,7 +368,7 @@ public class AnalisadorSemantico implements Dicionario{
 
                     //Lidar com matrizes
                     if (t.getIdUnico() == TK_MENOR){
-                        verificaTamanhoMatriz();
+                        verificaMatriz();
                     }
 
                     Simbolo variavel = tabela.get(t.getLexema());
@@ -381,7 +389,7 @@ public class AnalisadorSemantico implements Dicionario{
                         }
                     }
 
-                    if (variavel.ehMatriz() && variavel.getDimensoes() != contadorDeDimensoes)
+                    if (variavel.ehMatriz() && variavel.getDimensoes() != dimensoes)
                         erros.add(new ErroSemantico(t.getLexema(), DIFF_DIMENSOES, t.getnLinha()));
 
                     if (variavel.getTipo() != tabelado.getTipo())
@@ -405,7 +413,7 @@ public class AnalisadorSemantico implements Dicionario{
 
                         //Lidar com matrizes
                         if (t.getIdUnico() == TK_MENOR)
-                            verificaTamanhoMatriz();
+                            verificaMatriz();
 
                         Simbolo variavel = tabela.get(t.getLexema());
 
@@ -419,7 +427,7 @@ public class AnalisadorSemantico implements Dicionario{
                             }
                         }
 
-                        if (variavel.ehMatriz() && variavel.getDimensoes() != contadorDeDimensoes)
+                        if (variavel.ehMatriz() && variavel.getDimensoes() != dimensoes)
                             erros.add(new ErroSemantico(t.getLexema(), DIFF_DIMENSOES, t.getnLinha()));
 
                         else if (variavel.ehConstante())
@@ -438,26 +446,99 @@ public class AnalisadorSemantico implements Dicionario{
                 System.out.println(erro);
     }
 
-    private void verificaTamanhoMatriz(){
-        contadorDeDimensoes = 0;
-        //Pula os 2 menores
-        cont += 2;
-        t = tokens.get(cont);
+    private void verificaFuncao(String identificador) {
+        //Se a funcao existe
+        if (tabelaGlobal.containsKey(identificador)) {
+            Simbolo simbolo = tabelaGlobal.get(identificador);
+            List<Simbolo> parametros = new ArrayList<>();
 
-        while (t.getIdUnico() != TK_MAIOR) {
-            if (t.getIdUnico() != TK_VIRGULA)
-                contadorDeDimensoes++;
+            //Checa parametros
+            while (t.getIdUnico() != TK_PARENTESE_F) {
+                cont++;
+                t = tokens.get(cont);
 
-            cont++;
-            t = tokens.get(cont);
+                //Quando uma funcao nao tem parametros, acontece de PARENTESE_F ser a 1ª coisa que ele ler.
+                if (t.getIdUnico() == TK_PARENTESE_F)
+                    continue;
+
+                Simbolo variavel = tabela.get(t.getLexema());
+
+                //Cuida de tipos padroes, caracteres, inteiros, etc.
+                if (ehLiteral(t.getIdUnico()))
+                    variavel = new Simbolo(t.getLexema(), converteTipo(t), t);
+
+
+                //Variavel/Const nao existe no escopo local
+                if (variavel == null) {
+                    //Verifica no escopo global
+                    variavel = tabelaGlobal.get(t.getLexema());
+                    if (variavel == null) {
+                        erros.add(new ErroSemantico(t.getLexema(), VAR_NAO_DECL, t.getnLinha()));
+                        //Ignora todos os parametros
+                        while (t.getIdUnico() != TK_PARENTESE_F) {
+                            cont++;
+                            t = tokens.get(cont);
+                        }
+                        return;
+                    }
+                }
+
+                //Lida com funcoes dentro de funcoes
+                if (variavel.ehFuncao()){
+                    String funcao = variavel.getId();
+                    //A funcao VerificaFuncao sempre comeca a analisar como o "token atual" sendo (
+                    //Entao avancando a entrada...
+                    cont++;
+                    t = tokens.get(cont);
+                    verificaFuncao(funcao);
+                }
+
+                //Move a entrada consumindo coisas relacionada a variavel
+                while (!checaTerminadoresParametros()) {
+                    cont++;
+                    t = tokens.get(cont);
+                }
+                parametros.add(variavel);
+            }
+            //Checa quantidade de parametros
+            if (parametros.size() != simbolo.getParametros().size()){
+                erros.add(new ErroSemantico(simbolo.getId(), QNT_PARAM_INVALIDOS, t.getnLinha()));
+                //Ignora todos os parametros
+                while (t.getIdUnico() != TK_PARENTESE_F){
+                    cont++;
+                    t = tokens.get(cont);
+                }
+                return;
+            }
+
+            //Checa se o tipo de parametro esta correto
+            for (int i = 0; i < parametros.size(); i++) {
+                Simbolo tabelado = simbolo.getParametros().get(i);
+                Simbolo parametro = parametros.get(i);
+
+                //Se um for matriz e o outro nao
+                if (tabelado.ehMatriz() && !parametro.ehMatriz() || parametro.ehMatriz() && !tabelado.ehMatriz())
+                    erros.add(new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha()));
+
+
+                //Se tiverem tipos diferentes
+                if (tabelado.getTipo() != parametro.getTipo())
+                    erros.add(new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha()));
+
+            }
+        } //Funcao nao declarada
+        else{
+            erros.add(new ErroSemantico(identificador, FUNC_NAO_DECL, t.getnLinha()));
+            //Ignora todos os parametros q ela pode ter
+            while (t.getIdUnico() != TK_PARENTESE_F){
+                cont++;
+                t = tokens.get(cont);
+            }
         }
-        //Pula os 2 maior
-        cont += 2;
-        t = tokens.get(cont);
 
     }
 
-    private void verificaFuncao(String identificador) {
+    private void verificaFuncao(String identificador, Token t, int cont, List<Token> tokens) {
         //Se a funcao existe
         if (tabelaGlobal.containsKey(identificador)) {
             Simbolo simbolo = tabelaGlobal.get(identificador);
@@ -610,8 +691,81 @@ public class AnalisadorSemantico implements Dicionario{
             t = tokens.get(cont);
         }
 
+        //Busca funcoes
+        if (valor.size() > 1){
+            for (int i =0; i<valor.size();i++){
+                Token token = valor.get(i);
+                if (token.getIdUnico() == TK_PARENTESE_A)
+                    if (i - 1 >= 0 && valor.get(i-1).getIdUnico() == TK_ID)
+                        erros.add(new ErroSemantico(identificador, FUNC_EM_CONST, token.getnLinha()));
+            }
+        }
+        //Identifica tipos diferentes
+        else if (valor.size() == 1){
+            Token token = valor.get(0);
+            int tipo = converteTipo(token);
+            if (tipo != tipoAtual)
+                erros.add(new ErroSemantico(token.getLexema(), TIPOS_INCOMPATIVEIS, token.getnLinha()));
+        }
+
         Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor, t.getnLinha());
         simbolo.setEhConstante(true);
+    }
+
+    private void verificaMatriz() {
+        dimensoes = 0;
+        //Pula o menor atual e o proximo
+        cont += 2;
+        t = tokens.get(cont);
+
+        while (t.getIdUnico() != TK_MAIOR) {
+            //Ignora a virgula, para nao contar nas dimensoes
+            if (t.getIdUnico() != TK_VIRGULA) {
+                dimensoes++;
+
+                //Falta verificar expressoes dentro do Array
+                //Eh uma variavel ou uma funcao
+                if (t.getIdUnico() == TK_ID) {
+                    String id = t.getLexema();
+
+                    //Pega o proximo elemento
+                    cont++;
+                    t = tokens.get(cont);
+
+                    if (t.getIdUnico() == TK_PARENTESE_A)
+                        verificaFuncao(id);
+
+                    Simbolo variavel = tabela.get(id);
+
+                    //Variavel/Const nao existe no escopo local
+                    if (variavel == null) {
+                        //Verifica no escopo global
+                        variavel = tabelaGlobal.get(id);
+                        if (variavel == null) {
+                            ErroSemantico error = new ErroSemantico(id, VAR_NAO_DECL, t.getnLinha());
+                            if (!erros.contains(error))
+                                erros.add(error);
+                        }
+                    }
+
+                    if (variavel != null && variavel.ehFuncao() && variavel.getTipo() != TK_INTEIRO)
+                        erros.add(new ErroSemantico(variavel.getId(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
+                    else if (variavel != null && variavel.getTipo() != TK_INTEIRO)
+                        erros.add(new ErroSemantico(t.getLexema(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
+                    else
+                        erros.add(new ErroSemantico(id, TIPOS_INCOMPATIVEIS, t.getnLinha()));
+
+                }
+                else if (ehLiteral(t.getIdUnico()) && converteTipo(t) != TK_INTEIRO)
+                    erros.add(new ErroSemantico(t.getLexema(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
+
+            }
+
+            cont++;
+            t = tokens.get(cont);
+        }
+        //Pula o maior atual e o proximo
+        cont += 2;
     }
 
     private void percorreCriandoSimboloVar(){
@@ -623,55 +777,7 @@ public class AnalisadorSemantico implements Dicionario{
 
         //Eh vetor/matriz
         if (t.getIdUnico() == TK_MENOR){
-            //Pula o menor atual e o proximo
-            cont+=2;
-            t = tokens.get(cont);
-
-            while (t.getIdUnico() != TK_MAIOR){
-                //Ignora a virgula, para nao contar nas dimensoes
-                if (t.getIdUnico() != TK_VIRGULA){
-                    dimensoes++;
-                    //FALTA VERIFICAR QUANDO EH EXPRESSOES.
-
-
-                    //Eh uma variavel ou uma funcao
-                    if (t.getIdUnico() == TK_ID){
-                        String id = t.getLexema();
-
-                        //Pega o proximo elemento
-                        cont++;
-                        t = tokens.get(cont);
-
-                        if (t.getIdUnico() == TK_PARENTESE_A)
-                            verificaFuncao(id);
-
-                        Simbolo variavel = tabela.get(id);
-
-                        //Variavel/Const nao existe no escopo local
-                        if (variavel == null) {
-                            //Verifica no escopo global
-                            variavel = tabelaGlobal.get(id);
-                            if (variavel == null){
-                                ErroSemantico error = new ErroSemantico(id, VAR_NAO_DECL, t.getnLinha());
-                                if (!erros.contains(error))
-                                    erros.add(error);
-                            }
-                        }
-
-                        if (variavel != null && variavel.ehFuncao() && variavel.getTipo() != TK_INTEIRO)
-                            erros.add(new ErroSemantico(variavel.getId(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
-
-                        else if (variavel != null && variavel.getTipo() != TK_INTEIRO)
-                            erros.add(new ErroSemantico(t.getLexema(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
-                    }
-
-                }
-
-                cont++;
-                t = tokens.get(cont);
-            }
-            //Pula o maior atual e o proximo
-            cont+=2;
+            verificaMatriz();
         }
 
         //Pega o identificador
@@ -725,5 +831,62 @@ public class AnalisadorSemantico implements Dicionario{
             tabela = null;
 
         System.out.println("Escopo: "+tabelas.size());
+    }
+
+    private int lidaComTipoDeFuncoes(List<Token> expressao, int i, Token atual) {
+        String id = atual.getLexema();
+
+        //Pega o proximo elemento
+        i++;
+        atual = expressao.get(i);
+
+        //Cuida de funcoes
+        if (atual.getIdUnico() == TK_PARENTESE_A)
+            verificaFuncao(id, atual, i, expressao);
+
+
+        Simbolo variavel = tabela.get(atual.getLexema());
+        //Variavel/Const/Funcao nao existe no escopo local
+        if (variavel == null) {
+            //Verifica no escopo global
+            variavel = tabelaGlobal.get(atual.getLexema());
+            if (variavel == null)
+                erros.add(new ErroSemantico(atual.getLexema(), VAR_NAO_DECL, atual.getnLinha()));
+
+        }
+
+        if (variavel != null)
+            return variavel.getTipo();
+
+        return OP_INVALIDA;
+    }
+
+    private int verificaExpressoes(List<Token> expressao){
+        int tipoAtual = -5;
+        Token atual;
+        for(int i = 0; i < expressao.size(); i++){
+            atual = expressao.get(i);
+
+            //Comeca com identificador
+            if (atual.getIdUnico() == TK_ID){
+                int tipoTemp = lidaComTipoDeFuncoes(expressao,i,atual);
+                if (tipoTemp != OP_INVALIDA)
+                    tipoAtual = tipoTemp;
+            }
+
+            else if (atual.getIdUnico() == TK_MAIOR){
+
+            }
+
+            //Comeca com valores diretos.
+            else if (tipoAtual == VALOR_INICIAL)
+                tipoAtual = converteTipo(atual);
+
+
+            i++;
+            atual = expressao.get(i);
+
+        }
+        return -1;
     }
 }

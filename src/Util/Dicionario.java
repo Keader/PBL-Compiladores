@@ -212,19 +212,22 @@ public interface Dicionario {
     public static final int VOLTA_PRO_PAI                        = 226;
 
     //Semantico
-     public static final int TIPO_VAZIO                          = -1;
-     public static final int ESCOPO_GLOBAL                       =  0;
-     public static final int VAR_NAO_DECL                        =  1;
-     public static final int FUNC_NAO_DECL                       =  2;
-     public static final int ATRIBUICAO_INVALIDA                 =  3;
-     public static final int OPC_INVALIDA                        =  4;
-     public static final int VAR_JA_DECL                         =  5;
-     public static final int DIFF_DIMENSOES                      =  6;
-     public static final int RETORNO_INVALIDO                    =  7;
-     public static final int TIPOS_INCOMPATIVEIS                 =  8;
-     public static final int QNT_PARAM_INVALIDOS                 =  9;
-     public static final int TIPOS_PARAM_INVALIDOS               = 10;
-     public static final int VAR_NAO_INICIALIZADA                = 11;
+    public static final int VALOR_INICIAL                        =-99;
+    public static final int TIPO_VAZIO                           = -1;
+    public static final int OP_INVALIDA                          = -2;
+    public static final int ESCOPO_GLOBAL                        =  0;
+    public static final int VAR_NAO_DECL                         =  1;
+    public static final int FUNC_NAO_DECL                        =  2;
+    public static final int ATRIBUICAO_INVALIDA                  =  3;
+    public static final int OPC_INVALIDA                         =  4;
+    public static final int VAR_JA_DECL                          =  5;
+    public static final int DIFF_DIMENSOES                       =  6;
+    public static final int RETORNO_INVALIDO                     =  7;
+    public static final int TIPOS_INCOMPATIVEIS                  =  8;
+    public static final int QNT_PARAM_INVALIDOS                  =  9;
+    public static final int TIPOS_PARAM_INVALIDOS                = 10;
+    public static final int VAR_NAO_INICIALIZADA                 = 11;
+    public static final int FUNC_EM_CONST                        = 12;
 
 
     //Enums
@@ -937,5 +940,43 @@ public interface Dicionario {
             return TK_BOOLEANO;
 
         return -1;
+    }
+
+    public static int converteRegraTipos(int tipo1, int tipo2, int operador){
+
+        if (tipo1 == TK_INTEIRO && tipo2 == TK_INTEIRO && ehOperadorAritmetico(operador))
+            return TK_INTEIRO;
+
+        else if (((tipo1 == TK_INTEIRO && tipo2 == TK_REAL) ||
+                 (tipo1 == TK_REAL && tipo2 == TK_INTEIRO)) && ehOperadorAritmetico(operador))
+            return TK_REAL;
+
+        else if (tipo1 == TK_REAL && tipo2 == TK_REAL && ehOperadorAritmetico(operador))
+            return TK_REAL;
+
+        else if (tipo1 == TK_BOOLEANO && tipo2 == TK_BOOLEANO && ehOperadorLogico(operador))
+            return TK_BOOLEANO;
+
+        else if (tipo1 == TK_INTEIRO && tipo2 == TK_INTEIRO && ehOperadorRelacional(operador))
+            return TK_BOOLEANO;
+
+        else if (((tipo1 == TK_INTEIRO && tipo2 == TK_REAL) ||
+                 (tipo1 == TK_REAL && tipo2 == TK_INTEIRO)) && ehOperadorRelacional(operador))
+            return TK_BOOLEANO;
+
+        return OP_INVALIDA;
+    }
+
+    public static boolean ehOperadorAritmetico(int op){
+        return op == TK_SOMA || op == TK_SUBTRACAO || op == TK_DIVISAO || op == TK_MULTIPLICACAO;
+    }
+
+    public static boolean ehOperadorRelacional(int op){
+        return op == TK_MAIOR || op == TK_IGUAL || op == TK_DIFERENTE || op == TK_MENOR ||
+               op == TK_MENORIGUAL || op == TK_MAIORIGUAL;
+    }
+
+    public static boolean ehOperadorLogico(int op){
+        return op == TK_E || op == TK_NAO || op == TK_OU;
     }
 }
