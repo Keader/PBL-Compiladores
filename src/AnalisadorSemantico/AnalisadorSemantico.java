@@ -766,6 +766,7 @@ public class AnalisadorSemantico implements Dicionario{
         }
         //Pula o maior atual e o proximo
         cont += 2;
+        t = tokens.get(cont);
     }
 
     private void percorreCriandoSimboloVar(){
