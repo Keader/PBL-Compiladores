@@ -309,7 +309,7 @@ public class AnalisadorSemantico implements Dicionario{
                     t = tokens.get(cont);
                 }
                 escopoAtual++;
-                if (escopoAtual > tabelas.size())
+                if (escopoAtual < tabelas.size())
                     tabela = tabelas.get(escopoAtual);
             }
 
@@ -385,14 +385,13 @@ public class AnalisadorSemantico implements Dicionario{
                         variavel = tabelaGlobal.get(t.getLexema());
                         if (variavel == null) {
                             erros.add(new ErroSemantico(t.getLexema(), VAR_NAO_DECL, t.getnLinha()));
-                            return;
                         }
                     }
 
-                    if (variavel.ehMatriz() && variavel.getDimensoes() != dimensoes)
+                    if (variavel != null && variavel.ehMatriz() && variavel.getDimensoes() != dimensoes)
                         erros.add(new ErroSemantico(t.getLexema(), DIFF_DIMENSOES, t.getnLinha()));
 
-                    if (variavel.getTipo() != tabelado.getTipo())
+                    if (variavel != null && variavel.getTipo() != tabelado.getTipo())
                         erros.add(new ErroSemantico(t.getLexema(), RETORNO_INVALIDO, t.getnLinha()));
 
                     cont+=2;
@@ -423,14 +422,13 @@ public class AnalisadorSemantico implements Dicionario{
                             variavel = tabelaGlobal.get(t.getLexema());
                             if (variavel == null) {
                                 erros.add(new ErroSemantico(t.getLexema(), VAR_NAO_DECL, t.getnLinha()));
-                                return;
                             }
                         }
 
-                        if (variavel.ehMatriz() && variavel.getDimensoes() != dimensoes)
+                        if (variavel != null && variavel.ehMatriz() && variavel.getDimensoes() != dimensoes)
                             erros.add(new ErroSemantico(t.getLexema(), DIFF_DIMENSOES, t.getnLinha()));
 
-                        else if (variavel.ehConstante())
+                        else if (variavel != null && variavel.ehConstante())
                             erros.add(new ErroSemantico (t.getLexema(), ATRIBUICAO_INVALIDA, t.getnLinha()));
 
                         cont++;
