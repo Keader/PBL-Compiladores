@@ -60,7 +60,7 @@ public class AnalisadorSemantico implements Dicionario{
                 //Se as funcoes nao foram alcansadas ainda, significa que existe escopo global
                 if (!funcoesAlcancadas)
                     tabelaGlobal = tabela;
-                else
+                else //Nao verifica corpo
                     continue;
 
                 //Pula o const e o inicio
@@ -99,7 +99,7 @@ public class AnalisadorSemantico implements Dicionario{
                 //Se as funcoes nao foram alcancadas ainda, significa que existe escopo global
                 if (!funcoesAlcancadas)
                     tabelaGlobal = tabela;
-                else
+                else //Nao verifica corpo
                     continue;
 
                 //Pula o var e o inicio
@@ -133,7 +133,6 @@ public class AnalisadorSemantico implements Dicionario{
                         //Atualiza o token para pegar apos o ponto e virgula
                         t = tokens.get(cont);
                     }
-
                 }
             }
 
@@ -356,7 +355,6 @@ public class AnalisadorSemantico implements Dicionario{
                         while (t.getIdUnico() != TK_PONTOVIRGULA){
                             //TODO
                         }
-
                     }
                 }
 
@@ -367,9 +365,8 @@ public class AnalisadorSemantico implements Dicionario{
                     t = tokens.get(cont);
 
                     //Lidar com matrizes
-                    if (t.getIdUnico() == TK_MENOR){
+                    if (t.getIdUnico() == TK_MENOR)
                         verificaMatriz();
-                    }
 
                     Simbolo variavel = tabela.get(t.getLexema());
                     //Teoricamente, tabelado nunca sera null.
@@ -383,14 +380,12 @@ public class AnalisadorSemantico implements Dicionario{
                     if (variavel == null) {
                         //Verifica no escopo global
                         variavel = tabelaGlobal.get(t.getLexema());
-                        if (variavel == null) {
+                        if (variavel == null)
                             erros.add(new ErroSemantico(t.getLexema(), VAR_NAO_DECL, t.getnLinha()));
-                        }
                     }
 
                     if (variavel != null && variavel.ehMatriz() && variavel.getDimensoes() != dimensoes)
                         erros.add(new ErroSemantico(t.getLexema(), DIFF_DIMENSOES, t.getnLinha()));
-
                     if (variavel != null && variavel.getTipo() != tabelado.getTipo())
                         erros.add(new ErroSemantico(t.getLexema(), RETORNO_INVALIDO, t.getnLinha()));
 
@@ -465,7 +460,6 @@ public class AnalisadorSemantico implements Dicionario{
                 if (ehLiteral(t.getIdUnico()))
                     variavel = new Simbolo(t.getLexema(), converteTipo(t), t);
 
-
                 //Variavel/Const nao existe no escopo local
                 if (variavel == null) {
                     //Verifica no escopo global
@@ -518,11 +512,9 @@ public class AnalisadorSemantico implements Dicionario{
                 if (tabelado.ehMatriz() && !parametro.ehMatriz() || parametro.ehMatriz() && !tabelado.ehMatriz())
                     erros.add(new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha()));
 
-
                 //Se tiverem tipos diferentes
                 if (tabelado.getTipo() != parametro.getTipo())
                     erros.add(new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha()));
-
             }
         } //Funcao nao declarada
         else{
@@ -533,7 +525,6 @@ public class AnalisadorSemantico implements Dicionario{
                 t = tokens.get(cont);
             }
         }
-
     }
 
     private void verificaFuncao(String identificador, Token t, int cont, List<Token> tokens) {
@@ -557,7 +548,6 @@ public class AnalisadorSemantico implements Dicionario{
                 if (ehLiteral(t.getIdUnico()))
                     variavel = new Simbolo(t.getLexema(), converteTipo(t), t);
 
-
                 //Variavel/Const nao existe no escopo local
                 if (variavel == null) {
                     //Verifica no escopo global
@@ -610,11 +600,9 @@ public class AnalisadorSemantico implements Dicionario{
                 if (tabelado.ehMatriz() && !parametro.ehMatriz() || parametro.ehMatriz() && !tabelado.ehMatriz())
                     erros.add(new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha()));
 
-
                 //Se tiverem tipos diferentes
                 if (tabelado.getTipo() != parametro.getTipo())
                     erros.add(new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha()));
-
             }
         } //Funcao nao declarada
         else{
@@ -640,8 +628,8 @@ public class AnalisadorSemantico implements Dicionario{
         }
 
         if(!tabela.containsKey(id)){
-                tabela.put(id, simbolo);
-                System.out.println(simbolo);
+            tabela.put(id, simbolo);
+            System.out.println(simbolo);
         }
         else
             erros.add(new ErroSemantico(simbolo.getId(), VAR_JA_DECL, linha));
@@ -662,7 +650,7 @@ public class AnalisadorSemantico implements Dicionario{
 
         if(!tabelaE.containsKey(id)){
             tabelaE.put(id,simbolo);
-             System.out.println(simbolo);
+            System.out.println(simbolo);
         }
         else
             erros.add(new ErroSemantico(simbolo.getId(), VAR_JA_DECL, linha));
@@ -752,11 +740,9 @@ public class AnalisadorSemantico implements Dicionario{
                         erros.add(new ErroSemantico(variavel.getId(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
                     else if (variavel == null)
                         erros.add(new ErroSemantico(id, TIPOS_INCOMPATIVEIS, t.getnLinha()));
-
                 }
                 else if (ehLiteral(t.getIdUnico()) && converteTipo(t) != TK_INTEIRO)
                     erros.add(new ErroSemantico(t.getLexema(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
-
             }
 
             cont++;
@@ -775,9 +761,9 @@ public class AnalisadorSemantico implements Dicionario{
         t = tokens.get(cont);
 
         //Eh vetor/matriz
-        if (t.getIdUnico() == TK_MENOR){
+        if (t.getIdUnico() == TK_MENOR)
             verificaMatriz();
-        }
+
 
         //Pega o identificador
         t = tokens.get(cont);
@@ -794,7 +780,6 @@ public class AnalisadorSemantico implements Dicionario{
             simbolo.setDimensoes(dimensoes);
             dimensoes = 0;
         }
-
     }
 
     private boolean ehTipo(){
@@ -843,7 +828,6 @@ public class AnalisadorSemantico implements Dicionario{
         if (atual.getIdUnico() == TK_PARENTESE_A)
             verificaFuncao(id, atual, i, expressao);
 
-
         Simbolo variavel = tabela.get(atual.getLexema());
         //Variavel/Const/Funcao nao existe no escopo local
         if (variavel == null) {
@@ -851,7 +835,6 @@ public class AnalisadorSemantico implements Dicionario{
             variavel = tabelaGlobal.get(atual.getLexema());
             if (variavel == null)
                 erros.add(new ErroSemantico(atual.getLexema(), VAR_NAO_DECL, atual.getnLinha()));
-
         }
 
         if (variavel != null)
