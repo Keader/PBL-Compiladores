@@ -750,7 +750,7 @@ public class AnalisadorSemantico implements Dicionario{
                         erros.add(new ErroSemantico(variavel.getId(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
                     else if (variavel != null && variavel.getTipo() != TK_INTEIRO)
                         erros.add(new ErroSemantico(variavel.getId(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
-                    else
+                    else if (variavel == null)
                         erros.add(new ErroSemantico(id, TIPOS_INCOMPATIVEIS, t.getnLinha()));
 
                 }
