@@ -91,6 +91,10 @@ public class ErroSemantico implements Dicionario{
                 return "Na declaracao da constante: "+error+", foi feita uma chamada de funcao, linha: "+linha;
             case TIPO_ATRIBUICAO_INVALIDA:
                 return error+ ", na linha: "+linha;
+            case VAR_EM_CONST:
+                return "Na declaracao da constante: "+error+", foi feita uma atribuicao de variavel, na linha: "+linha;
+            case ARRAY_EM_CONST:
+                return "Na declaracao da constante: "+error+", foi feita uma chamada de Array, na linha: "+linha;
             default:
                 return "Unknown";
         }

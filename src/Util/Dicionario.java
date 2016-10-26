@@ -228,6 +228,8 @@ public interface Dicionario {
     public static final int VAR_NAO_INICIALIZADA                 = 11;
     public static final int FUNC_EM_CONST                        = 12;
     public static final int TIPO_ATRIBUICAO_INVALIDA             = 13;
+    public static final int VAR_EM_CONST                         = 14;
+    public static final int ARRAY_EM_CONST                       = 15;
 
 
     //Enums
@@ -983,5 +985,9 @@ public interface Dicionario {
 
     public static boolean ehOperadorLogico(int op){
         return op == TK_E || op == TK_NAO || op == TK_OU;
+    }
+
+    public static boolean ehOperador(int op){
+        return ehOperadorAritmetico(op) || ehOperadorRelacional(op) || ehOperadorLogico(op);
     }
 }

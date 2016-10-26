@@ -349,7 +349,8 @@ public class AnalisadorSemantico implements Dicionario{
                     }
 
                     //Eh uma atribuicao
-                    else if (t.getIdUnico() == TK_IGUAL){
+                    else if (t.getIdUnico() == TK_IGUAL) {
+                        System.out.println("Ue");
                         //Se funcoes nao foram alcadas, esta pegando as atribuicoes de const... entao pula
                         if (!funcoesAlcancadas)
                             continue;
@@ -369,6 +370,18 @@ public class AnalisadorSemantico implements Dicionario{
                     //Lidar com matrizes
                     if (t.getIdUnico() == TK_MENOR)
                         verificaMatriz();
+
+                    Token temp = t;
+                    //Verifico rapido o proximo elemento para ver se eh funcao
+                    cont++;
+                    t = tokens.get(cont);
+
+                    if (t.getIdUnico() == TK_PARENTESE_A){
+                        verificaFuncao(temp.getLexema());
+                        cont++;
+                    }
+
+                    t = temp;
 
                     Simbolo variavel = tabela.get(t.getLexema());
                     //Teoricamente, tabelado nunca sera null.
@@ -390,7 +403,7 @@ public class AnalisadorSemantico implements Dicionario{
                         erros.add(new ErroSemantico(t.getLexema(), DIFF_DIMENSOES, t.getnLinha()));
                     if (variavel != null && variavel.getTipo() != tabelado.getTipo())
                         erros.add(new ErroSemantico(t.getLexema(), RETORNO_INVALIDO, t.getnLinha()));
-
+                    //Pula o =>
                     cont+=2;
                     t = tokens.get(cont);
                 }
@@ -679,21 +692,57 @@ public class AnalisadorSemantico implements Dicionario{
         cont++;
         t = tokens.get(cont);
 
+
         //Percorre o valor ate achar virgula ou ponto e virgula
-        while (checaTerminadores()) {
+        while (!checaTerminadores()) {
+
             valor.add(t);
             cont++;
             t = tokens.get(cont);
+
+            //Gambiarra para Arrays, horrenda por sinal.
+            //Serve pra quando tiver arrays no meio de declaracao de constante.
+            //A virgula (separador das dimensoes) da pau na virgula de separar constantes.
+            if (checaTerminadores())
+                if (cont+1 < tokens.size() && tokens.get(cont+1).getIdUnico() == TK_NUMERO){
+                    valor.add(t);
+                    cont++;
+                    t = tokens.get(cont);
+                }
         }
 
         //Busca funcoes
-        if (valor.size() > 1){
+        if (valor.size() > 1) {
             for (int i =0; i<valor.size();i++){
                 Token token = valor.get(i);
-                if (token.getIdUnico() == TK_PARENTESE_A)
-                    if (i - 1 >= 0 && valor.get(i-1).getIdUnico() == TK_ID)
+                if (token.getIdUnico() == TK_PARENTESE_A){
+                    if (i - 1 >= 0 && valor.get(i-1).getIdUnico() == TK_ID){
                         erros.add(new ErroSemantico(identificador, FUNC_EM_CONST, token.getnLinha()));
+                        Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor, t.getnLinha());
+                        simbolo.setEhConstante(true);
+                        return;
+                    }
+                }
+                else if (token.getIdUnico() == TK_MENOR){
+                    if (i + 1 < valor.size() && valor.get(i+1).getIdUnico() == TK_MENOR){
+                        erros.add(new ErroSemantico(identificador, ARRAY_EM_CONST, token.getnLinha()));
+                        Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor, t.getnLinha());
+                        simbolo.setEhConstante(true);
+                        return;
+                    }
+                }
             }
+
+            //Evita que tenha variaveis dentro de expressoes, quando for expressoes de contantes
+            for (Token tk : valor){
+                if(tk.getIdUnico() == TK_ID){
+                    Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor, t.getnLinha());
+                    simbolo.setEhConstante(true);
+                    erros.add(new ErroSemantico(tk.getLexema(), VAR_NAO_DECL, tk.getnLinha()));
+                    return;
+                }
+            }
+
             int tipo = verificaExpressoes(valor);
             if (tipo != tipoAtual){
                 String valores = "";
@@ -706,9 +755,32 @@ public class AnalisadorSemantico implements Dicionario{
         //Identifica tipos diferentes
         else if (valor.size() == 1){
             Token token = valor.get(0);
-            int tipo = converteTipo(token);
-            if (tipo != tipoAtual)
-                erros.add(new ErroSemantico(token.getLexema(), TIPOS_INCOMPATIVEIS, token.getnLinha()));
+            if (tabelaGlobal.containsKey(token.getLexema())){
+                Simbolo sim = tabelaGlobal.get(token.getLexema());
+                if (!sim.ehConstante()){
+                    Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor, t.getnLinha());
+                    simbolo.setEhConstante(true);
+                    erros.add(new ErroSemantico(token.getLexema(), VAR_EM_CONST, token.getnLinha()));
+                    return;
+                }
+                else if (sim.ehConstante() && sim.getTipo() != tipoAtual){
+                    Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor, t.getnLinha());
+                    simbolo.setEhConstante(true);
+                    erros.add(new ErroSemantico(token.getLexema(), TIPOS_INCOMPATIVEIS, token.getnLinha()));
+                    return;
+                }
+            }
+            else if (!ehLiteral(token.getIdUnico())){
+                Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor, t.getnLinha());
+                simbolo.setEhConstante(true);
+                erros.add(new ErroSemantico(token.getLexema(), VAR_NAO_DECL, token.getnLinha()));
+                return;
+            }
+            if (token.getIdUnico() != TK_ID){
+                int tipo = converteTipo(token);
+                if (tipo != tipoAtual)
+                    erros.add(new ErroSemantico(token.getLexema(), TIPOS_INCOMPATIVEIS, token.getnLinha()));
+            }
         }
 
         Simbolo simbolo = criaSimbolo(identificador, tipoAtual, valor, t.getnLinha());
@@ -866,10 +938,7 @@ public class AnalisadorSemantico implements Dicionario{
     }
 
     private boolean checaTerminadores(){
-        if (t.getIdUnico() == TK_VIRGULA || t.getIdUnico() == TK_PONTOVIRGULA)
-        return false;
-
-        return true;
+        return t.getIdUnico() == TK_VIRGULA || t.getIdUnico() == TK_PONTOVIRGULA;
     }
 
     private boolean checaTerminadoresParametros(){
@@ -932,8 +1001,8 @@ public class AnalisadorSemantico implements Dicionario{
 
     private int verificaExpressoes(List<Token> expressao){
         int tipoAtual = TIPO_INVALIDO;
-        int operador = 0;
-        int proximo = 0;
+        int operador = TIPO_INVALIDO;
+        int proximo = TIPO_INVALIDO;
         Token atual;
         String error = "";
         //Essas variaveis servem para criar o error depois.
@@ -944,7 +1013,7 @@ public class AnalisadorSemantico implements Dicionario{
             //Sempre que achar um fecha parentese, retorna a recursao.
             if (atual.getIdUnico() == TK_PARENTESE_F){
                 //Pula o fecha parentese
-                contExp++;
+                //contExp++;
                 return tipoAtual;
             }
 
@@ -966,6 +1035,13 @@ public class AnalisadorSemantico implements Dicionario{
                 tipoAtual = converteTipo(atual);
                 contExp++;
             }
+            //Inicia com parentese
+            else if (atual.getIdUnico() == TK_PARENTESE_A){
+                //Pula o abre parentese
+                contExp++;
+                atual = expressao.get(contExp);
+                return verificaExpressoes(expressao);
+            }
 
             //Comeca com valores diretos.
             if (tipoAtual == TIPO_INVALIDO){
@@ -974,13 +1050,15 @@ public class AnalisadorSemantico implements Dicionario{
             }
 
             //Pega o operador
-
             atual = expressao.get(contExp);
-            operador = atual.getIdUnico();
+            //Casos especiais de 5+2+4+(50);
+            if (ehOperador(atual.getIdUnico())) {
+                operador = atual.getIdUnico();
 
-            //Pega o proximo.
-            contExp++;
-            atual = expressao.get(contExp);
+                //Se veio operador antes, pega o proximo elemento
+                contExp++;
+                atual = expressao.get(contExp);
+            }
 
             //Se vim parentese
             if (atual.getIdUnico() == TK_PARENTESE_A){
