@@ -30,6 +30,7 @@ public class AnalisadorSemantico implements Dicionario{
     private List<ErroSemantico> erros;
     private boolean retorno;
     private String funcaoAtual;
+    private int contExp;
 
     public AnalisadorSemantico(List<Token> lTokens){
         tokens = new ArrayList<>();
@@ -49,6 +50,7 @@ public class AnalisadorSemantico implements Dicionario{
         montarTabela();
         retorno = false;
         funcaoAtual = "";
+        contExp = 0;
     }
 
     private synchronized void montarTabela(){
@@ -527,7 +529,14 @@ public class AnalisadorSemantico implements Dicionario{
         }
     }
 
-    private void verificaFuncao(String identificador, Token t, int cont, List<Token> tokens) {
+    /**
+     * Metodo que verifica funcoes para expressoes.
+     * Ao sair deste metodo o proximo token eh o ).
+     * @param identificador id da funcao
+     * @param t token atual
+     * @param tokens  lista de tokens da expressao
+     */
+    private void verificaFuncao(String identificador, Token t, List<Token> tokens) {
         //Se a funcao existe
         if (tabelaGlobal.containsKey(identificador)) {
             Simbolo simbolo = tabelaGlobal.get(identificador);
@@ -535,8 +544,8 @@ public class AnalisadorSemantico implements Dicionario{
 
             //Checa parametros
             while (t.getIdUnico() != TK_PARENTESE_F) {
-                cont++;
-                t = tokens.get(cont);
+                contExp++;
+                t = tokens.get(contExp);
 
                 //Quando uma funcao nao tem parametros, acontece de PARENTESE_F ser a 1ª coisa que ele ler.
                 if (t.getIdUnico() == TK_PARENTESE_F)
@@ -556,8 +565,8 @@ public class AnalisadorSemantico implements Dicionario{
                         erros.add(new ErroSemantico(t.getLexema(), VAR_NAO_DECL, t.getnLinha()));
                         //Ignora todos os parametros
                         while (t.getIdUnico() != TK_PARENTESE_F) {
-                            cont++;
-                            t = tokens.get(cont);
+                            contExp++;
+                            t = tokens.get(contExp);
                         }
                         return;
                     }
@@ -568,15 +577,16 @@ public class AnalisadorSemantico implements Dicionario{
                     String funcao = variavel.getId();
                     //A funcao VerificaFuncao sempre comeca a analisar como o "token atual" sendo (
                     //Entao avancando a entrada...
-                    cont++;
-                    t = tokens.get(cont);
-                    verificaFuncao(funcao);
+                    contExp++;
+                    t = tokens.get(contExp);
+                    verificaFuncao(funcao, t, tokens);
+                    t = tokens.get(contExp);
                 }
 
                 //Move a entrada consumindo coisas relacionada a variavel
                 while (!checaTerminadoresParametros()) {
-                    cont++;
-                    t = tokens.get(cont);
+                    contExp++;
+                    t = tokens.get(contExp);
                 }
                 parametros.add(variavel);
             }
@@ -585,8 +595,8 @@ public class AnalisadorSemantico implements Dicionario{
                 erros.add(new ErroSemantico(simbolo.getId(), QNT_PARAM_INVALIDOS, t.getnLinha()));
                 //Ignora todos os parametros
                 while (t.getIdUnico() != TK_PARENTESE_F){
-                    cont++;
-                    t = tokens.get(cont);
+                    contExp++;
+                    t = tokens.get(contExp);
                 }
                 return;
             }
@@ -609,11 +619,10 @@ public class AnalisadorSemantico implements Dicionario{
             erros.add(new ErroSemantico(identificador, FUNC_NAO_DECL, t.getnLinha()));
             //Ignora todos os parametros q ela pode ter
             while (t.getIdUnico() != TK_PARENTESE_F){
-                cont++;
-                t = tokens.get(cont);
+                contExp++;
+                t = tokens.get(contExp);
             }
         }
-
     }
 
     private Simbolo criaSimbolo(String id, int tipo, List<Token> valor, int linha){
@@ -685,6 +694,14 @@ public class AnalisadorSemantico implements Dicionario{
                     if (i - 1 >= 0 && valor.get(i-1).getIdUnico() == TK_ID)
                         erros.add(new ErroSemantico(identificador, FUNC_EM_CONST, token.getnLinha()));
             }
+            int tipo = verificaExpressoes(valor);
+            if (tipo != tipoAtual){
+                String valores = "";
+                for (Token token : valor)
+                    valores = valores + token.getLexema() + " ";
+                String resultado = "Na atribuicao da constante: "+identificador+", a expressao: "+valores+ ", retornou o tipo invalido: "+conversorIdString(tipo);
+                erros.add(new ErroSemantico(resultado, TIPO_ATRIBUICAO_INVALIDA, valor.get(0).getnLinha()));}
+
         }
         //Identifica tipos diferentes
         else if (valor.size() == 1){
@@ -753,6 +770,64 @@ public class AnalisadorSemantico implements Dicionario{
         t = tokens.get(cont);
     }
 
+    private void verificaMatriz(Token t, List<Token> tokens) {
+        dimensoes = 0;
+        //Pula o menor atual e o proximo
+        contExp += 2;
+        t = tokens.get(contExp);
+
+        while (t.getIdUnico() != TK_MAIOR) {
+            //Ignora a virgula, para nao contar nas dimensoes
+            if (t.getIdUnico() != TK_VIRGULA) {
+                dimensoes++;
+
+                //Falta verificar expressoes dentro do Array
+                //Eh uma variavel ou uma funcao
+                if (t.getIdUnico() == TK_ID) {
+                    String id = t.getLexema();
+
+                    //Pega o proximo elemento
+                    contExp++;
+                    t = tokens.get(contExp);
+
+                    if (t.getIdUnico() == TK_PARENTESE_A)
+                        verificaFuncao(id, t, tokens);
+
+                    Simbolo variavel = tabela.get(id);
+
+                    //Variavel/Const nao existe no escopo local
+                    if (variavel == null) {
+                        //Verifica no escopo global
+                        variavel = tabelaGlobal.get(id);
+                        if (variavel == null) {
+                            ErroSemantico error = new ErroSemantico(id, VAR_NAO_DECL, t.getnLinha());
+                            if (!erros.contains(error))
+                                erros.add(error);
+                        }
+                    }
+
+                    if (variavel != null && variavel.ehFuncao() && variavel.getTipo() != TK_INTEIRO)
+                        erros.add(new ErroSemantico(variavel.getId(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
+                    else if (variavel != null && variavel.getTipo() != TK_INTEIRO)
+                        erros.add(new ErroSemantico(variavel.getId(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
+                    else if (variavel == null)
+                        erros.add(new ErroSemantico(id, TIPOS_INCOMPATIVEIS, t.getnLinha()));
+                }
+                //Literais
+                else if (ehLiteral(t.getIdUnico()) && converteTipo(t) != TK_INTEIRO)
+                    erros.add(new ErroSemantico(t.getLexema(), TIPOS_INCOMPATIVEIS, t.getnLinha()));
+                //Pega matriz dentro de matriz
+                else if (t.getIdUnico() == TK_MENOR)
+                    verificaMatriz(t, tokens);
+            }
+
+            contExp++;
+            t = tokens.get(contExp);
+        }
+        //Pula o maior atual e o proximo
+        contExp += 2;
+    }
+
     private void percorreCriandoSimboloVar(){
         identificador = "";
         //Apenas garantindo que sempre nao tera valor
@@ -817,58 +892,129 @@ public class AnalisadorSemantico implements Dicionario{
         System.out.println("Escopo: "+tabelas.size());
     }
 
-    private int lidaComTipoDeFuncoes(List<Token> expressao, int i, Token atual) {
+    /**
+     * Metodo que lida com os tipos de funcoes e identificadores
+     * Ao sair deste metodo o proximo token eh o que vier depois do identificador ou o que vier depois do ).
+     * @param expressao expressao que esta sendo analisada
+     * @param atual token atual
+     * @return tipo da funcao/identificador
+     */
+    private int lidaComTipoDeFuncoes(List<Token> expressao, Token atual) {
+        //Pega o identificador da funcao
         String id = atual.getLexema();
 
         //Pega o proximo elemento
-        i++;
-        atual = expressao.get(i);
+        contExp++;
+        atual = expressao.get(contExp);
 
         //Cuida de funcoes
-        if (atual.getIdUnico() == TK_PARENTESE_A)
-            verificaFuncao(id, atual, i, expressao);
+        if (atual.getIdUnico() == TK_PARENTESE_A){
+            //Ao sair daqui o token eh )
+            verificaFuncao(id, atual, expressao);
+            //Pula o )
+            contExp++;
+        }
 
-        Simbolo variavel = tabela.get(atual.getLexema());
+        Simbolo variavel = tabela.get(id);
         //Variavel/Const/Funcao nao existe no escopo local
         if (variavel == null) {
             //Verifica no escopo global
-            variavel = tabelaGlobal.get(atual.getLexema());
+            variavel = tabelaGlobal.get(id);
             if (variavel == null)
-                erros.add(new ErroSemantico(atual.getLexema(), VAR_NAO_DECL, atual.getnLinha()));
+                erros.add(new ErroSemantico(id, VAR_NAO_DECL, atual.getnLinha()));
         }
 
         if (variavel != null)
             return variavel.getTipo();
 
-        return OP_INVALIDA;
+        return TIPO_INVALIDO;
     }
 
     private int verificaExpressoes(List<Token> expressao){
-        int tipoAtual = -5;
+        int tipoAtual = TIPO_INVALIDO;
+        int operador = 0;
+        int proximo = 0;
         Token atual;
-        for(int i = 0; i < expressao.size(); i++){
-            atual = expressao.get(i);
+        String error = "";
+        //Essas variaveis servem para criar o error depois.
+        Token aux;
+        for( ; contExp < expressao.size(); contExp++){
+            atual = expressao.get(contExp);
 
-            //Comeca com identificador
-            if (atual.getIdUnico() == TK_ID){
-                int tipoTemp = lidaComTipoDeFuncoes(expressao,i,atual);
-                if (tipoTemp != OP_INVALIDA)
-                    tipoAtual = tipoTemp;
+            //Sempre que achar um fecha parentese, retorna a recursao.
+            if (atual.getIdUnico() == TK_PARENTESE_F){
+                //Pula o fecha parentese
+                contExp++;
+                return tipoAtual;
             }
 
-            else if (atual.getIdUnico() == TK_MAIOR){
+            //Comeca com identificador (Verifica se eh identificador e se eh funcao)
+            if (atual.getIdUnico() == TK_ID){
+                int tipoTemp = lidaComTipoDeFuncoes(expressao, atual);
+                if (tipoTemp != TIPO_INVALIDO)
+                    tipoAtual = tipoTemp;
+                atual = expressao.get(contExp);
+                contExp++;
+            }
 
+            //Inicia com matriz.
+            else if (atual.getIdUnico() == TK_MENOR){
+                //Saindo daqui o proximo elmento eh o que vim depois dos maiores (fim do array/matriz)
+                verificaMatriz(atual, expressao);
+                //Pega o id da matriz/array
+                atual = expressao.get(contExp);
+                tipoAtual = converteTipo(atual);
+                contExp++;
             }
 
             //Comeca com valores diretos.
-            else if (tipoAtual == VALOR_INICIAL)
+            if (tipoAtual == TIPO_INVALIDO){
                 tipoAtual = converteTipo(atual);
+                contExp++;
+            }
 
+            //Pega o operador
 
-            i++;
-            atual = expressao.get(i);
+            atual = expressao.get(contExp);
+            operador = atual.getIdUnico();
 
+            //Pega o proximo.
+            contExp++;
+            atual = expressao.get(contExp);
+
+            //Se vim parentese
+            if (atual.getIdUnico() == TK_PARENTESE_A){
+                //Pula o abre parentese
+                contExp++;
+                atual = expressao.get(contExp);
+                aux = atual;
+                proximo = verificaExpressoes(expressao);
+            }
+            else if (ehOperadorRelacional(atual.getIdUnico()) || ehOperadorLogico(atual.getIdUnico())){
+                aux = atual;
+                List<Token> nova = new ArrayList<>();
+                int c = 0;
+                for(c = contExp; c < expressao.size();c++)
+                    nova.add(expressao.get(c));
+
+                contExp = c;
+                proximo = verificaExpressoes(nova);
+            }
+            //Eh um tipo comum, numero, string, etc.
+            else{
+                aux = atual;
+                proximo = converteTipo(atual);
+            }
+
+            int tempTipo = converteRegraTipos(tipoAtual, proximo, operador);
+            if (tempTipo == TIPO_INVALIDO){
+                String resultado = conversorIdString(tipoAtual)+" "+conversorIdString(operador)+" "+aux.getLexema();
+                erros.add(new ErroSemantico(resultado, TIPOS_INCOMPATIVEIS, atual.getnLinha()));
+            }
+            else
+                tipoAtual = tempTipo;
         }
-        return -1;
+
+        return tipoAtual;
     }
 }

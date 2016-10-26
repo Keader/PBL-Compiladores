@@ -212,9 +212,8 @@ public interface Dicionario {
     public static final int VOLTA_PRO_PAI                        = 226;
 
     //Semantico
-    public static final int VALOR_INICIAL                        =-99;
     public static final int TIPO_VAZIO                           = -1;
-    public static final int OP_INVALIDA                          = -2;
+    public static final int TIPO_INVALIDO                        = -2;
     public static final int ESCOPO_GLOBAL                        =  0;
     public static final int VAR_NAO_DECL                         =  1;
     public static final int FUNC_NAO_DECL                        =  2;
@@ -228,6 +227,7 @@ public interface Dicionario {
     public static final int TIPOS_PARAM_INVALIDOS                = 10;
     public static final int VAR_NAO_INICIALIZADA                 = 11;
     public static final int FUNC_EM_CONST                        = 12;
+    public static final int TIPO_ATRIBUICAO_INVALIDA             = 13;
 
 
     //Enums
@@ -939,10 +939,15 @@ public interface Dicionario {
         else if (token.getIdUnico() == TK_VERDADEIRO || token.getIdUnico() == TK_FALSO)
             return TK_BOOLEANO;
 
-        return -1;
+        return TIPO_INVALIDO;
     }
 
     public static int converteRegraTipos(int tipo1, int tipo2, int operador){
+
+        //Casos em que 1 tipo for invalido e o outro nao.
+        //Pega casos em que a + 5 + 3 + 2; onde a nao existe (onde o primeiro elemento n existe).
+        if (tipo1 == TIPO_INVALIDO && tipo2 != TIPO_INVALIDO || tipo1 != TIPO_INVALIDO && tipo2 == TIPO_INVALIDO)
+            return tipo1 == TIPO_INVALIDO ? tipo2 : tipo1;
 
         if (tipo1 == TK_INTEIRO && tipo2 == TK_INTEIRO && ehOperadorAritmetico(operador))
             return TK_INTEIRO;
@@ -964,7 +969,7 @@ public interface Dicionario {
                  (tipo1 == TK_REAL && tipo2 == TK_INTEIRO)) && ehOperadorRelacional(operador))
             return TK_BOOLEANO;
 
-        return OP_INVALIDA;
+        return TIPO_INVALIDO;
     }
 
     public static boolean ehOperadorAritmetico(int op){

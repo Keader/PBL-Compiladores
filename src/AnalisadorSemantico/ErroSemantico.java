@@ -89,6 +89,8 @@ public class ErroSemantico implements Dicionario{
                 return "A variavel: "+error+" usada na linha: "+linha+" nao foi inicializada";
             case FUNC_EM_CONST:
                 return "Na declaracao da constante: "+error+", foi feita uma chamada de funcao, linha: "+linha;
+            case TIPO_ATRIBUICAO_INVALIDA:
+                return error+ ", na linha: "+linha;
             default:
                 return "Unknown";
         }
