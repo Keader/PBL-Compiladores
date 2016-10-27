@@ -367,6 +367,22 @@ public class AnalisadorSemantico implements Dicionario{
                     cont+=2;
                     t = tokens.get(cont);
 
+                    //Pega tudo que tem entre os 2 =>
+                    List<Token> expressao = new ArrayList<>();
+                    Token aux = tokens.get(cont);
+                    int contador = cont;
+                    while (aux.getIdUnico() != TK_IGUAL){
+                        expressao.add(aux);
+                        contador++;
+                        aux = tokens.get(contador);
+                        if (aux.getIdUnico() == TK_IGUAL && contador+1 < tokens.size()
+                            && tokens.get(contador+1).getIdUnico() != TK_MAIOR){
+                            expressao.add(aux);
+                            contador++;
+                            aux = tokens.get(contador);
+                        }
+                    }
+
                     //Lidar com matrizes
                     if (t.getIdUnico() == TK_MENOR)
                         verificaMatriz();
@@ -376,9 +392,36 @@ public class AnalisadorSemantico implements Dicionario{
                     cont++;
                     t = tokens.get(cont);
 
-                    if (t.getIdUnico() == TK_PARENTESE_A){
+                    if (temp.getIdUnico() == TK_ID && t.getIdUnico() == TK_PARENTESE_A){
                         verificaFuncao(temp.getLexema());
                         cont++;
+                    }
+
+                    //Se o atual eh igual a parentese ou o proximo eh um operador (diferente de igual), significa que eh expressao.
+                    else if (temp.getIdUnico() == TK_PARENTESE_A || (ehOperador(t.getIdUnico())) && t.getIdUnico() != TK_IGUAL){
+                    //else if (temp.getIdUnico() == TK_PARENTESE_A || ehOperador(t.getIdUnico())){
+                        contExp = 0;
+                        int tipo = verificaExpressoes(expressao);
+                        Simbolo tabelado = tabelaGlobal.get(funcaoAtual);
+                        if(tabelado.getTipo() != tipo){
+                            String exp = "";
+                            for (Token tk : expressao)
+                                exp = exp + tk.getLexema()+ " ";
+                            String retorno = "A expressao: "+exp+", retornou o tipo: "+conversorIdString(tipo)+", no retorno da funcao: "+funcaoAtual;
+                            erros.add(new ErroSemantico(retorno, TIPO_ATRIBUICAO_INVALIDA, t.getnLinha()));
+                            cont = contador;
+                            //Pula o =>
+                            cont+=2;
+                            t = tokens.get(cont);
+                            continue;
+                        }
+                        else{
+                            cont = contador;
+                            //Pula o =>
+                            cont+=2;
+                            t = tokens.get(cont);
+                            continue;
+                        }
                     }
 
                     t = temp;
@@ -564,6 +607,9 @@ public class AnalisadorSemantico implements Dicionario{
                 if (t.getIdUnico() == TK_PARENTESE_F)
                     continue;
 
+                if (t.getIdUnico() == TK_VIRGULA)
+                    continue;
+
                 Simbolo variavel = tabela.get(t.getLexema());
 
                 //Cuida de tipos padroes, caracteres, inteiros, etc.
@@ -596,12 +642,8 @@ public class AnalisadorSemantico implements Dicionario{
                     t = tokens.get(contExp);
                 }
 
-                //Move a entrada consumindo coisas relacionada a variavel
-                while (!checaTerminadoresParametros()) {
-                    contExp++;
-                    t = tokens.get(contExp);
-                }
                 parametros.add(variavel);
+                t = tokens.get(contExp);
             }
             //Checa quantidade de parametros
             if (parametros.size() != simbolo.getParametros().size()){
@@ -742,14 +784,18 @@ public class AnalisadorSemantico implements Dicionario{
                     return;
                 }
             }
-
+            contExp = 0;
             int tipo = verificaExpressoes(valor);
             if (tipo != tipoAtual){
-                String valores = "";
-                for (Token token : valor)
-                    valores = valores + token.getLexema() + " ";
-                String resultado = "Na atribuicao da constante: "+identificador+", a expressao: "+valores+ ", retornou o tipo invalido: "+conversorIdString(tipo);
-                erros.add(new ErroSemantico(resultado, TIPO_ATRIBUICAO_INVALIDA, valor.get(0).getnLinha()));}
+                //Adicionando uma excecao porque decidiram aceitar
+                if (tipoAtual == TK_REAL && tipo != TK_INTEIRO){
+                    String valores = "";
+                    for (Token token : valor)
+                        valores = valores + token.getLexema() + " ";
+                    String resultado = "Na atribuicao da constante: "+identificador+", a expressao: "+valores+ ", retornou o tipo invalido: "+conversorIdString(tipo);
+                    erros.add(new ErroSemantico(resultado, TIPO_ATRIBUICAO_INVALIDA, valor.get(0).getnLinha()));
+                }
+            }
 
         }
         //Identifica tipos diferentes
@@ -776,10 +822,12 @@ public class AnalisadorSemantico implements Dicionario{
                 erros.add(new ErroSemantico(token.getLexema(), VAR_NAO_DECL, token.getnLinha()));
                 return;
             }
+            //Lida com tipos diretos.
             if (token.getIdUnico() != TK_ID){
                 int tipo = converteTipo(token);
                 if (tipo != tipoAtual)
-                    erros.add(new ErroSemantico(token.getLexema(), TIPOS_INCOMPATIVEIS, token.getnLinha()));
+                    if (tipoAtual == TK_REAL && tipo != TK_INTEIRO) //Adicionando uma excecao porque decidiram aceitar
+                        erros.add(new ErroSemantico(token.getLexema(), TIPOS_INCOMPATIVEIS, token.getnLinha()));
             }
         }
 
@@ -973,15 +1021,15 @@ public class AnalisadorSemantico implements Dicionario{
         String id = atual.getLexema();
 
         //Pega o proximo elemento
-        contExp++;
-        atual = expressao.get(contExp);
+        if (contExp+1 < expressao.size()){
+            contExp++;
+            atual = expressao.get(contExp);
+        }
 
         //Cuida de funcoes
         if (atual.getIdUnico() == TK_PARENTESE_A){
             //Ao sair daqui o token eh )
             verificaFuncao(id, atual, expressao);
-            //Pula o )
-            contExp++;
         }
 
         Simbolo variavel = tabela.get(id);
@@ -1006,28 +1054,28 @@ public class AnalisadorSemantico implements Dicionario{
         Token atual;
         String error = "";
         //Essas variaveis servem para criar o error depois.
-        Token aux;
+        Token aux = null;
         for( ; contExp < expressao.size(); contExp++){
             atual = expressao.get(contExp);
+            operador = TIPO_INVALIDO;
+            proximo = TIPO_INVALIDO;
+
+            /***************************************VERIFICANDO PRIMEIRO ELEMENTO ********************/
 
             //Sempre que achar um fecha parentese, retorna a recursao.
-            if (atual.getIdUnico() == TK_PARENTESE_F){
-                //Pula o fecha parentese
-                //contExp++;
+            if (atual.getIdUnico() == TK_PARENTESE_F)
                 return tipoAtual;
-            }
 
             //Comeca com identificador (Verifica se eh identificador e se eh funcao)
-            if (atual.getIdUnico() == TK_ID){
+            if (atual.getIdUnico() == TK_ID && tipoAtual == TIPO_INVALIDO){
                 int tipoTemp = lidaComTipoDeFuncoes(expressao, atual);
                 if (tipoTemp != TIPO_INVALIDO)
                     tipoAtual = tipoTemp;
                 atual = expressao.get(contExp);
-                contExp++;
             }
 
             //Inicia com matriz.
-            else if (atual.getIdUnico() == TK_MENOR){
+            else if (atual.getIdUnico() == TK_MENOR && tipoAtual == TIPO_INVALIDO) {
                 //Saindo daqui o proximo elmento eh o que vim depois dos maiores (fim do array/matriz)
                 verificaMatriz(atual, expressao);
                 //Pega o id da matriz/array
@@ -1048,38 +1096,73 @@ public class AnalisadorSemantico implements Dicionario{
                 tipoAtual = converteTipo(atual);
                 contExp++;
             }
+            //Atualizacao do atual, apos passar pelo primeiro tipo.
+            if (contExp < expressao.size())
+                atual = expressao.get(contExp);
+            else
+                return tipoAtual;
 
-            //Pega o operador
-            atual = expressao.get(contExp);
-            //Casos especiais de 5+2+4+(50);
-            if (ehOperador(atual.getIdUnico())) {
+            //Para casos de apenas 1 elemento
+            if (expressao.size() == 1 && tipoAtual != TIPO_INVALIDO)
+                return tipoAtual;
+
+            //Pega o operador. (Existem casos que nao tera operador ex: 5+4*(4);
+            //Verifica se eh operador relacional ou logico (tem maior precendencia)
+            if (ehOperadorRelacional(atual.getIdUnico()) || ehOperadorLogico(atual.getIdUnico())){
+                aux = atual;
+                //Pega o operador
                 operador = atual.getIdUnico();
+                contExp++;
+                atual = expressao.get(contExp);
 
+                proximo = verificaExpressoes(expressao);
+            }
+            //Verifica se eh operador arimetico
+            else if (ehOperadorAritmetico(atual.getIdUnico())) {
+                operador = atual.getIdUnico();
                 //Se veio operador antes, pega o proximo elemento
                 contExp++;
                 atual = expressao.get(contExp);
             }
 
+            /***************************************VERIFICANDO SEGUNDO ELEMENTO ********************/
+
+            //Sempre que achar um fecha parentese, retorna a recursao.
+            if (atual.getIdUnico() == TK_PARENTESE_F)
+                return tipoAtual;
+
+            //Verifica se o proximo elemento eh variavel ou funcao
+            if (atual.getIdUnico() == TK_ID && proximo == TIPO_INVALIDO){
+                aux = atual;
+                int tipoTemp = lidaComTipoDeFuncoes(expressao, atual);
+                if (tipoTemp != TIPO_INVALIDO)
+                    proximo = tipoTemp;
+                atual = expressao.get(contExp);
+            }
+
+            //Tem matriz no meio
+            else if (atual.getIdUnico() == TK_MENOR && proximo == TIPO_INVALIDO){
+                if (contExp+1 < expressao.size() && expressao.get(contExp+1).getIdUnico() == TK_MENOR){
+                    //Saindo daqui o proximo elmento eh o que vim depois dos maiores (fim do array/matriz)
+                    verificaMatriz(atual, expressao);
+                    //Pega o id da matriz/array
+                    atual = expressao.get(contExp);
+                    tipoAtual = converteTipo(atual);
+                    contExp++;
+                }
+            }
+
             //Se vim parentese
-            if (atual.getIdUnico() == TK_PARENTESE_A){
+            else if (atual.getIdUnico() == TK_PARENTESE_A && proximo == TIPO_INVALIDO){
                 //Pula o abre parentese
                 contExp++;
                 atual = expressao.get(contExp);
                 aux = atual;
                 proximo = verificaExpressoes(expressao);
             }
-            else if (ehOperadorRelacional(atual.getIdUnico()) || ehOperadorLogico(atual.getIdUnico())){
-                aux = atual;
-                List<Token> nova = new ArrayList<>();
-                int c = 0;
-                for(c = contExp; c < expressao.size();c++)
-                    nova.add(expressao.get(c));
 
-                contExp = c;
-                proximo = verificaExpressoes(nova);
-            }
             //Eh um tipo comum, numero, string, etc.
-            else{
+            else if (ehLiteral(atual.getIdUnico()) && proximo == TIPO_INVALIDO){
                 aux = atual;
                 proximo = converteTipo(atual);
             }
@@ -1087,6 +1170,7 @@ public class AnalisadorSemantico implements Dicionario{
             int tempTipo = converteRegraTipos(tipoAtual, proximo, operador);
             if (tempTipo == TIPO_INVALIDO){
                 String resultado = conversorIdString(tipoAtual)+" "+conversorIdString(operador)+" "+aux.getLexema();
+                System.err.println(resultado);
                 erros.add(new ErroSemantico(resultado, TIPOS_INCOMPATIVEIS, atual.getnLinha()));
             }
             else
