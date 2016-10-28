@@ -949,11 +949,6 @@ public interface Dicionario {
         if (operador == TIPO_INVALIDO && tipo1 == TK_BOOLEANO && tipo2 == TK_BOOLEANO)
             return TK_BOOLEANO;
 
-        //Casos em que 1 tipo for invalido e o outro nao.
-        //Pega casos em que a + 5 + 3 + 2; onde a nao existe (onde o primeiro elemento n existe).
-        else if (tipo1 == TIPO_INVALIDO && tipo2 != TIPO_INVALIDO || tipo1 != TIPO_INVALIDO && tipo2 == TIPO_INVALIDO)
-            return tipo1 == TIPO_INVALIDO ? tipo2 : tipo1;
-
         else if (tipo1 == TK_INTEIRO && tipo2 == TK_INTEIRO && ehOperadorAritmetico(operador))
             return TK_INTEIRO;
 
@@ -970,9 +965,17 @@ public interface Dicionario {
         else if (tipo1 == TK_INTEIRO && tipo2 == TK_INTEIRO && ehOperadorRelacional(operador))
             return TK_BOOLEANO;
 
+        else if (tipo1 == TK_REAL && tipo2 == TK_REAL && ehOperadorRelacional(operador))
+            return TK_BOOLEANO;
+
         else if (((tipo1 == TK_INTEIRO && tipo2 == TK_REAL) ||
                  (tipo1 == TK_REAL && tipo2 == TK_INTEIRO)) && ehOperadorRelacional(operador))
             return TK_BOOLEANO;
+
+        //Casos em que 1 tipo for invalido e o outro nao.
+        //Pega casos em que a + 5 + 3 + 2; onde a nao existe (onde o primeiro elemento n existe).
+        else if (tipo1 == TIPO_INVALIDO && tipo2 != TIPO_INVALIDO || tipo1 != TIPO_INVALIDO && tipo2 == TIPO_INVALIDO)
+            return tipo1 == TIPO_INVALIDO ? tipo2 : tipo1;
 
         return TIPO_INVALIDO;
     }
