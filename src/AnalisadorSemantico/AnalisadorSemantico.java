@@ -398,7 +398,7 @@ public class AnalisadorSemantico implements Dicionario{
                     }
 
                     //Se o atual eh igual a parentese ou o proximo eh um operador (diferente de igual), significa que eh expressao.
-                    else if (temp.getIdUnico() == TK_PARENTESE_A || (ehOperador(t.getIdUnico())) && t.getIdUnico() != TK_IGUAL){
+                    else if (temp.getIdUnico() == TK_SUBTRACAO || temp.getIdUnico() == TK_PARENTESE_A || (ehOperador(t.getIdUnico())) && t.getIdUnico() != TK_IGUAL || temp.getIdUnico() == TK_NAO){
                     //else if (temp.getIdUnico() == TK_PARENTESE_A || ehOperador(t.getIdUnico())){
                         contExp = 0;
                         int tipo = verificaExpressoes(expressao);
@@ -1094,6 +1094,8 @@ public class AnalisadorSemantico implements Dicionario{
             //Comeca com valores diretos.
             if (tipoAtual == TIPO_INVALIDO){
                 tipoAtual = converteTipo(atual);
+                if (atual.getIdUnico() == TK_NAO)
+                    tipoAtual = TK_BOOLEANO;
                 contExp++;
             }
             //Atualizacao do atual, apos passar pelo primeiro tipo.
@@ -1109,13 +1111,26 @@ public class AnalisadorSemantico implements Dicionario{
             //Pega o operador. (Existem casos que nao tera operador ex: 5+4*(4);
             //Verifica se eh operador relacional ou logico (tem maior precendencia)
             if (ehOperadorRelacional(atual.getIdUnico()) || ehOperadorLogico(atual.getIdUnico())){
+                List<Token> miniExpressao = new ArrayList<>();
                 aux = atual;
                 //Pega o operador
                 operador = atual.getIdUnico();
                 contExp++;
                 atual = expressao.get(contExp);
 
-                proximo = verificaExpressoes(expressao);
+                int c = 0;
+                Token temp = null;
+                for (c = contExp; c <expressao.size(); c++){
+                    temp = expressao.get(c);
+                    if (ehOperadorLogico(temp.getIdUnico())){
+                        c--;
+                        break;
+                    }
+                    miniExpressao.add(temp);
+                }
+                contExp = 0;
+                proximo = verificaExpressoes(miniExpressao);
+                contExp = c;
             }
             //Verifica se eh operador arimetico
             else if (ehOperadorAritmetico(atual.getIdUnico())) {
@@ -1176,6 +1191,9 @@ public class AnalisadorSemantico implements Dicionario{
             else
                 tipoAtual = tempTipo;
         }
+
+        if (tipoAtual == TK_NAO)
+            return TK_BOOLEANO;
 
         return tipoAtual;
     }

@@ -946,12 +946,15 @@ public interface Dicionario {
 
     public static int converteRegraTipos(int tipo1, int tipo2, int operador){
 
+        if (operador == TIPO_INVALIDO && tipo1 == TK_BOOLEANO && tipo2 == TK_BOOLEANO)
+            return TK_BOOLEANO;
+
         //Casos em que 1 tipo for invalido e o outro nao.
         //Pega casos em que a + 5 + 3 + 2; onde a nao existe (onde o primeiro elemento n existe).
-        if (tipo1 == TIPO_INVALIDO && tipo2 != TIPO_INVALIDO || tipo1 != TIPO_INVALIDO && tipo2 == TIPO_INVALIDO)
+        else if (tipo1 == TIPO_INVALIDO && tipo2 != TIPO_INVALIDO || tipo1 != TIPO_INVALIDO && tipo2 == TIPO_INVALIDO)
             return tipo1 == TIPO_INVALIDO ? tipo2 : tipo1;
 
-        if (tipo1 == TK_INTEIRO && tipo2 == TK_INTEIRO && ehOperadorAritmetico(operador))
+        else if (tipo1 == TK_INTEIRO && tipo2 == TK_INTEIRO && ehOperadorAritmetico(operador))
             return TK_INTEIRO;
 
         else if (((tipo1 == TK_INTEIRO && tipo2 == TK_REAL) ||
