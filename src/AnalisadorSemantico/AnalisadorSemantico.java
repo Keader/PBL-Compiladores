@@ -4,6 +4,10 @@ import Util.Dicionario;
 import static Util.Dicionario.*;
 import Util.Simbolo;
 import Util.Token;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -31,8 +35,10 @@ public class AnalisadorSemantico implements Dicionario{
     private boolean retorno;
     private String funcaoAtual;
     private int contExp;
+    private final String pastaSaida = "saida_semantica";
+    private String arquivo;
 
-    public AnalisadorSemantico(List<Token> lTokens){
+    public AnalisadorSemantico(List<Token> lTokens, String arquivo){
         tokens = new ArrayList<>();
         tokens.addAll(lTokens);
         tabelas = new ArrayList<>();
@@ -51,6 +57,7 @@ public class AnalisadorSemantico implements Dicionario{
         retorno = false;
         funcaoAtual = "";
         contExp = 0;
+        this.arquivo = arquivo;
     }
 
     private synchronized void montarTabela(){
@@ -318,9 +325,12 @@ public class AnalisadorSemantico implements Dicionario{
             else {
                 identificador = "";
 
+                //Atribuicao de vetor
+                if(t.getIdUnico() == TK_MENOR)
+                    verificaMatriz();
+
                 //Comeca com identificador, logo eh chamada de funcao ou atribuicao.
                 if (t.getIdUnico() == TK_ID){
-
                     //Evita re-analisar constantes e variaveis.
                     if (!funcoesAlcancadas) {
                         while (t.getIdUnico() != TK_FIM) {
@@ -343,20 +353,74 @@ public class AnalisadorSemantico implements Dicionario{
                         //E neste caso, sempre apos o fecha parentese vira um ponto e virgula.
                         verificaFuncao(identificador);
 
-                        //Pula ponto e virgula
+                        //Pula o fecha parentese
                         cont++;
                         t = tokens.get(cont);
                     }
 
-                    //Eh uma atribuicao
-                    else if (t.getIdUnico() == TK_IGUAL) {
-                        System.out.println("Ue");
-                        //Se funcoes nao foram alcadas, esta pegando as atribuicoes de const... entao pula
-                        if (!funcoesAlcancadas)
+                    Simbolo variavel = tabela.get(identificador);
+
+                    //Variavel/Const nao existe no escopo local
+                    if (variavel == null) {
+                        //Verifica no escopo global
+                        variavel = tabelaGlobal.get(identificador);
+                        if (variavel == null) {
+                            ErroSemantico erro = new ErroSemantico(identificador, VAR_NAO_DECL, t.getnLinha());
+                            if (!erros.contains(erro))
+                                erros.add(erro);
+                            //Ignora tudo ateh o ponto e virgula
+                            while (t.getIdUnico() != TK_PONTOVIRGULA) {
+                                cont++;
+                                t = tokens.get(cont);
+                            }
                             continue;
+                        }
+                    }
+                    //Se chegou neste ponto, variavel existe.
+                    if (variavel.ehConstante()) {
+                        ErroSemantico erro = new ErroSemantico(identificador, ATRIBUICAO_INVALIDA_CONST, t.getnLinha());
+                        if (!erros.contains(erro))
+                            erros.add(erro);
+                    }
+
+                    tipo = variavel.getTipo();
+
+                    //Eh Atribuicao
+                    if (t.getIdUnico() == TK_IGUAL){
+                        //Pula o igual
+                        cont++;
+                        t = tokens.get(cont);
+
+                        //Transforma tudo que vem depois em uma "expressao"
+                        List<Token> expressao = new ArrayList<>();
 
                         while (t.getIdUnico() != TK_PONTOVIRGULA){
-                            //TODO
+                            expressao.add(t);
+                            cont++;
+                            t = tokens.get(cont);
+                        }
+
+                        //Atribuicao simples
+                        if (expressao.size() == 1) {
+                            Token tk = expressao.get(0);
+                            if (tipo != converteTipo(tk)){
+                                ErroSemantico erro = new ErroSemantico(tk.getLexema(), TIPOS_INCOMPATIVEIS, tk.getnLinha());
+                                if (!erros.contains(erro))
+                                    erros.add(erro);
+                            }
+                        }
+                        else{
+                            contExp = 0;
+                            int retorno = verificaExpressoes(expressao);
+                            if (retorno != tipo){
+                                String exp = "";
+                                for (Token tk: expressao)
+                                    exp = exp + tk.getLexema() + " ";
+
+                                ErroSemantico erro = new ErroSemantico(exp, TIPOS_INCOMPATIVEIS, t.getnLinha());
+                                if (!erros.contains(erro))
+                                    erros.add(erro);
+                            }
                         }
                     }
                 }
@@ -487,27 +551,268 @@ public class AnalisadorSemantico implements Dicionario{
                         }
 
                         else if (variavel != null && variavel.ehConstante())
-                            erros.add(new ErroSemantico (t.getLexema(), ATRIBUICAO_INVALIDA, t.getnLinha()));
+                            erros.add(new ErroSemantico (variavel.getId(), ATRIBUICAO_INVALIDA_CONST, t.getnLinha()));
 
                         cont++;
                         t = tokens.get(cont);
                     }
                 }
+                else if (t.getIdUnico() == TK_SE){
+                    //Pula o se e o abre parentese
+                    cont+=2;
+                    t = tokens.get(cont);
+                    List<Token> expressao = new ArrayList<>();
+
+                    while(!quebraCapturaExpressao(TK_ENTAO)){
+                        expressao.add(t);
+                        cont++;
+                        t = tokens.get(cont);
+                    }
+
+                    contExp = 0;
+                    int tipo = verificaExpressoes(expressao);
+                    if (tipo != TK_BOOLEANO){
+                        String resultado = "";
+                        for (Token tk: expressao)
+                            resultado = resultado + tk.getLexema() + " ";
+                        ErroSemantico erro = new ErroSemantico(resultado, TIPOS_INCOMPATIVEIS, t.getnLinha());
+                        if (!erros.contains(erro))
+                            erros.add(erro);
+                    }
+                    //Pula o fecha parentese
+                    cont++;
+                    t.getLexema();
+                }
+                else if (t.getIdUnico() == TK_ENQUANTO){
+                     //Pula o enquanto e o abre parentese
+                    cont+=2;
+                    t = tokens.get(cont);
+                    List<Token> expressao = new ArrayList<>();
+
+                    while(!quebraCapturaExpressao(TK_FACA)){
+                        expressao.add(t);
+                        cont++;
+                        t = tokens.get(cont);
+                    }
+
+                    contExp = 0;
+                    int tipo = verificaExpressoes(expressao);
+                    if (tipo != TK_BOOLEANO){
+                        String resultado = "";
+                        for (Token tk: expressao)
+                            resultado = resultado + tk.getLexema() + " ";
+                        ErroSemantico erro = new ErroSemantico(resultado, TIPOS_INCOMPATIVEIS, t.getnLinha());
+                        if (!erros.contains(erro))
+                            erros.add(erro);
+                    }
+                    //Pula o fecha parentese
+                    cont++;
+                    t.getLexema();
+                }
+                else if (t.getIdUnico() == TK_ESCREVA){
+                    //Pula o escreva e o abre parentese
+                    cont+=2;
+                    t = tokens.get(cont);
+                    List<Token> expressao = new ArrayList<>();
+
+                    while(!quebraCapturaExpressao(TK_PONTOVIRGULA)){
+                        expressao.add(t);
+                        cont++;
+                        t = tokens.get(cont);
+                    }
+
+                    /*
+                    Explicando a gambiarra envolvendo aqui.
+                    no escreva, ele pode ter infinitos valores, separados por virgula.
+                    Entao eh preciso quebrar a expressao por virgula.
+                    Porem para quebrar por virgula, daria ruim em casos de matrizes.
+                    Por isso, crio uma lista e separo em menores...
+                    */
+                    List<List<Token>> menores = new ArrayList<>();
+                    List<Token> miniexpressao = new ArrayList<>();
+
+                    //Big fucking gambiarra. Tentando nao quebrar quando tiver "Array" no escreva.
+                    //Infelizmente... quebra no caso de Array dentro de Array, apenas no escreva.
+                    boolean ehArray = false;
+                    for (Token tk : expressao){
+                        if (tk.getIdUnico() == TK_MENOR)
+                            ehArray = true;
+
+                        else if (tk.getIdUnico() == TK_MAIOR)
+                            ehArray = false;
+
+                        if(!ehArray && tk.getIdUnico() == TK_VIRGULA){
+                            menores.add(miniexpressao);
+                            miniexpressao = new ArrayList<>();
+                            continue;
+                        }
+                       miniexpressao.add(tk);
+                    }
+                    //Add a ultima expressao, se n ela ficara de fora haha
+                    menores.add(miniexpressao);
+
+                    for (List<Token> lista : menores) {
+                        contExp = 0;
+                        int tipo = verificaExpressoes(lista);
+                        if (tipo != TK_CADEIA && tipo != TK_CARACTERE && tipo != TK_INTEIRO && tipo != TK_REAL) {
+                            String resultado = "";
+                            for (Token tk : lista)
+                                resultado = resultado + tk.getLexema() + " ";
+
+                            ErroSemantico erro = new ErroSemantico(resultado, TIPOS_INCOMPATIVEIS, t.getnLinha());
+                            if (!erros.contains(erro))
+                                erros.add(erro);
+                        }
+                    }
+
+                    //Pula o fecha parentese
+                    cont++;
+                    t.getLexema();
+                }
             }
         }
+
         if (erros.isEmpty())
             System.out.println("Sem erros");
         else
             for(ErroSemantico erro: erros)
                 System.out.println(erro);
+
+        gerarSaidaSemantica();
     }
+
+    public synchronized void gerarSaidaSemantica() {
+        try {
+            File pasta = new File(pastaSaida);
+            pasta.mkdir();
+            File n = new File(pasta.getName() + "//SS_" + arquivo);
+            BufferedWriter bw = new BufferedWriter(new FileWriter(n));
+            if (erros.isEmpty()) {
+                bw.write("Sucesso!");
+                bw.flush();
+            }
+            else {
+
+                for (ErroSemantico erro : erros) {
+                    bw.write(erro.toString());
+                    bw.newLine();
+                    bw.flush();
+                }
+
+            }
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean quebraCapturaExpressao(int finalizador){
+        if (t.getIdUnico() != TK_PARENTESE_F)
+            return false;
+
+        Token proximo = null;
+        if (cont+1 < tokens.size())
+            proximo = tokens.get(cont+1);
+
+        if (proximo.getIdUnico() == finalizador)
+            return true;
+
+        return false;
+    }
+
+    private boolean condicaoDeParadaFuncao(Token t, int contador){
+        return t.getIdUnico() == TK_PARENTESE_F && contador == 0;
+    }
+
 
     private void verificaFuncao(String identificador) {
         //Se a funcao existe
         if (tabelaGlobal.containsKey(identificador)) {
             Simbolo simbolo = tabelaGlobal.get(identificador);
             List<Simbolo> parametros = new ArrayList<>();
+            List<Token> expressao = new ArrayList<>();
+            int contadorParametros = 0;
 
+             while (!condicaoDeParadaFuncao(t, contadorParametros)) {
+                 cont++;
+                 t = tokens.get(cont);
+
+                 if (t.getIdUnico() == TK_PARENTESE_A)
+                     contadorParametros++;
+
+                 else if (t.getIdUnico() == TK_PARENTESE_F){
+                     if (contadorParametros-1 >= 0)
+                         contadorParametros--;
+                     else if (contadorParametros == 0)
+                         continue;
+                 }
+
+                 expressao.add(t);
+             }
+
+            List<List<Token>> menores = new ArrayList<>();
+            List<Token> miniexpressao = new ArrayList<>();
+
+            //Big fucking gambiarra. Tentando nao quebrar quando tiver "Array" no escreva.
+            //Infelizmente... quebra no caso de Array dentro de Array, apenas no escreva.
+            boolean ehArray = false;
+            for (Token tk : expressao) {
+                if (tk.getIdUnico() == TK_MENOR)
+                    ehArray = true;
+                else if (tk.getIdUnico() == TK_MAIOR)
+                    ehArray = false;
+
+                if (!ehArray && tk.getIdUnico() == TK_VIRGULA) {
+                    menores.add(miniexpressao);
+                    miniexpressao = new ArrayList<>();
+                    continue;
+                }
+                miniexpressao.add(tk);
+            }
+
+             //Add a ultima expressao, se n ela ficara de fora haha
+             if(!miniexpressao.isEmpty())
+                menores.add(miniexpressao);
+
+            int tamanhoParametros = menores.size();
+
+            //Quantidade de parametros invalida, nao verifico os tipos
+            if (simbolo.getParametros().size() != tamanhoParametros){
+                erros.add(new ErroSemantico(simbolo.getId(), QNT_PARAM_INVALIDOS, t.getnLinha()));
+                return;
+            }
+
+            List<Token> lista = null;
+            for (int i=0; i < menores.size();i++) {
+                contExp = 0;
+                int tipoEsperado = simbolo.getParametros().get(i).getTipo();
+                lista = menores.get(i);
+                int tipoVindo = verificaExpressoes(lista);
+
+                if(tipoEsperado != tipoVindo){
+                    ErroSemantico erro = new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha());
+                    if (!erros.contains(erro))
+                        erros.add(erro);
+                }
+            }
+        }
+        //Funcao nao existe
+        else{
+            int contadorParametros = 0;
+            //Ignora tudo ateh o fecha parentese.
+             while (t.getIdUnico() != TK_PARENTESE_F && contadorParametros != 0) {
+                 cont++;
+                 t = tokens.get(cont);
+
+                 if (t.getIdUnico() == TK_PARENTESE_A)
+                     contadorParametros++;
+
+                 else if (t.getIdUnico() == TK_PARENTESE_F)
+                     if (contadorParametros-1 > 0)
+                         contadorParametros--;
+             }
+        }
+            /*
             //Checa parametros
             while (t.getIdUnico() != TK_PARENTESE_F) {
                 cont++;
@@ -588,6 +893,7 @@ public class AnalisadorSemantico implements Dicionario{
                 t = tokens.get(cont);
             }
         }
+            */
     }
 
     /**
@@ -598,6 +904,94 @@ public class AnalisadorSemantico implements Dicionario{
      * @param tokens  lista de tokens da expressao
      */
     private void verificaFuncao(String identificador, Token t, List<Token> tokens) {
+        //Se a funcao existe
+        if (tabelaGlobal.containsKey(identificador)) {
+            Simbolo simbolo = tabelaGlobal.get(identificador);
+            List<Simbolo> parametros = new ArrayList<>();
+            List<Token> expressao = new ArrayList<>();
+            int contadorParametros = 0;
+
+             while (!condicaoDeParadaFuncao(t,contadorParametros)) {
+                 contExp++;
+                 t = tokens.get(contExp);
+
+                 if (t.getIdUnico() == TK_PARENTESE_A)
+                     contadorParametros++;
+
+                 else if (t.getIdUnico() == TK_PARENTESE_F){
+                     if (contadorParametros-1 >= 0)
+                         contadorParametros--;
+                     else if (contadorParametros == 0)
+                         continue;
+                 }
+
+                 expressao.add(t);
+             }
+
+            List<List<Token>> menores = new ArrayList<>();
+            List<Token> miniexpressao = new ArrayList<>();
+
+            //Big fucking gambiarra. Tentando nao quebrar quando tiver "Array" no escreva.
+            //Infelizmente... quebra no caso de Array dentro de Array, apenas no escreva.
+            boolean ehArray = false;
+            for (Token tk : expressao) {
+                if (tk.getIdUnico() == TK_MENOR)
+                    ehArray = true;
+                else if (tk.getIdUnico() == TK_MAIOR)
+                    ehArray = false;
+
+                if (!ehArray && tk.getIdUnico() == TK_VIRGULA) {
+                    menores.add(miniexpressao);
+                    miniexpressao = new ArrayList<>();
+                    continue;
+                }
+                miniexpressao.add(tk);
+            }
+
+             //Add a ultima expressao, se n ela ficara de fora haha
+             if(!miniexpressao.isEmpty())
+                menores.add(miniexpressao);
+
+            int tamanhoParametros = menores.size();
+
+            //Quantidade de parametros invalida, nao verifico os tipos
+            if (simbolo.getParametros().size() != tamanhoParametros){
+                erros.add(new ErroSemantico(simbolo.getId(), QNT_PARAM_INVALIDOS, t.getnLinha()));
+                return;
+            }
+
+            List<Token> lista = null;
+            for (int i=0; i < menores.size();i++) {
+                int cache = contExp;
+                contExp = 0;
+                int tipoEsperado = simbolo.getParametros().get(i).getTipo();
+                lista = menores.get(i);
+                int tipoVindo = verificaExpressoes(lista);
+                contExp = cache;
+                if(tipoEsperado != tipoVindo){
+                    ErroSemantico erro = new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha());
+                    if (!erros.contains(erro))
+                        erros.add(erro);
+                }
+            }
+        }
+        //Funcao nao existe
+        else{
+            int contadorParametros = 0;
+            //Ignora tudo ateh o fecha parentese.
+             while (t.getIdUnico() != TK_PARENTESE_F && contadorParametros != 0) {
+                 contExp++;
+                 t = tokens.get(contExp);
+
+                 if (t.getIdUnico() == TK_PARENTESE_A)
+                     contadorParametros++;
+
+                 else if (t.getIdUnico() == TK_PARENTESE_F)
+                     if (contadorParametros-1 > 0)
+                         contadorParametros--;
+             }
+        }
+        /*
         //Se a funcao existe
         if (tabelaGlobal.containsKey(identificador)) {
             Simbolo simbolo = tabelaGlobal.get(identificador);
@@ -682,7 +1076,7 @@ public class AnalisadorSemantico implements Dicionario{
                 contExp++;
                 t = tokens.get(contExp);
             }
-        }
+        }*/
     }
 
     private Simbolo criaSimbolo(String id, int tipo, List<Token> valor, int linha){
@@ -793,7 +1187,7 @@ public class AnalisadorSemantico implements Dicionario{
             int tipo = verificaExpressoes(valor);
             if (tipo != tipoAtual){
                 //Adicionando uma excecao porque decidiram aceitar
-                if (tipoAtual == TK_REAL && tipo != TK_INTEIRO){
+                if (!(tipoAtual == TK_REAL && tipo == TK_INTEIRO)) {
                     String valores = "";
                     for (Token token : valor)
                         valores = valores + token.getLexema() + " ";
@@ -831,7 +1225,7 @@ public class AnalisadorSemantico implements Dicionario{
             if (token.getIdUnico() != TK_ID){
                 int tipo = converteTipo(token);
                 if (tipo != tipoAtual)
-                    if (tipoAtual == TK_REAL && tipo != TK_INTEIRO) //Adicionando uma excecao porque decidiram aceitar
+                    if (!(tipoAtual == TK_REAL && tipo == TK_INTEIRO)) //Adicionando uma excecao porque decidiram aceitar
                         erros.add(new ErroSemantico(token.getLexema(), TIPOS_INCOMPATIVEIS, token.getnLinha()));
             }
         }

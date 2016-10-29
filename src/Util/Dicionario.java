@@ -217,7 +217,7 @@ public interface Dicionario {
     public static final int ESCOPO_GLOBAL                        =  0;
     public static final int VAR_NAO_DECL                         =  1;
     public static final int FUNC_NAO_DECL                        =  2;
-    public static final int ATRIBUICAO_INVALIDA                  =  3;
+    public static final int ATRIBUICAO_INVALIDA_CONST            =  3;
     public static final int OPC_INVALIDA                         =  4;
     public static final int VAR_JA_DECL                          =  5;
     public static final int DIFF_DIMENSOES                       =  6;

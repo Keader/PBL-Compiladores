@@ -69,8 +69,8 @@ public class ErroSemantico implements Dicionario{
                 return "A variavel: "+error+", utilizada na linha: "+linha+" nao foi declarada";
             case FUNC_NAO_DECL:
                 return "A funcao: "+error+", utilizada na linha: "+linha+" nao foi declarada";
-            case ATRIBUICAO_INVALIDA:
-                return "Foi detectada uma atribuicao invalida na linha: "+linha;
+            case ATRIBUICAO_INVALIDA_CONST:
+                return "Foi detectada uma atribuicao invalida na linha: "+linha+" na constante: "+error;
             case OPC_INVALIDA:
                 return "Foi detectado uma operacao invalida na linha: "+linha;
             case VAR_JA_DECL:

@@ -188,7 +188,7 @@ public class AnalisadorSintatico implements Dicionario, Runnable {
     }
 
     private synchronized void iniciarAnaliseSemantica(){
-        AnalisadorSemantico analisador = new AnalisadorSemantico(tokens);
+        AnalisadorSemantico analisador = new AnalisadorSemantico(tokens, arquivo);
         analisador.iniciarAnalise();
     }
 
