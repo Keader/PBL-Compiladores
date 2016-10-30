@@ -400,26 +400,18 @@ public class AnalisadorSemantico implements Dicionario{
                             t = tokens.get(cont);
                         }
 
-                        //Atribuicao simples
-                        if (expressao.size() == 1) {
-                            Token tk = expressao.get(0);
-                            if (tipo != converteTipo(tk)){
-                                ErroSemantico erro = new ErroSemantico(tk.getLexema(), TIPOS_INCOMPATIVEIS, tk.getnLinha());
-                                if (!erros.contains(erro))
-                                    erros.add(erro);
-                            }
-                        }
-                        else{
-                            contExp = 0;
-                            int retorno = verificaExpressoes(expressao);
-                            if (retorno != tipo){
+                        contExp = 0;
+                        int retorno = verificaExpressoes(expressao);
+                        if (retorno != tipo) {
+                            if (!(tipo == TK_REAL && retorno == TK_INTEIRO)) {
                                 String exp = "";
-                                for (Token tk: expressao)
+                                for (Token tk : expressao)
                                     exp = exp + tk.getLexema() + " ";
 
                                 ErroSemantico erro = new ErroSemantico(exp, TIPOS_INCOMPATIVEIS, t.getnLinha());
-                                if (!erros.contains(erro))
+                                if (!erros.contains(erro)) {
                                     erros.add(erro);
+                                }
                             }
                         }
                     }
@@ -466,17 +458,20 @@ public class AnalisadorSemantico implements Dicionario{
                         contExp = 0;
                         int tipo = verificaExpressoes(expressao);
                         Simbolo tabelado = tabelaGlobal.get(funcaoAtual);
-                        if(tabelado.getTipo() != tipo && (tipo != TK_INTEIRO && tabelado.getTipo() != TK_REAL)){
-                            String exp = "";
-                            for (Token tk : expressao)
-                                exp = exp + tk.getLexema()+ " ";
-                            String retorno = "A expressao: "+exp+", retornou o tipo: "+conversorIdString(tipo)+", no retorno da funcao: "+funcaoAtual;
-                            erros.add(new ErroSemantico(retorno, TIPO_ATRIBUICAO_INVALIDA, t.getnLinha()));
-                            cont = contador;
-                            //Pula o =>
-                            cont+=2;
-                            t = tokens.get(cont);
-                            continue;
+                        if (tabelado.getTipo() != tipo) {
+                            if (!(tabelado.getTipo() == TK_REAL && tipo == TK_INTEIRO)) {
+                                String exp = "";
+                                for (Token tk : expressao)
+                                    exp = exp + tk.getLexema() + " ";
+
+                                String retorno = "A expressao: " + exp + ", retornou o tipo: " + conversorIdString(tipo) + ", no retorno da funcao: " + funcaoAtual;
+                                erros.add(new ErroSemantico(retorno, TIPO_ATRIBUICAO_INVALIDA, t.getnLinha()));
+                                cont = contador;
+                                //Pula o =>
+                                cont += 2;
+                                t = tokens.get(cont);
+                                continue;
+                            }
                         }
                         else{
                             cont = contador;
@@ -510,8 +505,10 @@ public class AnalisadorSemantico implements Dicionario{
                         if (!erros.contains(erro))
                             erros.add(erro);
                     }
-                    if (variavel != null && variavel.getTipo() != tabelado.getTipo())
-                        erros.add(new ErroSemantico(t.getLexema(), RETORNO_INVALIDO, t.getnLinha()));
+                    if (variavel != null && variavel.getTipo() != tabelado.getTipo()) {
+                        if (variavel != null && !(tabelado.getTipo() == TK_REAL && variavel.getTipo() == TK_INTEIRO))
+                            erros.add(new ErroSemantico(t.getLexema(), RETORNO_INVALIDO, t.getnLinha()));
+                    }
                     //Pula o =>
                     cont+=2;
                     t = tokens.get(cont);
@@ -790,9 +787,11 @@ public class AnalisadorSemantico implements Dicionario{
                 int tipoVindo = verificaExpressoes(lista);
 
                 if(tipoEsperado != tipoVindo){
-                    ErroSemantico erro = new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha());
-                    if (!erros.contains(erro))
-                        erros.add(erro);
+                   if (!(tipoEsperado == TK_REAL && tipoVindo == TK_INTEIRO)) {
+                        ErroSemantico erro = new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha());
+                        if (!erros.contains(erro))
+                            erros.add(erro);
+                   }
                 }
             }
         }
