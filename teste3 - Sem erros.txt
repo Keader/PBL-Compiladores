@@ -77,7 +77,7 @@ programa inicio
         se (nao evento <> 0) entao inicio
             leia(<<1>>direcoes);
             leia(<<2>>direcoes);
-            andarResultado(andar(<<1>>direcoes, <<2>>direcoes));
+            andarResultado = (andar(<<1>>direcoes, <<2>>direcoes));
         fim
         senao inicio 
             se (nao (evento <> 1)) entao inicio
