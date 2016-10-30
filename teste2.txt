@@ -1,8 +1,8 @@
 const inicio
-    inteiro velX = 2, velY = 1, peso = 3;
-    real pi = 3.1415;
-    cadeia texto1 = "andando";
-    caractere tipoPersonagem1 = 'a', tipoPersonagem2 = 'b';
+    inteiro velX = 2.2, velY = 1, peso = 3;
+    real pi = 3;
+    cadeia texto1 = "a";
+    caractere tipoPersonagem1 = "c", tipoPersonagem2 = 'b';
 fim
 
 var inicio 
@@ -37,14 +37,14 @@ funcao cadeia parado() inicio
     => texto1 =>;
 fim
 
-funcao real andar (inteiro direcaoX, inteiro direcaoY) inicio
+funcao inteiro andar (inteiro direcaoX, inteiro direcaoY) inicio
+    leia(movimentoDirX);
+    leia(movimentoDirY);
     var inicio
         inteiro movimentoDirX, movimentoDirY;
         real resultadoMovimento;
     fim
-    
-    leia(movimentoDirX);
-    leia(movimentoDirY);
+
     posX = (velX * movimentoDirX);
     posY = (velY * movimentoDirY);
     resultadoMovimento = posX + posY / peso;
@@ -63,22 +63,23 @@ funcao real andar (inteiro direcaoX, inteiro direcaoY) inicio
 fim
 
 programa inicio
-    var inicio
-        inteiro evento, dirX, dirY;
-        real andarResultado;
-    fim
-   
-    start(1024, 768, 100, "zezinho");
-   
     enquanto (nao taMorto) faca inicio
         se (nao evento <> 0) entao inicio
             leia(dirX);
             leia(dirY);
             andarResultado(andar(dirX, dirY));
         fim
-    senao inicio 
-        se (nao (evento <> 1)) entao inicio
+        senao inicio 
+           se (nao (evento <> 1)) entao inicio
+           fim
         fim
     fim
+
+    var inicio
+        inteiro evento, dirX, dirY;
+        real andarResultado;
     fim
+    start(1024, 768, 100, "zezinho");
+    start(1024, 768, "zezinho", 100, 100);
+
 fim
