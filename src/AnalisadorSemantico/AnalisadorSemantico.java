@@ -1579,8 +1579,7 @@ public class AnalisadorSemantico implements Dicionario{
 
         //Pega o proximo elemento
         if (contExp+1 < expressao.size()){
-            contExp++;
-            atual = expressao.get(contExp);
+            atual = expressao.get(contExp+1);
         }
 
         //Cuida de funcoes
