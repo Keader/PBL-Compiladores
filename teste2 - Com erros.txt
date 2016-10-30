@@ -62,6 +62,12 @@ funcao inteiro andar (inteiro direcaoX, inteiro direcaoY) inicio
     => resultadoMovimento =>;
 fim
 
+funcao booleano morreu() inicio
+{implementar}
+animacaoMorto();
+=> verdadeiro =>;
+fim
+
 programa inicio
     enquanto (nao taMorto) faca inicio
         se (nao evento <> 0) entao inicio
@@ -74,12 +80,12 @@ programa inicio
            fim
         fim
     fim
-
+    se (taMorto) entao inicio
+        morreu();
+    fim
     var inicio
         inteiro evento, dirX, dirY;
         real andarResultado;
     fim
-    start(1024, 768, 100, "zezinho");
-    start(1024, 768, "zezinho", 100, 100);
-
+    start(1024, 768, "zezinho", 100);
 fim
