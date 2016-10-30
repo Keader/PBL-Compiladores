@@ -1,0 +1,14 @@
+programa
+inicio
+    escreva("Hello World");
+    var
+    inicio
+        inteiro alfa;
+        inteiro beta;
+        real kappa;
+    fim
+    alfa = 23;
+    leia(beta);
+    leia(kappa);
+    escreva(alfa + beta - kappa);
+fim
