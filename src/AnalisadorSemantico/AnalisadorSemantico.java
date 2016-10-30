@@ -773,6 +773,11 @@ public class AnalisadorSemantico implements Dicionario{
 
             int tamanhoParametros = menores.size();
 
+            if (!simbolo.ehFuncao()){
+                erros.add(new ErroSemantico(simbolo.getId(), FUNC_NAO_DECL, t.getnLinha()));
+                return;
+            }
+
             //Quantidade de parametros invalida, nao verifico os tipos
             if (simbolo.getParametros().size() != tamanhoParametros){
                 erros.add(new ErroSemantico(simbolo.getId(), QNT_PARAM_INVALIDOS, t.getnLinha()));
@@ -786,7 +791,7 @@ public class AnalisadorSemantico implements Dicionario{
                 lista = menores.get(i);
                 int tipoVindo = verificaExpressoes(lista);
 
-                if(tipoEsperado != tipoVindo){
+                if(tipoEsperado != tipoVindo) {
                    if (!(tipoEsperado == TK_REAL && tipoVindo == TK_INTEIRO)) {
                         ErroSemantico erro = new ErroSemantico(identificador, TIPOS_PARAM_INVALIDOS, t.getnLinha());
                         if (!erros.contains(erro))
@@ -797,6 +802,7 @@ public class AnalisadorSemantico implements Dicionario{
         }
         //Funcao nao existe
         else{
+            erros.add(new ErroSemantico(identificador, FUNC_NAO_DECL, t.getnLinha()));
             int contadorParametros = 0;
             //Ignora tudo ateh o fecha parentese.
              while (t.getIdUnico() != TK_PARENTESE_F && contadorParametros != 0) {
@@ -953,6 +959,11 @@ public class AnalisadorSemantico implements Dicionario{
 
             int tamanhoParametros = menores.size();
 
+           if (!simbolo.ehFuncao()){
+                erros.add(new ErroSemantico(simbolo.getId(), FUNC_NAO_DECL, t.getnLinha()));
+                return;
+            }
+
             //Quantidade de parametros invalida, nao verifico os tipos
             if (simbolo.getParametros().size() != tamanhoParametros){
                 erros.add(new ErroSemantico(simbolo.getId(), QNT_PARAM_INVALIDOS, t.getnLinha()));
@@ -976,6 +987,7 @@ public class AnalisadorSemantico implements Dicionario{
         }
         //Funcao nao existe
         else{
+            erros.add(new ErroSemantico(identificador, FUNC_NAO_DECL, t.getnLinha()));
             int contadorParametros = 0;
             //Ignora tudo ateh o fecha parentese.
              while (t.getIdUnico() != TK_PARENTESE_F && contadorParametros != 0) {
