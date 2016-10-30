@@ -1,0 +1,79 @@
+const inicio
+    inteiro velX = 2, velY = 1, peso = 3;
+    real pi = 3.1415;
+    cadeia texto1 = "andando";
+    caractere tipoPersonagem1 = 'a', tipoPersonagem2 = 'b';
+fim
+
+var inicio 
+    inteiro telaMaxX, telaMaxY, vidaAtual, vidaTotal;
+    real posX, posY;
+    cadeia charName;
+    booleano taMorto;
+fim
+
+funcao start (inteiro tamX, inteiro tamY, inteiro vida, cadeia nome) inicio
+    telaMaxX = tamX;
+    telaMaxY = tamY;
+    charName = nome;
+    vidaTotal = vida;
+    vidaAtual = vidaTotal;
+    taMorto = falso;
+fim
+
+funcao cadeia parado() inicio
+    var inicio
+        real tempoAtual;
+        real tempoFinal;
+        cadeia texto1;
+    fim
+    texto1 = "quero fazer algo";
+    tempoAtual = 0;
+    tempoFinal = 3;
+    enquanto (tempoAtual < tempoFinal) faca inicio
+        tempoAtual = tempoAtual + 1;
+    fim
+
+    => texto1 =>;
+fim
+
+funcao real andar (inteiro direcaoX, inteiro direcaoY) inicio
+    var inicio
+        inteiro movimentoDirX, movimentoDirY;
+        real resultadoMovimento;
+    fim
+    
+    leia(movimentoDirX);
+    leia(movimentoDirY);
+    posX = (velX * movimentoDirX);
+    posY = (velY * movimentoDirY);
+    resultadoMovimento = posX + posY / peso;
+    
+    se(posX > telaMaxX) entao inicio
+        posX = telaMaxX;
+    fim
+    
+    se(posY > telaMaxY) entao inicio
+        posY = telaMaxY;
+    fim
+   
+    escreva(resultadoMovimento);
+    escreva(texto1);
+    => resultadoMovimento =>;
+fim
+
+programa inicio
+    var inicio
+        inteiro evento;
+    fim
+    start(1024, 768, 100, "zezinho");
+    enquanto (nao taMorto) faca inicio
+        se (nao evento <> 0) entao inicio
+        
+        fim
+    senao inicio 
+        se (nao (evento <> 1)) entao inicio
+        fim
+    fim
+    fim
+fim
