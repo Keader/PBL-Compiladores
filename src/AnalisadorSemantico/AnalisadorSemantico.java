@@ -1664,7 +1664,8 @@ public class AnalisadorSemantico implements Dicionario{
                 //Pula o abre parentese
                 contExp++;
                 atual = expressao.get(contExp);
-                return verificaExpressoes(expressao);
+                tipoAtual =  verificaExpressoes(expressao);
+                contExp++;
             }
 
             //Comeca com valores diretos.
@@ -1778,9 +1779,6 @@ public class AnalisadorSemantico implements Dicionario{
             else
                 tipoAtual = tempTipo;
         }
-
-        if (tipoAtual == TK_NAO)
-            return TK_BOOLEANO;
 
         return tipoAtual;
     }
