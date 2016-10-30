@@ -1,0 +1,6 @@
+funcao booleano seara() inicio
+=> (4) > (2) =>;
+fim
+
+programa inicio
+fim
