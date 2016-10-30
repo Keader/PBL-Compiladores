@@ -1598,6 +1598,9 @@ public class AnalisadorSemantico implements Dicionario{
                 erros.add(new ErroSemantico(id, VAR_NAO_DECL, atual.getnLinha()));
         }
 
+        if (variavel != null && variavel.ehFuncao() && atual.getIdUnico() != TK_PARENTESE_A)
+            erros.add(new ErroSemantico(atual.getLexema(), VAR_NAO_DECL, atual.getnLinha()));
+
         if (variavel != null)
             return variavel.getTipo();
 
