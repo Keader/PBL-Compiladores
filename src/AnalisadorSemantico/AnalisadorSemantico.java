@@ -1578,9 +1578,11 @@ public class AnalisadorSemantico implements Dicionario{
         String id = atual.getLexema();
 
         //Pega o proximo elemento
-        if (contExp+1 < expressao.size())
-            atual = expressao.get(contExp+1);
-        
+        if (contExp+1 < expressao.size()){
+            contExp++;
+            atual = expressao.get(contExp);
+        }
+
         //Cuida de funcoes
         if (atual.getIdUnico() == TK_PARENTESE_A){
             //Ao sair daqui o token eh )
@@ -1733,7 +1735,7 @@ public class AnalisadorSemantico implements Dicionario{
                     int tipoTemp = lidaComTipoDeFuncoes(expressao, atual);
                     if (tipoTemp != TIPO_INVALIDO)
                         proximo = tipoTemp;
-
+                    contExp--;
                     atual = expressao.get(contExp);
                 }
             }
