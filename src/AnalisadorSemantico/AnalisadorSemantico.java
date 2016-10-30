@@ -1578,10 +1578,9 @@ public class AnalisadorSemantico implements Dicionario{
         String id = atual.getLexema();
 
         //Pega o proximo elemento
-        if (contExp+1 < expressao.size()){
+        if (contExp+1 < expressao.size())
             atual = expressao.get(contExp+1);
-        }
-
+        
         //Cuida de funcoes
         if (atual.getIdUnico() == TK_PARENTESE_A){
             //Ao sair daqui o token eh )
